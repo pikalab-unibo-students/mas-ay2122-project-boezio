@@ -10,3 +10,4 @@
 rootProject.name = "ChocoKt"
 include("first_example")
 include("second_example")
+include("third_example")
