@@ -8,4 +8,4 @@
  */
 
 rootProject.name = "ChocoKt"
-include("app")
+include("first_example")
