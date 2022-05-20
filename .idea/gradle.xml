@@ -11,8 +11,11 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/fifth_example" />
             <option value="$PROJECT_DIR$/first_example" />
+            <option value="$PROJECT_DIR$/fourth_example" />
             <option value="$PROJECT_DIR$/second_example" />
+            <option value="$PROJECT_DIR$/sixth_example" />
             <option value="$PROJECT_DIR$/third_example" />
           </set>
         </option>
