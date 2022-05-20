@@ -24,13 +24,13 @@ fun main() {
    model.setObjective(Model.MAXIMIZE, banana.mul(400).add(chocolate.mul(450)).intVar())
    val solver = model.solver
 
-    if(solver.solve()){
-        println("$banana")
-        println("$chocolate")
-    }else if(solver.isStopCriterionMet){
-        println("The solver could not find a solution nor prove that none exists in the given limits")
-    }else {
-        println("The solver has proved the problem has no solution")
-    }
+   if(solver.solve()){
+       println("$banana")
+       println("$chocolate")
+   }else if(solver.isStopCriterionMet){
+       println("The solver could not find a solution nor prove that none exists in the given limits")
+   } else {
+       println("The solver has proved the problem has no solution")
+   }
 
 }
