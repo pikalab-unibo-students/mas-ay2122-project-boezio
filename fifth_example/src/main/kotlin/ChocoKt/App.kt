@@ -43,15 +43,25 @@ fun main() {
     val capacities = intArrayOf(3,2,2)
     val maxCapacity = 4
     val sum = durations.sum()
-    val starts = model.intVarArray("starts", numTasks, 0, sum)
+    val starts = model.intVarArray("starts", numTasks, 1, sum)
 
     // definition of constraints
 
     model.cumulative(starts, durations, capacities, maxCapacity)
 
     // search for a solution
-    
 
+    val solver = model.solver
+
+    if(solver.solve()){
+        for (i in 0..numTasks-1){
+            println("S${i+1} : ${starts[i].value}")
+        }
+    }else if(solver.isStopCriterionMet){
+        println("The solver could not find a solution nor prove that none exists in the given limits")
+    } else {
+        println("The solver has proved the problem has no solution")
+    }
 
 
 }
