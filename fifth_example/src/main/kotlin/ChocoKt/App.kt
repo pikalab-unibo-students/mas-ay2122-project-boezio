@@ -1,7 +1,6 @@
 package ChocoKt
 
 import org.chocosolver.solver.Model
-import org.chocosolver.solver.variables.Task
 
 /**
  *
