@@ -49,3 +49,11 @@ jobs:
         with:
           fetch-depth: 0
       - run: gradle :sixth_example:run
+  precision:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - run: gradle :precision:run
