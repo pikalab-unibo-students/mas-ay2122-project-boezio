@@ -29,14 +29,14 @@ dependencies {
     // This dependency is used by the application.
     implementation("com.google.guava:guava:30.1.1-jre")
 
-    // Use the Kotlin test library.
-    testImplementation("org.jetbrains.kotlin:kotlin-test")
-
-    // Use the Kotlin JUnit integration.
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testImplementation(kotlin("test"))
 }
 
 application {
     // Define the main class for the application.
     mainClass.set("ChocoKt.AppKt")
+}
+
+tasks.test {
+    useJUnitPlatform()
 }
