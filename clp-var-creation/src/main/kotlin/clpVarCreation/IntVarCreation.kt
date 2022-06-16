@@ -16,8 +16,8 @@ object In : TernaryRelation.NonBacktrackable<ExecutionContext>("in") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term): Solve.Response {
         val chocoModel: Model
         val varName = first.toString()
-        val lb = second.castToInteger().intValue as Int
-        val ub = third.castToInteger().intValue as Int
+        val lb = second.castToInteger().intValue.toInt()
+        val ub = third.castToInteger().intValue.toInt()
         // checking whether the model has been created
         if ("chocoModel" in context.customData.durable) {
             chocoModel = context.customData.durable.get("chocoModel") as Model
