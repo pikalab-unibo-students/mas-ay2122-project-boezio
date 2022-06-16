@@ -18,21 +18,25 @@ object In : TernaryRelation.NonBacktrackable<ExecutionContext>("in") {
         val varName = first.toString()
         val lb = second.castToInteger().intValue.toInt()
         val ub = third.castToInteger().intValue.toInt()
-        // checking whether the model has been created
-        if ("chocoModel" in context.customData.durable) {
-            chocoModel = context.customData.durable.get("chocoModel") as Model
-            val variable = chocoModel.intVar(varName, lb, ub)
-            replySuccess {
-                addDurableData(varName, variable)
-            }
-        } else {
-            chocoModel = Model()
-            replySuccess {
-                addDurableData("chocoModel", chocoModel)
-                addDurableData(varName, chocoModel.intVar(varName, lb, ub))
-            }
+        if (lb > ub) {
+            return replyFail()
         }
-
+        else {
+            // checking whether the model has been created
+            if ("chocoModel" in context.customData.persistent) {
+                chocoModel = context.customData.persistent.get("chocoModel") as Model
+                val variable = chocoModel.intVar(varName, lb, ub)
+                replySuccess {
+                    addDurableData(varName, variable)
+                }
+            } else {
+                chocoModel = Model()
+                replySuccess {
+                    addDurableData("chocoModel", chocoModel)
+                    addDurableData(varName, chocoModel.intVar(varName, lb, ub))
+                }
+            }
+            return replySuccess()
     }
 }
 
