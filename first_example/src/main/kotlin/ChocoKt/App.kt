@@ -10,15 +10,28 @@ fun main() {
 
     // definition of the variables
     val numValues = 3
+
+    println(model.vars.map { it.name })
+
     val x: IntVar = model.intVar("x", 1, numValues)
     val y = model.intVar("y", 1, numValues)
     val z = model.intVar("z", 1, numValues)
+
+    println(model.vars.map { it.name })
 
     // definition of constraints
     model.arithm(x, "!=", y).post()
 
     // searching for a feasible solution
     val solver: Solver = model.solver
+
+    if(solver.solve()){
+        println("$x")
+        println("$y")
+        println("$z")
+    } else {
+        println("The solver has proved the problem has no solution")
+    }
 
     if(solver.solve()){
         println("$x")
