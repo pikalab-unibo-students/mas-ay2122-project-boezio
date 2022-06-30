@@ -1,22 +1,29 @@
 package clpVarCreation
 
 import it.unibo.tuprolog.core.*
-import it.unibo.tuprolog.core.List as LogicList
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.exception.LogicError
-import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.library.AliasedLibrary
 import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.solve.library.Library
 import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
-import it.unibo.tuprolog.solve.primitive.TernaryRelation
-import it.unibo.tuprolog.solve.primitive.UnaryPredicate
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.chocosolver.solver.Model
+import org.chocosolver.solver.constraints.Constraint
+import org.chocosolver.solver.search.strategy.selectors.values.IntDomainMax
+import org.chocosolver.solver.search.strategy.selectors.values.IntDomainMin
+import org.chocosolver.solver.search.strategy.selectors.values.IntValueSelector
+import org.chocosolver.solver.search.strategy.selectors.variables.DomOverWDeg
+import org.chocosolver.solver.search.strategy.selectors.variables.FirstFail
+import org.chocosolver.solver.search.strategy.selectors.variables.InputOrder
+import org.chocosolver.solver.search.strategy.selectors.variables.Largest
+import org.chocosolver.solver.search.strategy.selectors.variables.Smallest
+import org.chocosolver.solver.search.strategy.selectors.variables.VariableSelector
+import org.chocosolver.solver.search.strategy.strategy.IntStrategy
 import org.chocosolver.solver.variables.IntVar
 import org.chocosolver.solver.variables.Variable
+import it.unibo.tuprolog.core.List as LogicList
 
 
 private const val CHOCO_MODEL = "chocoModel"
@@ -67,6 +74,100 @@ private val Variable.valueAsTerm: Term
             else -> TODO()
         }
     }
+
+data class LabellingConfiguration(
+    var variableSelection: VariableSelectionStrategy = VariableSelectionStrategy.LEFTMOST,
+    var problemType: ProblemType = ProblemType.SATISFY,
+    var valueOrder: ValueOrder = ValueOrder.UP,
+    var objective: Struct? = null // expression to be optimized if problemType is either MAXIMISE or MINIMISE
+)
+
+enum class VariableSelectionStrategy {
+    LEFTMOST, FIRST_FAIL, FFC, MIN, MAX
+}
+
+enum class ProblemType {
+    SATISFY, MAXIMISE, MINIMISE
+}
+
+enum class ValueOrder {
+    UP, DOWN
+}
+
+enum class BranchingStrategy {
+    STEP, ENUM, BISECT
+}
+
+fun parseConfiguration(arguments: List<Term>): LabellingConfiguration {
+    val configuration = LabellingConfiguration()
+    for (term in arguments) {
+        if (term.isAtom) {
+            val atom = term.castToAtom()
+            configuration.variableSelection = when(atom.value) {
+                "ff" -> VariableSelectionStrategy.FIRST_FAIL
+                "ffc" -> VariableSelectionStrategy.FFC
+                "min" -> VariableSelectionStrategy.MIN
+                "max" -> VariableSelectionStrategy.MAX
+                else -> VariableSelectionStrategy.LEFTMOST
+            }
+            configuration.valueOrder = when(atom.value) {
+                "down" -> ValueOrder.DOWN
+                else -> ValueOrder.UP
+
+            }
+        } else {
+            val struct = term.asStruct()
+            configuration.problemType = if (struct.let {it?.arity == 1 && it.functor == "max"}) {
+                ProblemType.MAXIMISE
+            } else if (struct.let {it?.arity == 1 && it.functor == "min"}) {
+                ProblemType.MINIMISE
+            } else {
+                ProblemType.SATISFY
+            }
+            configuration.objective = struct.args[0].asStruct()
+        }
+    }
+    return configuration
+}
+
+fun parseExpression(struct: Struct?): Constraint {
+    // transform an expression from a tuprolog Struct to a choco Constraint
+}
+
+fun createChocoSolver(model: Model, config: LabellingConfiguration, variables: Array<IntVar>): Model {
+
+    val variableStrategy: VariableSelector<IntVar> = when(config.variableSelection) {
+        VariableSelectionStrategy.LEFTMOST -> InputOrder(model)
+        VariableSelectionStrategy.FIRST_FAIL -> FirstFail(model)
+        //VariableSelectionStrategy.FFC -> DomOverWDeg<IntVar>(model)
+        VariableSelectionStrategy.MIN -> Smallest()
+        VariableSelectionStrategy.MAX -> Largest()
+    }
+
+    val valueStrategy: IntValueSelector = when(config.valueOrder) {
+        ValueOrder.UP -> IntDomainMax()
+        ValueOrder.DOWN -> IntDomainMin()
+    }
+
+    if (config.problemType == ProblemType.SATISFY xor config.objective != null) {
+        when (config.problemType) {
+            ProblemType.MINIMISE -> model.setObjective(Model.MINIMIZE, parseExpression(config.objective).intVar())
+            ProblemType.MAXIMISE -> model.setObjective(Model.MAXIMIZE, parseExpression(config.objective).intVar())
+            else -> {}
+        }
+    } else {
+        throw IllegalStateException()
+    }
+
+    model.solver.setSearch(IntStrategy(
+        variables,
+        variableStrategy,
+        valueStrategy
+    ))
+
+    return model
+}
+
 
 object Labelling : BinaryRelation.NonBacktrackable<ExecutionContext>("labelling") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term): Solve.Response {
