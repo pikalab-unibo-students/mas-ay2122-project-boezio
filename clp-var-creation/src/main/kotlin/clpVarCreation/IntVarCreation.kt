@@ -20,6 +20,7 @@ import org.chocosolver.solver.search.strategy.selectors.variables.InputOrder
 import org.chocosolver.solver.search.strategy.selectors.variables.Largest
 import org.chocosolver.solver.search.strategy.selectors.variables.Smallest
 import org.chocosolver.solver.search.strategy.selectors.variables.VariableSelector
+import org.chocosolver.solver.search.strategy.strategy.AbstractStrategy
 import org.chocosolver.solver.search.strategy.strategy.IntStrategy
 import org.chocosolver.solver.variables.IntVar
 import org.chocosolver.solver.variables.Variable
@@ -124,7 +125,7 @@ fun parseConfiguration(arguments: List<Term>): LabellingConfiguration {
             } else {
                 ProblemType.SATISFY
             }
-            configuration.objective = struct.args[0].asStruct()
+            configuration.objective = struct!!.args[0].asStruct()
         }
     }
     return configuration
@@ -136,20 +137,27 @@ fun parseExpression(struct: Struct?): Constraint {
 
 fun createChocoSolver(model: Model, config: LabellingConfiguration, variables: Array<IntVar>): Model {
 
-    val variableStrategy: VariableSelector<IntVar> = when(config.variableSelection) {
+    val variableStrategy: VariableSelector<IntVar>? = when(config.variableSelection) {
         VariableSelectionStrategy.LEFTMOST -> InputOrder(model)
         VariableSelectionStrategy.FIRST_FAIL -> FirstFail(model)
-        //VariableSelectionStrategy.FFC -> DomOverWDeg<IntVar>(model)
+        VariableSelectionStrategy.FFC -> null
         VariableSelectionStrategy.MIN -> Smallest()
         VariableSelectionStrategy.MAX -> Largest()
     }
+
 
     val valueStrategy: IntValueSelector = when(config.valueOrder) {
         ValueOrder.UP -> IntDomainMax()
         ValueOrder.DOWN -> IntDomainMin()
     }
 
-    if (config.problemType == ProblemType.SATISFY xor config.objective != null) {
+    var domWdeg: DomOverWDeg? = null
+    val SEED = 1.0 as Long
+    if (variableStrategy == null) {
+        domWdeg = DomOverWDeg(variables, SEED, valueStrategy)
+    }
+
+    if ((config.problemType == ProblemType.SATISFY) xor (config.objective != null)) {
         when (config.problemType) {
             ProblemType.MINIMISE -> model.setObjective(Model.MINIMIZE, parseExpression(config.objective).intVar())
             ProblemType.MAXIMISE -> model.setObjective(Model.MAXIMIZE, parseExpression(config.objective).intVar())
@@ -159,11 +167,21 @@ fun createChocoSolver(model: Model, config: LabellingConfiguration, variables: A
         throw IllegalStateException()
     }
 
-    model.solver.setSearch(IntStrategy(
-        variables,
-        variableStrategy,
-        valueStrategy
-    ))
+    if (domWdeg == null) {
+        model.solver.setSearch(IntStrategy(
+            variables,
+            variableStrategy,
+            valueStrategy
+        ))
+    } else {
+        model.solver.setSearch(IntStrategy(
+            variables,
+            variableStrategy,
+            valueStrategy
+        ), domWdeg)
+    }
+
+
 
     return model
 }
