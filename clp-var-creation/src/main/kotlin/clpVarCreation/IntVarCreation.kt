@@ -152,7 +152,7 @@ fun createChocoSolver(model: Model, config: LabellingConfiguration, variables: A
     }
 
     var domWdeg: DomOverWDeg? = null
-    val SEED = 1.0 as Long
+    val SEED = 1L
     if (variableStrategy == null) {
         domWdeg = DomOverWDeg(variables, SEED, valueStrategy)
     }
@@ -167,21 +167,18 @@ fun createChocoSolver(model: Model, config: LabellingConfiguration, variables: A
         throw IllegalStateException()
     }
 
-    if (domWdeg == null) {
-        model.solver.setSearch(IntStrategy(
-            variables,
-            variableStrategy,
-            valueStrategy
-        ))
-    } else {
+    // use domWdeg if specified
+    domWdeg?.let {
         model.solver.setSearch(IntStrategy(
             variables,
             variableStrategy,
             valueStrategy
         ), domWdeg)
-    }
-
-
+    } ?: model.solver.setSearch(IntStrategy(
+        variables,
+        variableStrategy,
+        valueStrategy
+    ))
 
     return model
 }
