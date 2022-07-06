@@ -214,7 +214,7 @@ fun createChocoSolver(model: Model, config: LabellingConfiguration, variables: A
     val variableStrategy: VariableSelector<IntVar>? = when(config.variableSelection) {
         VariableSelectionStrategy.LEFTMOST -> InputOrder(model)
         VariableSelectionStrategy.FIRST_FAIL -> FirstFail(model)
-        VariableSelectionStrategy.FFC -> null
+        VariableSelectionStrategy.FFC -> throw IllegalStateException()
         VariableSelectionStrategy.MIN -> Smallest()
         VariableSelectionStrategy.MAX -> Largest()
     }
@@ -225,10 +225,10 @@ fun createChocoSolver(model: Model, config: LabellingConfiguration, variables: A
         ValueOrder.DOWN -> IntDomainMin()
     }
 
-    var domWdeg: DomOverWDeg? = null
+    var domWdeg: AbstractStrategy<IntVar>? = null
     val SEED = 1L
     if (variableStrategy == null) {
-        domWdeg = DomOverWDeg(variables, SEED, valueStrategy)
+        domWdeg = DomOverWDeg(variables, SEED, valueStrategy) as AbstractStrategy<IntVar>
     }
 
     require((config.objective != null) xor (config.problemType == ProblemType.SATISFY))
@@ -249,11 +249,7 @@ fun createChocoSolver(model: Model, config: LabellingConfiguration, variables: A
 
     // use domWdeg if specified
     domWdeg?.let {
-        model.solver.setSearch(IntStrategy(
-            variables,
-            variableStrategy,
-            valueStrategy
-        ), domWdeg)
+        model.solver.setSearch(it)
     } ?: model.solver.setSearch(IntStrategy(
         variables,
         variableStrategy,
