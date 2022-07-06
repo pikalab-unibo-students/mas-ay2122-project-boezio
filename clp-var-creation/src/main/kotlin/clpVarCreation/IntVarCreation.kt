@@ -10,7 +10,9 @@ import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.chocosolver.solver.Model
+import org.chocosolver.solver.constraints.Arithmetic
 import org.chocosolver.solver.constraints.Constraint
+import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression
 import org.chocosolver.solver.search.strategy.selectors.values.IntDomainMax
 import org.chocosolver.solver.search.strategy.selectors.values.IntDomainMin
 import org.chocosolver.solver.search.strategy.selectors.values.IntValueSelector
@@ -84,7 +86,19 @@ data class LabellingConfiguration(
 )
 
 enum class VariableSelectionStrategy {
-    LEFTMOST, FIRST_FAIL, FFC, MIN, MAX
+    LEFTMOST, FIRST_FAIL, FFC, MIN, MAX;
+
+    fun toVariableSelector(): VariableSelector<IntVar> = TODO()
+
+    companion object {
+        fun fromAtom(atom: Atom): VariableSelectionStrategy? = when(atom.value) {
+            "ff" -> FIRST_FAIL
+            "ffc" -> FFC
+            "min" -> MIN
+            "max" -> MAX
+            else -> null
+        }
+    }
 }
 
 enum class ProblemType {
@@ -92,7 +106,15 @@ enum class ProblemType {
 }
 
 enum class ValueOrder {
-    UP, DOWN
+    UP, DOWN;
+
+    companion object {
+        fun fromAtom(atom: Atom): ValueOrder? = when(atom.value) {
+            "up" -> UP
+            "down" -> DOWN
+            else -> null
+        }
+    }
 }
 
 enum class BranchingStrategy {
@@ -104,18 +126,8 @@ fun parseConfiguration(arguments: List<Term>): LabellingConfiguration {
     for (term in arguments) {
         if (term.isAtom) {
             val atom = term.castToAtom()
-            configuration.variableSelection = when(atom.value) {
-                "ff" -> VariableSelectionStrategy.FIRST_FAIL
-                "ffc" -> VariableSelectionStrategy.FFC
-                "min" -> VariableSelectionStrategy.MIN
-                "max" -> VariableSelectionStrategy.MAX
-                else -> VariableSelectionStrategy.LEFTMOST
-            }
-            configuration.valueOrder = when(atom.value) {
-                "down" -> ValueOrder.DOWN
-                else -> ValueOrder.UP
-
-            }
+            VariableSelectionStrategy.fromAtom(atom)?.let { configuration.variableSelection = it }
+            ValueOrder.fromAtom(atom)?.let { configuration.valueOrder = it }
         } else {
             val struct = term.asStruct()
             configuration.problemType = if (struct.let {it?.arity == 1 && it.functor == "max"}) {
@@ -126,13 +138,75 @@ fun parseConfiguration(arguments: List<Term>): LabellingConfiguration {
                 ProblemType.SATISFY
             }
             configuration.objective = struct!!.args[0].asStruct()
+        // if (struct?.arity == 1) struct.args[0].asStruct() else null
         }
     }
     return configuration
 }
 
-fun parseExpression(struct: Struct?): Constraint {
-    // transform an expression from a tuprolog Struct to a choco Constraint
+// X + 1 - Z
+// -(+(X, 1), Z)
+fun parseExpression(variables: Map<Var, Variable>, term: Term): ArExpression {
+    return when (term) {
+        is Struct -> parseExpression(term)
+        is Var -> parseExpression(term)
+        else -> throw IllegalStateException()
+    }
+}
+
+fun parseExpression(variables: Map<Var, Variable>, struct: Var): ArExpression {
+    return variables[struct] as IntVar
+}
+
+fun Variable.toExpression(): ArExpression =
+    when (this) {
+        is IntVar -> this
+        else -> throw IllegalStateException()
+    }
+
+fun parseExpression(variables: Map<Var, Variable>, struct: Struct): ArExpression {
+    when {
+        struct.arity == 2 -> when {
+            struct.functor == "+" -> return parseSum(variables, struct[0], struct[1])
+            struct.functor == "-" -> return parseSub(variables, struct[0], struct[1])
+            struct.functor == "*" -> return parseMult(variables, struct[0], struct[1])
+            struct.functor == "/" -> return parseDiv(variables, struct[0], struct[1])
+        }
+        struct.arity == 1 -> when {
+            struct.functor == "abs" -> return parseAbs(variables, struct[0])
+        }
+    }
+    throw IllegalStateException()
+}
+
+fun parseAbs(variables: Map<Var, Variable>, term: Term): ArExpression {
+    val first = parseExpression(variables, term)
+    return first.abs()
+}
+
+fun parseSum(variables: Map<Var, Variable>, term1: Term, term2: Term): ArExpression {
+    return when {
+        term1 is Numeric && term2 is Numeric -> TODO()
+        term1 is Numeric -> {
+            val second = parseExpression(variables, term2)
+            return second.add(term1.intValue.toInt())
+        }
+        term2 is Numeric -> {
+            val first = parseExpression(variables, term1)
+            return first.add(term2.intValue.toInt())
+        }
+        else -> {
+            val first = parseExpression(variables, term1)
+            val second = parseExpression(variables, term2)
+            return first.add(second)
+        }
+    }
+}
+
+fun parseSub(variables: Map<Var, Variable>, term1: Term, term2: Term): ArExpression {
+    val first = parseExpression(variables, term1)
+    val second = parseExpression(variables, term2)
+    return first.sub(second)
 }
 
 fun createChocoSolver(model: Model, config: LabellingConfiguration, variables: Array<IntVar>): Model {
@@ -157,14 +231,20 @@ fun createChocoSolver(model: Model, config: LabellingConfiguration, variables: A
         domWdeg = DomOverWDeg(variables, SEED, valueStrategy)
     }
 
-    if ((config.problemType == ProblemType.SATISFY) xor (config.objective != null)) {
-        when (config.problemType) {
-            ProblemType.MINIMISE -> model.setObjective(Model.MINIMIZE, parseExpression(config.objective).intVar())
-            ProblemType.MAXIMISE -> model.setObjective(Model.MAXIMIZE, parseExpression(config.objective).intVar())
-            else -> {}
+    require((config.objective != null) xor (config.problemType == ProblemType.SATISFY))
+
+
+
+    when (config.problemType) {
+        ProblemType.SATISFY -> {
+            // does nothing
         }
-    } else {
-        throw IllegalStateException()
+        ProblemType.MINIMISE -> {
+            model.setObjective(Model.MINIMIZE, parseExpression(config.objective!!).intVar())
+        }
+        ProblemType.MAXIMISE -> {
+            model.setObjective(Model.MAXIMIZE, parseExpression(config.objective!!).intVar())
+        }
     }
 
     // use domWdeg if specified
