@@ -29,10 +29,15 @@ class ExpressionParser<T : Variable>(
                 "+" -> return binaryExpression(term, ArExpression::add)
                 "-" -> return binaryExpression(term, ArExpression::sub)
                 "*" -> return binaryExpression(term, ArExpression::mul)
-                "/" -> return binaryExpression(term, ArExpression::div)
+                "^" -> return binaryExpression(term, ArExpression::pow)
+                "div" -> return binaryExpression(term, ArExpression::div)
+                "mod" -> return binaryExpression(term, ArExpression::mod)
+                "min" -> return binaryExpression(term, ArExpression::min)
+                "max" -> return binaryExpression(term, ArExpression::max)
             }
             1 -> when (term.functor) {
                 "abs" -> return unaryExpression(term, ArExpression::abs)
+                "-" -> return unaryExpression(term, ArExpression::neg)
             }
         }
         return super.visitStruct(term) // indirectly calls defaultValue(term)
