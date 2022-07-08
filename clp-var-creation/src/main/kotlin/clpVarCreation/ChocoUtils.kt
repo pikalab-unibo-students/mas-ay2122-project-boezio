@@ -51,7 +51,9 @@ internal fun createChocoSolver(
     val variableStrategy: VariableSelector<IntVar> = config.variableSelection.toVariableSelector(model)
     val valueStrategy: IntValueSelector = config.valueOrder.toValueSelector()
 
-    // TODO handle config.branchingStrategy
+    if (config.branchingStrategy != BranchingStrategy.STEP) {
+        throw java.lang.IllegalStateException()
+    }
 
     require((config.objective != null) xor (config.problemType == ProblemType.SATISFY))
 
