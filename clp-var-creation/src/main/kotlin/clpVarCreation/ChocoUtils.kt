@@ -4,6 +4,8 @@ import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.sideffects.SideEffectsBuilder
+import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression
+import org.chocosolver.solver.expression.discrete.relational.ReExpression
 import org.chocosolver.solver.search.strategy.selectors.values.IntValueSelector
 import org.chocosolver.solver.search.strategy.selectors.variables.VariableSelector
 import org.chocosolver.solver.search.strategy.strategy.IntStrategy
@@ -26,6 +28,19 @@ internal val Solve.Request<ExecutionContext>.chocoModel
     } else {
         context.customData.durable[CHOCO_MODEL] as ChocoModel
     }
+
+// apply a generic relational constraint
+internal fun Solve.Request<ExecutionContext>.applyRelConstraint(
+    first: Term, second: Term, op: (ArExpression, ArExpression) -> ReExpression
+) {
+    val chocoModel = chocoModel
+    val logicalVars = (first.variables + second.variables).toSet()
+    val varMap = chocoModel.variablesMap(logicalVars).flip()
+    val parser = ExpressionParser(chocoModel, varMap)
+    val firstExpression = first.accept(parser)
+    val secondExpression = second.accept(parser)
+    op(firstExpression, secondExpression).decompose().post()
+}
 
 internal fun SideEffectsBuilder.setChocoModel(chocoModel: ChocoModel) {
     setDurableData(CHOCO_MODEL, chocoModel)

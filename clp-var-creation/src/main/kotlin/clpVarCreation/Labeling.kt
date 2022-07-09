@@ -9,7 +9,7 @@ import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 import org.chocosolver.solver.variables.Variable
 
-object Labelling : BinaryRelation.NonBacktrackable<ExecutionContext>("labelling") {
+object Labeling : BinaryRelation.NonBacktrackable<ExecutionContext>("labeling") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term): Solve.Response {
         ensuringArgumentIsList(0)
         val keys: Set<Struct> = (first as it.unibo.tuprolog.core.List).toList().filterIsInstance<Struct>().toSet()
