@@ -14,9 +14,9 @@ object Labeling : BinaryRelation.NonBacktrackable<ExecutionContext>("labeling") 
         ensuringArgumentIsList(0)
         val keys: Set<Struct> = (first as it.unibo.tuprolog.core.List).toList().filterIsInstance<Struct>().toSet()
         ensuringArgumentIsList(1)
-        val logicVariables: List<Var> = first.toList().filterIsInstance<Var>().distinct().toList()
+        val logicVariables: List<Var> = (second as it.unibo.tuprolog.core.List).toList().filterIsInstance<Var>().distinct().toList()
         val chocoModel = chocoModel
-        val configuration = LabellingConfiguration.fromTerms(keys)
+        val configuration = LabelingConfiguration.fromTerms(keys)
         val chocoToLogic: Map<Variable, Var> = chocoModel.variablesMap(logicVariables)
         val solver = createChocoSolver(chocoModel, configuration, chocoToLogic)
         return if (solver.solve()) {
