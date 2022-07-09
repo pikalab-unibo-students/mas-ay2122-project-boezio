@@ -4,7 +4,7 @@ import it.unibo.tuprolog.core.Atom
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
 
-data class LabellingConfiguration(
+data class LabelingConfiguration(
     var branchingStrategy: BranchingStrategy = BranchingStrategy.STEP,
     var variableSelection: VariableSelectionStrategy = VariableSelectionStrategy.LEFTMOST,
     var problemType: ProblemType = ProblemType.SATISFY,
@@ -13,8 +13,8 @@ data class LabellingConfiguration(
 ) {
     companion object {
         // TODO no
-        fun fromTerms(arguments: Iterable<Term>): LabellingConfiguration {
-            val configuration = LabellingConfiguration()
+        fun fromTerms(arguments: Iterable<Term>): LabelingConfiguration {
+            val configuration = LabelingConfiguration()
             for (term in arguments) {
                 when (term) {
                     is Atom -> {

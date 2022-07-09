@@ -13,7 +13,7 @@ internal class LabelingTest {
     @Test @Ignore
     fun testGreaterThan() {
 
-        val theory = ClausesParser.withStandardOperators.parseTheory(
+        val theory = ClausesParser.withDefaultOperators.parseTheory(
             """
             problem(X, Y) :- 
                 in(X, '..'(1, 10)), 

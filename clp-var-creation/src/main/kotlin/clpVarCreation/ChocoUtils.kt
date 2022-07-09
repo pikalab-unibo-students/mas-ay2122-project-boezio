@@ -68,7 +68,7 @@ private fun <K, V> Map<K, V>.flip(): Map<V, K> = map { (k, v) -> v to k }.toMap(
 
 internal fun createChocoSolver(
     model: ChocoModel,
-    config: LabellingConfiguration,
+    config: LabelingConfiguration,
     variables: Map<Variable, Var>
 ): ChocoSolver {
     val variableStrategy: VariableSelector<IntVar> = config.variableSelection.toVariableSelector(model)
