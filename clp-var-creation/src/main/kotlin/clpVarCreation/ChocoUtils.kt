@@ -1,16 +1,17 @@
 package clpVarCreation
 
-import it.unibo.tuprolog.core.Integer
-import it.unibo.tuprolog.core.Term
-import it.unibo.tuprolog.core.Var
+import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.sideffects.SideEffectsBuilder
 import org.chocosolver.solver.search.strategy.selectors.values.IntValueSelector
 import org.chocosolver.solver.search.strategy.selectors.variables.VariableSelector
 import org.chocosolver.solver.search.strategy.strategy.IntStrategy
+import org.chocosolver.solver.variables.BoolVar
 import org.chocosolver.solver.variables.IntVar
+import org.chocosolver.solver.variables.RealVar
 import org.chocosolver.solver.variables.Variable
+import org.chocosolver.util.ESat
 import kotlin.collections.component1
 import kotlin.collections.component2
 import org.chocosolver.solver.Model as ChocoModel
@@ -38,7 +39,14 @@ internal fun ChocoModel.variablesMap(logicVariables: Iterable<Var>): Map<Variabl
 internal val Variable.valueAsTerm: Term
     get() = when (this) {
         is IntVar -> Integer.of(value)
-        else -> TODO("Implement value retrieval as ${Term::class} for type ${this::class}")
+        // toString returns <name_var>=<value>
+        is RealVar -> Real.of((this.toString().split("=")[1]).toDouble())
+        is BoolVar -> when(booleanValue) {
+            ESat.TRUE -> Truth.of(true)
+            ESat.FALSE -> Truth.of(false)
+            else -> throw IllegalStateException()
+        }
+        else -> throw IllegalStateException()
     }
 
 private fun <K, V> Map<K, V>.flip(): Map<V, K> = map { (k, v) -> v to k }.toMap()
