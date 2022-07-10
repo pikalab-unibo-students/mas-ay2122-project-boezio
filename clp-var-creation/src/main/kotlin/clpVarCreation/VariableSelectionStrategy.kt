@@ -29,7 +29,7 @@ enum class VariableSelectionStrategy {
         }
         MAX -> {
             require(T::class == IntVar::class)
-            Smallest() as VariableSelector<T>
+            Largest() as VariableSelector<T>
         }
     }
 

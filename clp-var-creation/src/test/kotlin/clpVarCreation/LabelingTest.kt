@@ -27,7 +27,7 @@ internal class LabelingTest {
         // @giuseppeboezio i goal da dare in pasto ai solver vanno parsati come strutture.
         // era il fatto di parsarli come clausole che ti creava problemi.
         val goal = parser.parseStruct(
-            "problem(X,Y),labeling([],[X,Y])"
+            "problem(X,Y),label([[X,Y])"
         )
 
         val solver = Solver.prolog.solverOf(
@@ -63,4 +63,233 @@ internal class LabelingTest {
         // 2. la sostituzione dà 4 variabili al posto di 2, quindi secondo me da qualche parte a livello implementativo gestiamo male le variabili.
         //    qua tocca debuggare per capire dove.
     }
+
+    @Test
+    fun testLessThan() {
+
+        val theory = ClausesParser.withDefaultOperators().parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                '#<'(X, Y).
+            """.trimIndent()
+        )
+
+        val parser = TermParser.withDefaultOperators()
+
+        val goal = parser.parseStruct(
+            "problem(X,Y),labeling([down],[X,Y])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpLibrary)
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        parser.scope.with {
+
+            assertEquals(
+                Substitution.unifier(
+                    varOf("X") to intOf(9),
+                    varOf("Y") to intOf(10)
+                ),
+                solution.substitution
+            )
+        }
+
+    }
+
+    @Test
+    fun testGreaterEquals() {
+
+        val theory = ClausesParser.withDefaultOperators().parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                '#>='(X, Y).
+            """.trimIndent()
+        )
+
+        val parser = TermParser.withDefaultOperators()
+
+        val goal = parser.parseStruct(
+            "problem(X,Y),labeling([ff, down],[X,Y])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpLibrary)
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        parser.scope.with {
+
+            assertEquals(
+                Substitution.unifier(
+                    varOf("X") to intOf(10),
+                    varOf("Y") to intOf(10)
+                ),
+                solution.substitution
+            )
+        }
+
+    }
+
+    @Test
+    fun testLessEquals() {
+
+        val theory = ClausesParser.withDefaultOperators().parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                '#=<'(X, Y).
+            """.trimIndent()
+        )
+
+        val parser = TermParser.withDefaultOperators()
+
+        val goal = parser.parseStruct(
+            "problem(X,Y),labeling([min],[X,Y])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpLibrary)
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        parser.scope.with {
+
+            assertEquals(
+                Substitution.unifier(
+                    varOf("X") to intOf(10),
+                    varOf("Y") to intOf(10)
+                ),
+                solution.substitution
+            )
+        }
+
+    }
+
+    @Test
+    fun testEquals() {
+
+        val theory = ClausesParser.withDefaultOperators().parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                '#='(X, Y).
+            """.trimIndent()
+        )
+
+        val parser = TermParser.withDefaultOperators()
+
+        val goal = parser.parseStruct(
+            "problem(X,Y),labeling([max],[X,Y])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpLibrary)
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        parser.scope.with {
+
+            assertEquals(
+                Substitution.unifier(
+                    varOf("X") to intOf(1),
+                    varOf("Y") to intOf(1)
+                ),
+                solution.substitution
+            )
+        }
+    }
+
+    @Test
+    fun testNotEquals() {
+
+        val theory = ClausesParser.withDefaultOperators().parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                '#\='(X, Y).
+            """.trimIndent()
+        )
+
+        val parser = TermParser.withDefaultOperators()
+
+        val goal = parser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpLibrary)
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        parser.scope.with {
+
+            assertEquals(
+                Substitution.unifier(
+                    varOf("X") to intOf(1),
+                    varOf("Y") to intOf(2)
+                ),
+                solution.substitution
+            )
+        }
+    }
+
+    @Test
+    fun testMinimize() {
+
+        val theory = ClausesParser.withDefaultOperators().parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                '#<'(X, Y).
+            """.trimIndent()
+        )
+
+        val parser = TermParser.withDefaultOperators()
+
+        val goal = parser.parseStruct(
+            "problem(X,Y),labeling([min(X)],[X,Y])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpLibrary)
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        parser.scope.with {
+
+            assertEquals(
+                Substitution.unifier(
+                    varOf("X") to intOf(1),
+                    varOf("Y") to intOf(2)
+                ),
+                solution.substitution
+            )
+        }
+    }
+
+
+
+
 }

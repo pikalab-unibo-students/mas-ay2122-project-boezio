@@ -8,7 +8,7 @@ enum class BranchingStrategy {
     companion object {
         fun fromAtom(atom: Atom): BranchingStrategy? = when (atom.value) {
             "step" -> STEP
-            "down" -> ENUM
+            "enum" -> ENUM
             "bisect" -> BISECT
             else -> null
         }
