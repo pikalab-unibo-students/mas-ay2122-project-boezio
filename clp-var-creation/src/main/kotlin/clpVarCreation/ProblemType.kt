@@ -4,13 +4,13 @@ import it.unibo.tuprolog.core.Struct
 import org.chocosolver.solver.Model as ChocoModel
 
 enum class ProblemType {
-    SATISFY, MAXIMISE, MINIMISE;
+    SATISFY, MAXIMIZE, MINIMIZE;
 
     fun toChoco(): Boolean? =
         when (this) {
             SATISFY -> null
-            MAXIMISE -> ChocoModel.MAXIMIZE
-            MINIMISE -> ChocoModel.MINIMIZE
+            MAXIMIZE -> ChocoModel.MAXIMIZE
+            MINIMIZE -> ChocoModel.MINIMIZE
         }
 
     companion object {
@@ -18,11 +18,11 @@ enum class ProblemType {
             return when (struct.functor) {
                 "max" -> {
                     require(struct.arity <= 1)
-                    MAXIMISE
+                    MAXIMIZE
                 }
                 "min" -> {
                     require(struct.arity <= 1)
-                    MINIMISE
+                    MINIMIZE
                 }
                 else -> SATISFY
             }
