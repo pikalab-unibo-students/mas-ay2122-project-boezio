@@ -6,7 +6,7 @@ import it.unibo.tuprolog.theory.parsing.ClausesParser
 
 fun main() {
 
-    val theory = ClausesParser.withDefaultOperators.parseTheory(
+    val theory = ClausesParser.withDefaultOperators().parseTheory(
         """
             problem(X, Y) :- 
                 in(X, '..'(1, 10)), 

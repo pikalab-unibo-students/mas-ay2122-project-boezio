@@ -48,7 +48,7 @@ internal fun SideEffectsBuilder.setChocoModel(chocoModel: ChocoModel) {
 
 internal fun ChocoModel.variablesMap(logicVariables: Iterable<Var>): Map<Variable, Var> {
     val logicVariablesByName = logicVariables.groupBy { it.completeName }.mapValues { it.value.single() }
-    return vars.associateWith { logicVariablesByName[it.name]!! }
+    return vars.filter { it.name in logicVariablesByName }.associateWith { logicVariablesByName[it.name]!! }
 }
 
 internal val Variable.valueAsTerm: Term

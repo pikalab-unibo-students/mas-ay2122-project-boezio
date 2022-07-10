@@ -8,7 +8,7 @@
 
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.5.31"
+    id("org.jetbrains.kotlin.jvm") version "1.7.0"
 }
 
 repositories {
@@ -24,8 +24,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     // This dependency is used by the application.
-    implementation("it.unibo.tuprolog:solve-classic-jvm:0.20.4")
-    implementation("it.unibo.tuprolog:parser-theory-jvm:0.20.4")
+    implementation("it.unibo.tuprolog:solve-classic-jvm:0.20.9")
+    implementation("it.unibo.tuprolog:parser-theory-jvm:0.20.9")
 
     testImplementation(kotlin("test"))
 }
