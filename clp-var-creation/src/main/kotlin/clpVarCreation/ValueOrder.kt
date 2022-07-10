@@ -10,8 +10,8 @@ enum class ValueOrder {
 
     fun toValueSelector(): IntValueSelector {
         return when (this) {
-            UP -> IntDomainMax()
-            DOWN -> IntDomainMin()
+            UP -> IntDomainMin()
+            DOWN -> IntDomainMax()
         }
     }
 
