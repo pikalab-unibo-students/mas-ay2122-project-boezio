@@ -25,7 +25,8 @@ data class LabelingConfiguration(
                     is Struct -> {
                         configuration.problemType = ProblemType.fromTerm(term)
                         if (configuration.problemType != ProblemType.SATISFY && term.arity == 1) {
-                            configuration.objective = term.args[0].asStruct()
+                            val struct = term.args[0].asStruct()
+                            configuration.objective = struct
                         }
                     }
                 }
