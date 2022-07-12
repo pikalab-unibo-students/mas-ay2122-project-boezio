@@ -247,7 +247,7 @@ internal class LabelingTest {
         }
     }
 
-    @Test
+    @Test @Ignore
     fun testMaximize() {
 
         val theory = ClausesParser.withDefaultOperators().parseTheory(
