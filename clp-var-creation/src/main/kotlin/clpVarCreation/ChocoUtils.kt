@@ -37,14 +37,14 @@ internal fun ChocoModel.variablesMap(logicVariables: Iterable<Var>): Map<Variabl
 internal val Variable.valueAsTerm: Term
     get() = when (this) {
         is IntVar -> Integer.of(value)
-        // toString returns <name_var>=<value>
+        // RealVar.toString returns <name_var>=<value>
         is RealVar -> Real.of((this.toString().split("=")[1]).toDouble())
-        is BoolVar -> when(booleanValue) {
+        is BoolVar -> when (booleanValue) {
             ESat.TRUE -> Truth.of(true)
             ESat.FALSE -> Truth.of(false)
-            else -> throw IllegalStateException()
+            else -> throw IllegalStateException("Invalid value for ${BoolVar::class.java.simpleName}: $booleanValue")
         }
-        else -> throw IllegalStateException()
+        else -> throw IllegalStateException("Not supported type of Choco variable: ${this::class.java.name}")
     }
 
 internal fun <K, V> Map<K, V>.flip(): Map<V, K> = map { (k, v) -> v to k }.toMap()
