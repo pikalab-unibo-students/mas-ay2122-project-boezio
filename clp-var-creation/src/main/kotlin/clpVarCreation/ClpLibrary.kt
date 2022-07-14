@@ -7,7 +7,6 @@ import it.unibo.tuprolog.theory.Theory
 object ClpLibrary : AliasedLibrary by Library.aliased(
     alias = "prolog.clp.int",
     primitives = listOf(
-        In,
         Ins,
         Labeling,
         Equals,
@@ -18,6 +17,9 @@ object ClpLibrary : AliasedLibrary by Library.aliased(
         LessEquals
     ).associate { it.descriptionPair },
     theory = Theory.of(
-        Label.implementation
+        listOf(
+            In,
+            Label
+        ).map { it.implementation }
     )
 )
