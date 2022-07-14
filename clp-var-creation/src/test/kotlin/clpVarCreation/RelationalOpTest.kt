@@ -175,7 +175,7 @@ class RelationalOpTest {
         }
     }
 
-    @Test @Ignore
+    @Test
     fun testNotEquals() {
 
         val theory = ClausesParser.withDefaultOperators().parseTheory(
@@ -183,7 +183,7 @@ class RelationalOpTest {
             problem(X, Y) :- 
                 in(X, '..'(1, 10)), 
                 in(Y, '..'(1, 10)), 
-                '#\='(X, Y).
+                '#\\='(X, Y).
             """.trimIndent()
         )
 
