@@ -9,10 +9,9 @@ data class LabelingConfiguration(
     var variableSelection: VariableSelectionStrategy = VariableSelectionStrategy.LEFTMOST,
     var problemType: ProblemType = ProblemType.SATISFY,
     var valueOrder: ValueOrder = ValueOrder.UP,
-    var objective: Struct? = null // expression to be optimized if problemType is either MAXIMISE or MINIMISE,
+    var objective: Term? = null // expression to be optimized if problemType is either MAXIMISE or MINIMISE,
 ) {
     companion object {
-        // TODO no
         fun fromTerms(arguments: Iterable<Term>): LabelingConfiguration {
             val configuration = LabelingConfiguration()
             for (term in arguments) {
@@ -25,8 +24,7 @@ data class LabelingConfiguration(
                     is Struct -> {
                         configuration.problemType = ProblemType.fromTerm(term)
                         if (configuration.problemType != ProblemType.SATISFY && term.arity == 1) {
-                            val struct = term.args[0].asStruct()
-                            configuration.objective = struct
+                            configuration.objective = term.args[0]
                         }
                     }
                 }
