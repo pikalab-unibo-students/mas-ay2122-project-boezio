@@ -1,13 +1,10 @@
 package clpVarCreation
 
-import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.parsing.TermParser
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
-import kotlin.test.assertEquals
 
 internal class LabelingTest {
 
@@ -39,13 +36,9 @@ internal class LabelingTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(2),
-                    varOf("Y") to intOf(1)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(2),
+                varOf("Y") to intOf(1)
             )
         }
     }
@@ -65,18 +58,14 @@ internal class LabelingTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(2),
-                    varOf("Y") to intOf(1)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(2),
+                varOf("Y") to intOf(1)
             )
         }
     }
 
-    @Test @Ignore
+    @Test
     fun testDomOverWDeg() {
 
         val goal = parser.parseStruct(
@@ -91,20 +80,15 @@ internal class LabelingTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(2),
-                    varOf("Y") to intOf(1)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(2),
+                varOf("Y") to intOf(1)
             )
         }
     }
 
     @Test
     fun testMin() {
-
         val goal = parser.parseStruct(
             "problem(X,Y),labeling([min],[X,Y])"
         )
@@ -117,20 +101,15 @@ internal class LabelingTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(2),
-                    varOf("Y") to intOf(1)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(2),
+                varOf("Y") to intOf(1)
             )
         }
     }
 
     @Test
     fun testMax() {
-
         val goal = parser.parseStruct(
             "problem(X,Y),labeling([max],[X,Y])"
         )
@@ -143,13 +122,9 @@ internal class LabelingTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(2),
-                    varOf("Y") to intOf(1)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(2),
+                varOf("Y") to intOf(1)
             )
         }
     }
@@ -171,13 +146,9 @@ internal class LabelingTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(2),
-                    varOf("Y") to intOf(1)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(2),
+                varOf("Y") to intOf(1)
             )
         }
     }
@@ -197,20 +168,17 @@ internal class LabelingTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(10),
-                    varOf("Y") to intOf(9)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(10),
+                varOf("Y") to intOf(9)
             )
         }
     }
 
     // Optimization tests
+    // TODO non usare i commenti per separare il codice. Piuttosto fai una classe diversa per questi test
 
-    @Test @Ignore
+    @Test
     fun testMinimize() {
 
         val theory = ClausesParser.withDefaultOperators().parseTheory(
@@ -236,18 +204,14 @@ internal class LabelingTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(10),
-                    varOf("Y") to intOf(1)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(10),
+                varOf("Y") to intOf(1)
             )
         }
     }
 
-    @Test @Ignore
+    @Test
     fun testMaximize() {
 
         val theory = ClausesParser.withDefaultOperators().parseTheory(
@@ -273,18 +237,10 @@ internal class LabelingTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(10),
-                    varOf("Y") to intOf(1)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(10),
+                varOf("Y") to intOf(1)
             )
         }
     }
-
-
-
-
 }

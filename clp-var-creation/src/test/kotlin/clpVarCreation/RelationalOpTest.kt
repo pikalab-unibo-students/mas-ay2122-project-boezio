@@ -1,13 +1,10 @@
 package clpVarCreation
 
-import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.parsing.TermParser
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
-import kotlin.test.assertEquals
 
 class RelationalOpTest {
 
@@ -37,13 +34,9 @@ class RelationalOpTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(2),
-                    varOf("Y") to intOf(1)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(2),
+                varOf("Y") to intOf(1)
             )
         }
     }
@@ -68,13 +61,9 @@ class RelationalOpTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(1),
-                    varOf("Y") to intOf(2)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(1),
+                varOf("Y") to intOf(2)
             )
         }
 
@@ -100,16 +89,11 @@ class RelationalOpTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(1),
-                    varOf("Y") to intOf(1)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(1),
+                varOf("Y") to intOf(1)
             )
         }
-
     }
 
     @Test
@@ -132,16 +116,11 @@ class RelationalOpTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(1),
-                    varOf("Y") to intOf(1)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(1),
+                varOf("Y") to intOf(1)
             )
         }
-
     }
 
     @Test
@@ -164,13 +143,9 @@ class RelationalOpTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(1),
-                    varOf("Y") to intOf(1)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(1),
+                varOf("Y") to intOf(1)
             )
         }
     }
@@ -195,13 +170,9 @@ class RelationalOpTest {
         val solution = solver.solveOnce(goal)
 
         parser.scope.with {
-
-            assertEquals(
-                Substitution.unifier(
-                    varOf("X") to intOf(1),
-                    varOf("Y") to intOf(2)
-                ),
-                solution.substitution
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(1),
+                varOf("Y") to intOf(2)
             )
         }
     }

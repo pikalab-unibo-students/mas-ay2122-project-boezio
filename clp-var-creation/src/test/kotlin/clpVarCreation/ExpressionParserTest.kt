@@ -24,6 +24,7 @@ internal class ExpressionParserTest {
     private val mapVars = (tuPrologVars zip chocoVars).toMap()
     private val expressionParser = ExpressionParser(model, mapVars)
 
+    // TODO questi test sono troppo deboli, bisogna fare più asserzioni
 
     @Test
     fun testVisitVar() {
