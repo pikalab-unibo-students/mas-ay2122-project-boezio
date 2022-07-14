@@ -7,8 +7,8 @@ import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
-import org.chocosolver.solver.Model
-import org.chocosolver.solver.Solver
+import org.chocosolver.solver.Model as ChocoModel
+import org.chocosolver.solver.Solver as ChocoSolver
 import org.chocosolver.solver.search.strategy.selectors.values.IntValueSelector
 import org.chocosolver.solver.search.strategy.selectors.variables.VariableSelector
 import org.chocosolver.solver.search.strategy.strategy.IntStrategy
@@ -26,22 +26,33 @@ object Labeling : BinaryRelation.NonBacktrackable<ExecutionContext>("labeling") 
         val configuration = LabelingConfiguration.fromTerms(keys)
         val chocoToLogic: Map<Variable, Var> = chocoModel.variablesMap(logicVariables)
         val solver = createChocoSolver(chocoModel, configuration, chocoToLogic)
-        return if (solver.solve()) {
-            replyWith(
-                Substitution.of(chocoToLogic.map { (k, v) -> v to k.valueAsTerm })
-            )
+        return if (configuration.problemType == ProblemType.SATISFY) {
+            replyWith(solver.solutions(chocoToLogic).first())
         } else {
-            replyFail()
+            replyWith(solver.solutions(chocoToLogic).last())
+        }
+    }
+
+    // why? see https://choco-solver.org/docs/solving/solving/#mono-objective-optimization
+    // how? see https://kotlinlang.org/docs/sequences.html#from-chunks
+    private fun ChocoSolver.solutions(chocoToLogic: Map<Variable, Var>): Sequence<Substitution> = sequence {
+        var atLeastOne = false
+        while (solve()) {
+            atLeastOne = true
+            yield(Substitution.of(chocoToLogic.map { (k, v) -> v to k.valueAsTerm }))
+        }
+        if (!atLeastOne) {
+            yield(Substitution.failed())
         }
     }
 
     private fun <K, V> Map<K, V>.flip(): Map<V, K> = map { (k, v) -> v to k }.toMap()
 
     private fun createChocoSolver(
-        model: Model,
+        model: ChocoModel,
         config: LabelingConfiguration,
         variables: Map<Variable, Var>
-    ): Solver {
+    ): ChocoSolver {
         val variableStrategy: VariableSelector<IntVar> = config.variableSelection.toVariableSelector(model, variables.keys)
         val valueStrategy: IntValueSelector = config.valueOrder.toValueSelector()
 
