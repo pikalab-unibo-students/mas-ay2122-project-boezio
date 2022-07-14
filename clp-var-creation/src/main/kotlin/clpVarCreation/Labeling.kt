@@ -42,7 +42,7 @@ object Labeling : BinaryRelation.NonBacktrackable<ExecutionContext>("labeling") 
         config: LabelingConfiguration,
         variables: Map<Variable, Var>
     ): Solver {
-        val variableStrategy: VariableSelector<IntVar> = config.variableSelection.toVariableSelector(model)
+        val variableStrategy: VariableSelector<IntVar> = config.variableSelection.toVariableSelector(model, variables.keys)
         val valueStrategy: IntValueSelector = config.valueOrder.toValueSelector()
 
         if (config.branchingStrategy != BranchingStrategy.STEP) {

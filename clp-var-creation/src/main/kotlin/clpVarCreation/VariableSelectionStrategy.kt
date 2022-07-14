@@ -12,6 +12,7 @@ enum class VariableSelectionStrategy {
     @Suppress("UNCHECKED_CAST")
     inline fun <reified T : Variable> toVariableSelector(
         chocoModel: Model,
+        variables: Iterable<Variable>,
         seed: Long = DEFAULT_RANDOM_SEED
     ): VariableSelector<T> = when (this) {
         LEFTMOST -> InputOrder(chocoModel)
@@ -20,7 +21,7 @@ enum class VariableSelectionStrategy {
             FirstFail(chocoModel) as VariableSelector<T>
         }
         FFC -> {
-            val intVariables = chocoModel.vars.filterIsInstance<IntVar>().toTypedArray()
+            val intVariables = variables.filterIsInstance<IntVar>().toTypedArray()
             DomOverWDeg(intVariables, seed) as VariableSelector<T>
         }
         MIN -> {
