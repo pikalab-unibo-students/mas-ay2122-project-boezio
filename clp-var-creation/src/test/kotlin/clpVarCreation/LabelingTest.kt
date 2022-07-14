@@ -205,7 +205,7 @@ internal class LabelingTest {
 
         parser.scope.with {
             solution.assertSolutionAssigns(
-                varOf("X") to intOf(10),
+                varOf("X") to intOf(2),
                 varOf("Y") to intOf(1)
             )
         }
