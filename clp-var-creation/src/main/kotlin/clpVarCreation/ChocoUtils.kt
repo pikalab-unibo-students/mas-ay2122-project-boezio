@@ -25,19 +25,6 @@ internal val Solve.Request<ExecutionContext>.chocoModel
         context.customData.durable[CHOCO_MODEL] as ChocoModel
     }
 
-// apply a generic relational constraint
-internal fun Solve.Request<ExecutionContext>.applyRelConstraint(
-    first: Term, second: Term, op: (ArExpression, ArExpression) -> ReExpression
-) {
-    val chocoModel = chocoModel
-    val logicalVars = (first.variables + second.variables).toSet()
-    val varMap = chocoModel.variablesMap(logicalVars).flip()
-    val parser = ExpressionParser(chocoModel, varMap)
-    val firstExpression = first.accept(parser)
-    val secondExpression = second.accept(parser)
-    op(firstExpression, secondExpression).decompose().post()
-}
-
 internal fun SideEffectsBuilder.setChocoModel(chocoModel: ChocoModel) {
     setDurableData(CHOCO_MODEL, chocoModel)
 }
