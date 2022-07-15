@@ -19,8 +19,6 @@ internal class LabelingTest {
 
     private val parser = TermParser.withDefaultOperators()
 
-    // VariableSelectionStrategy tests
-
     @Test
     fun testLeftMost() {
 
@@ -174,9 +172,6 @@ internal class LabelingTest {
             )
         }
     }
-
-    // Optimization tests
-    // TODO non usare i commenti per separare il codice. Piuttosto fai una classe diversa per questi test
 
     @Test
     fun testMinimize() {
