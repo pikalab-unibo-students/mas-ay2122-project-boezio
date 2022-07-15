@@ -24,8 +24,6 @@ internal class ExpressionParserTest {
     private val mapVars = (tuPrologVars zip chocoVars).toMap()
     private val expressionParser = ExpressionParser(model, mapVars)
 
-    // TODO questi test sono troppo deboli, bisogna fare più asserzioni
-
     @Test
     fun testVisitVar() {
 
@@ -48,7 +46,7 @@ internal class ExpressionParserTest {
     }
 
     @Test
-    fun testVisitStructPlus() {
+    fun testVisitStructAdd() {
 
         val varX = tuPrologVars[0]
         val varY = tuPrologVars[1]
@@ -60,10 +58,105 @@ internal class ExpressionParserTest {
     }
 
     @Test
+    fun testVisitStructSub() {
+
+        val varX = tuPrologVars[0]
+        val varY = tuPrologVars[1]
+        val struct = Struct.of("-", varX, varY)
+        val arithmeticExpr = struct.accept(expressionParser)
+        // the expression has the two variables as children
+        assertEquals(arithmeticExpr.noChild, 2)
+
+    }
+
+    @Test
+    fun testVisitStructMul() {
+
+        val varX = tuPrologVars[0]
+        val varY = tuPrologVars[1]
+        val struct = Struct.of("*", varX, varY)
+        val arithmeticExpr = struct.accept(expressionParser)
+        // the expression has the two variables as children
+        assertEquals(arithmeticExpr.noChild, 2)
+
+    }
+
+    @Test
+    fun testVisitStructPow() {
+
+        val varX = tuPrologVars[0]
+        val varY = tuPrologVars[1]
+        val struct = Struct.of("^", varX, varY)
+        val arithmeticExpr = struct.accept(expressionParser)
+        // the expression has the two variables as children
+        assertEquals(arithmeticExpr.noChild, 2)
+
+    }
+
+    @Test
+    fun testVisitStructDiv() {
+
+        val varX = tuPrologVars[0]
+        val varY = tuPrologVars[1]
+        val struct = Struct.of("div", varX, varY)
+        val arithmeticExpr = struct.accept(expressionParser)
+        // the expression has the two variables as children
+        assertEquals(arithmeticExpr.noChild, 2)
+
+    }
+
+    @Test
+    fun testVisitStructMod() {
+
+        val varX = tuPrologVars[0]
+        val varY = tuPrologVars[1]
+        val struct = Struct.of("mod", varX, varY)
+        val arithmeticExpr = struct.accept(expressionParser)
+        // the expression has the two variables as children
+        assertEquals(arithmeticExpr.noChild, 2)
+
+    }
+
+    @Test
+    fun testVisitStructMin() {
+
+        val varX = tuPrologVars[0]
+        val varY = tuPrologVars[1]
+        val struct = Struct.of("min", varX, varY)
+        val arithmeticExpr = struct.accept(expressionParser)
+        // the expression has the two variables as children
+        assertEquals(arithmeticExpr.noChild, 2)
+
+    }
+
+    @Test
+    fun testVisitStructMax() {
+
+        val varX = tuPrologVars[0]
+        val varY = tuPrologVars[1]
+        val struct = Struct.of("max", varX, varY)
+        val arithmeticExpr = struct.accept(expressionParser)
+        // the expression has the two variables as children
+        assertEquals(arithmeticExpr.noChild, 2)
+
+    }
+
+    @Test
     fun testVisitStructAbs() {
 
         val variable = tuPrologVars[0]
         val struct = Struct.of("abs", variable)
+        val arithmeticExpr = struct.accept(expressionParser)
+        // The only child of the expression is the argument of abs
+        assertEquals(arithmeticExpr.noChild, 1)
+
+    }
+
+    @Test
+    fun testVisitStructNegation() {
+
+        val variable = tuPrologVars[0]
+        val struct = Struct.of("-", variable)
         val arithmeticExpr = struct.accept(expressionParser)
         // The only child of the expression is the argument of abs
         assertEquals(arithmeticExpr.noChild, 1)
