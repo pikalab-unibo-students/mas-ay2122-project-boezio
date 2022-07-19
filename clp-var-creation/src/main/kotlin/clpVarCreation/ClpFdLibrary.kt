@@ -4,7 +4,7 @@ import it.unibo.tuprolog.solve.library.AliasedLibrary
 import it.unibo.tuprolog.solve.library.Library
 import it.unibo.tuprolog.theory.Theory
 
-object ClpLibrary : AliasedLibrary by Library.aliased(
+object ClpFdLibrary : AliasedLibrary by Library.aliased(
     alias = "prolog.clp.int",
     primitives = listOf(
         Ins,
