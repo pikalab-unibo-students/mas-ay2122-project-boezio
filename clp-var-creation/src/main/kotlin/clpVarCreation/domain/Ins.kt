@@ -1,5 +1,7 @@
-package clpVarCreation
+package clpVarCreation.domain
 
+import clpVarCreation.chocoModel
+import clpVarCreation.setChocoModel
 import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var

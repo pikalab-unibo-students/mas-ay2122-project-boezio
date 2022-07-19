@@ -1,4 +1,4 @@
-package clpVarCreation
+package clpVarCreation.relationalConstraints
 
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression
 import org.chocosolver.solver.expression.discrete.relational.ReExpression

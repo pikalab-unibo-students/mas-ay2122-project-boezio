@@ -1,5 +1,9 @@
-package clpVarCreation
+package clpVarCreation.relationalConstraints
 
+import clpVarCreation.ExpressionParser
+import clpVarCreation.chocoModel
+import clpVarCreation.flip
+import clpVarCreation.variablesMap
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.BinaryRelation

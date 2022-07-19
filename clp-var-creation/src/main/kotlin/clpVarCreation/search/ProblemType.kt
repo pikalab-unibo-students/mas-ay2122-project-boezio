@@ -1,4 +1,4 @@
-package clpVarCreation
+package clpVarCreation.search
 
 import it.unibo.tuprolog.core.Struct
 import org.chocosolver.solver.Model as ChocoModel

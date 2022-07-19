@@ -1,5 +1,7 @@
-package clpVarCreation
+package clpVarCreation.search
 
+import clpVarCreation.*
+import clpVarCreation.chocoModel
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.Term

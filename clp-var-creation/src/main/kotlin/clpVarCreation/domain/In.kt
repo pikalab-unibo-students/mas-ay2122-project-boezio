@@ -1,4 +1,4 @@
-package clpVarCreation
+package clpVarCreation.domain
 
 import it.unibo.tuprolog.core.Scope
 import it.unibo.tuprolog.core.Term

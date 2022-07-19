@@ -1,5 +1,11 @@
 package clpVarCreation
 
+import clpVarCreation.domain.In
+import clpVarCreation.domain.Ins
+import clpVarCreation.globalConstraints.AllDistinct
+import clpVarCreation.relationalConstraints.*
+import clpVarCreation.search.Label
+import clpVarCreation.search.Labeling
 import it.unibo.tuprolog.solve.library.AliasedLibrary
 import it.unibo.tuprolog.solve.library.Library
 import it.unibo.tuprolog.theory.Theory

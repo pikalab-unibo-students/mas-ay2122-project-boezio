@@ -1,4 +1,4 @@
-package clpVarCreation
+package clpVarCreation.search
 
 import it.unibo.tuprolog.core.Atom
 import org.chocosolver.solver.Model

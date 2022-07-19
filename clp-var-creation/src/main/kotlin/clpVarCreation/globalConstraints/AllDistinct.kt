@@ -1,5 +1,7 @@
-package clpVarCreation
+package clpVarCreation.globalConstraints
 
+import clpVarCreation.chocoModel
+import clpVarCreation.variablesMap
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -12,9 +14,9 @@ object AllDistinct : UnaryPredicate.NonBacktrackable<ExecutionContext>("all_dist
         ensuringArgumentIsList(0)
         val logicVars = first.castToList().toList().filterIsInstance<Var>().distinct().toList()
         val chocoModel = chocoModel
-        val vars = chocoModel.variablesMap(logicVars).keys.map { it as IntVar }.toTypedArray()
+        val chocoVars = chocoModel.variablesMap(logicVars).keys.map { it as IntVar }.toTypedArray()
         return replySuccess {
-            chocoModel.allDifferent(*vars).post()
+            chocoModel.allDifferent(*chocoVars).post()
         }
     }
 }
