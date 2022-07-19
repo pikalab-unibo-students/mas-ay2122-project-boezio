@@ -18,7 +18,7 @@ object TuplesIn : BinaryRelation.NonBacktrackable<ExecutionContext>("tuples_in")
         ensuringArgumentIsList(0)
         ensuringArgumentIsList(1)
         val listVar = first.castToList().toList()
-        require(listVar.let { it.size == 1 && it is LogicList }) {
+        require(listVar.let { it.size == 1 && it[0] is LogicList }) {
             "first argument is invalid"
         }
         val innerList = listVar[0].castToList().toList()
