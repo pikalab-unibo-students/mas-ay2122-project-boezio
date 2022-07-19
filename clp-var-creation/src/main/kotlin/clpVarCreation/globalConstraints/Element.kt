@@ -13,7 +13,7 @@ import org.chocosolver.solver.variables.IntVar
 object Element : TernaryRelation.NonBacktrackable<ExecutionContext>("element") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term): Solve.Response {
         ensuringArgumentIsVariable(0)
-        val value = first.castToVar()
+        val index = first.castToVar()
         ensuringArgumentIsList(1)
         val table = second.castToList().toList()
         for (elem in table) {
@@ -23,7 +23,7 @@ object Element : TernaryRelation.NonBacktrackable<ExecutionContext>("element") {
         }
         val integerList = table.filterIsInstance<LogicInteger>().map { it.value.toInt() }.toIntArray()
         ensuringArgumentIsVariable(2)
-        val index = third.castToVar()
+        val value = third.castToVar()
         val logicVars = setOf(value, index)
         val chocoModel = chocoModel
         val varsMap = chocoModel.variablesMap(logicVars).flip()
