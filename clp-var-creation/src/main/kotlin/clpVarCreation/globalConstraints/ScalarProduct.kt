@@ -21,7 +21,7 @@ object ScalarProduct : QuaternaryRelation.NonBacktrackable<ExecutionContext>("sc
         val listVars = second.castToList().toList().filterIsInstance<Var>().distinct().toSet()
         if (listVars.size != listCoeffs.size)
             throw IllegalStateException()
-        val coeffs = listCoeffs.map { it.value as Int } as IntArray
+        val coeffs = listCoeffs.map { it.value.toInt() }.toIntArray()
         ensuringArgumentIsAtom(2)
         val operator = third.asAtom()
         val exprVars = fourth.variables.toSet()
@@ -30,7 +30,7 @@ object ScalarProduct : QuaternaryRelation.NonBacktrackable<ExecutionContext>("sc
         val varsMap = chocoModel.variablesMap(logicVars)
         val varsFirstTerm = chocoModel.variablesMap(listVars).keys.map { it as IntVar }.toTypedArray()
         val expParser = ExpressionParser(chocoModel, varsMap.flip())
-        val expression = third.accept(expParser).intVar()
+        val expression = fourth.accept(expParser).intVar()
         return replySuccess {
             chocoModel.scalar(varsFirstTerm, coeffs, operatorsMap[operator], expression).post()
         }
