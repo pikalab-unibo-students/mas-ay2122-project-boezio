@@ -25,6 +25,18 @@ internal val Solve.Request<ExecutionContext>.chocoModel
         context.customData.durable[CHOCO_MODEL] as ChocoModel
     }
 
+internal val Solve.Request<ExecutionContext>.operatorsMap
+    get(): Map<Atom, String> {
+        return mapOf(
+            Atom.of("#=") to "=",
+            Atom.of("#\\=") to "!=",
+            Atom.of("#>") to ">",
+            Atom.of("#<") to "<",
+            Atom.of("#>=") to ">=",
+            Atom.of("#=<") to "<="
+        )
+    }
+
 internal fun SideEffectsBuilder.setChocoModel(chocoModel: ChocoModel) {
     setDurableData(CHOCO_MODEL, chocoModel)
 }

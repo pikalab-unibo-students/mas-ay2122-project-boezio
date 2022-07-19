@@ -24,16 +24,8 @@ object Sum : TernaryRelation.NonBacktrackable<ExecutionContext>("sum") {
         val varsFirstTerm = chocoModel.variablesMap(listVars).keys.map { it as IntVar }.toTypedArray()
         val expParser = ExpressionParser(chocoModel, varsMap.flip())
         val expression = third.accept(expParser).intVar()
-        val operatorPrologChoco = mapOf(
-            Atom.of("#=") to "=",
-            Atom.of("#\\=") to "!=",
-            Atom.of("#>") to ">",
-            Atom.of("#<") to "<",
-            Atom.of("#>=") to ">=",
-            Atom.of("#=<") to "<="
-        )
         return replySuccess {
-            chocoModel.sum(varsFirstTerm, operatorPrologChoco.get(operator), expression).post()
+            chocoModel.sum(varsFirstTerm, operatorsMap[operator], expression).post()
         }
     }
 }
