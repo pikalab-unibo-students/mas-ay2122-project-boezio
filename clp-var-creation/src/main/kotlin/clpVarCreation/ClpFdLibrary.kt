@@ -3,6 +3,7 @@ package clpVarCreation
 import clpVarCreation.domain.In
 import clpVarCreation.domain.Ins
 import clpVarCreation.globalConstraints.AllDistinct
+import clpVarCreation.globalConstraints.LexChain
 import clpVarCreation.globalConstraints.ScalarProduct
 import clpVarCreation.globalConstraints.Sum
 import clpVarCreation.relationalConstraints.*
@@ -25,7 +26,8 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         LessEquals,
         AllDistinct,
         Sum,
-        ScalarProduct
+        ScalarProduct,
+        LexChain
     ).associate { it.descriptionPair },
     theory = Theory.of(
         listOf(
