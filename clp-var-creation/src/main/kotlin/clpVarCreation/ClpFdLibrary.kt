@@ -14,7 +14,8 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         GreaterThan,
         GreaterEquals,
         LessThan,
-        LessEquals
+        LessEquals,
+        AllDistinct
     ).associate { it.descriptionPair },
     theory = Theory.of(
         listOf(

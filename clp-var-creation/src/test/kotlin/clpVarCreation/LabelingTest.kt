@@ -28,7 +28,7 @@ internal class LabelingTest {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpLibrary)
+            libraries = Libraries.of(ClpFdLibrary)
         )
 
         val solution = solver.solveOnce(goal)
@@ -50,7 +50,7 @@ internal class LabelingTest {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpLibrary)
+            libraries = Libraries.of(ClpFdLibrary)
         )
 
         val solution = solver.solveOnce(goal)
@@ -72,7 +72,7 @@ internal class LabelingTest {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpLibrary)
+            libraries = Libraries.of(ClpFdLibrary)
         )
 
         val solution = solver.solveOnce(goal)
@@ -93,7 +93,7 @@ internal class LabelingTest {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpLibrary)
+            libraries = Libraries.of(ClpFdLibrary)
         )
 
         val solution = solver.solveOnce(goal)
@@ -114,7 +114,7 @@ internal class LabelingTest {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpLibrary)
+            libraries = Libraries.of(ClpFdLibrary)
         )
 
         val solution = solver.solveOnce(goal)
@@ -138,7 +138,7 @@ internal class LabelingTest {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpLibrary)
+            libraries = Libraries.of(ClpFdLibrary)
         )
 
         val solution = solver.solveOnce(goal)
@@ -160,7 +160,7 @@ internal class LabelingTest {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpLibrary)
+            libraries = Libraries.of(ClpFdLibrary)
         )
 
         val solution = solver.solveOnce(goal)
@@ -193,7 +193,7 @@ internal class LabelingTest {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpLibrary)
+            libraries = Libraries.of(ClpFdLibrary)
         )
 
         val solution = solver.solveOnce(goal)
@@ -226,7 +226,7 @@ internal class LabelingTest {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpLibrary)
+            libraries = Libraries.of(ClpFdLibrary)
         )
 
         val solution = solver.solveOnce(goal)
