@@ -15,13 +15,13 @@ object LexChain : UnaryPredicate.NonBacktrackable<ExecutionContext>("lex_chain")
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
         ensuringArgumentIsList(0)
         val outerList = first.castToList().toList()
+        require(outerList.size == 2) {
+            "List has an invalid length"
+        }
         for (elem in outerList) {
             require(elem is LogicList) {
                 "$elem is not a list"
             }
-        }
-        require(outerList.size == 2) {
-            "List has an invalid length"
         }
         val firstListVars = outerList[0].castToList().toList().filterIsInstance<Var>().distinct().toSet()
         val secondListVars = outerList[1].castToList().toList().filterIsInstance<Var>().distinct().toSet()
@@ -30,7 +30,7 @@ object LexChain : UnaryPredicate.NonBacktrackable<ExecutionContext>("lex_chain")
         val firstList = firstListVars.map{ varsMap[it] }.map{ it as IntVar }.toTypedArray()
         val secondList = secondListVars.map{ varsMap[it] }.map { it as IntVar }.toTypedArray()
         return replySuccess {
-            chocoModel.lexLessEq(firstList, secondList)
+            chocoModel.lexLessEq(firstList, secondList).post()
         }
     }
 }
