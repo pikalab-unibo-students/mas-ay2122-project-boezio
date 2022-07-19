@@ -1,19 +1,22 @@
-package clpVarCreation
+package clpVarCreation.globalConstraints
 
+import clpVarCreation.ClpFdLibrary
+import clpVarCreation.assertSolutionAssigns
 import it.unibo.tuprolog.core.parsing.TermParser
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
 
-class GlobalConstraintsTest {
+class AllDistinctTest {
 
-    private val parser = TermParser.withDefaultOperators()
+    private val termParser = TermParser.withDefaultOperators()
+    private val theoryParser = ClausesParser.withDefaultOperators()
 
     @Test
     fun testAllDistinct() {
 
-         val theory = ClausesParser.withDefaultOperators().parseTheory(
+        val theory = theoryParser.parseTheory(
             """
             problem(X, Y) :- 
                 in(X, '..'(1, 10)), 
@@ -22,7 +25,7 @@ class GlobalConstraintsTest {
             """.trimIndent()
         )
 
-        val goal = parser.parseStruct(
+        val goal = termParser.parseStruct(
             "problem(X,Y),label([X,Y])"
         )
 
@@ -33,12 +36,11 @@ class GlobalConstraintsTest {
 
         val solution = solver.solveOnce(goal)
 
-        parser.scope.with {
+        termParser.scope.with {
             solution.assertSolutionAssigns(
                 varOf("X") to intOf(1),
                 varOf("Y") to intOf(2)
             )
         }
-
     }
 }

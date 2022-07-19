@@ -14,12 +14,14 @@ import org.chocosolver.solver.variables.IntVar
 object Sum : TernaryRelation.NonBacktrackable<ExecutionContext>("sum") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term): Solve.Response {
         ensuringArgumentIsList(0)
-        val logicVars = first.castToList().toList().filterIsInstance<Var>().distinct().toList()
+        val listVars = first.castToList().toList().filterIsInstance<Var>().distinct().toSet()
         ensuringArgumentIsAtom(1)
         val operator = second.asAtom()
+        val exprVars = third.variables.toSet()
+        val logicVars = listVars.union(exprVars)
         val chocoModel = chocoModel
         val varsMap = chocoModel.variablesMap(logicVars)
-        val varsFirstTerm = varsMap.keys.map { it as IntVar }.toTypedArray()
+        val varsFirstTerm = chocoModel.variablesMap(listVars).keys.map { it as IntVar }.toTypedArray()
         val expParser = ExpressionParser(chocoModel, varsMap.flip())
         val expression = third.accept(expParser).intVar()
         val operatorPrologChoco = mapOf(
@@ -31,7 +33,7 @@ object Sum : TernaryRelation.NonBacktrackable<ExecutionContext>("sum") {
             Atom.of("#=<") to "<="
         )
         return replySuccess {
-            chocoModel.sum(varsFirstTerm, operatorPrologChoco.get(operator), expression)
+            chocoModel.sum(varsFirstTerm, operatorPrologChoco.get(operator), expression).post()
         }
     }
 }
