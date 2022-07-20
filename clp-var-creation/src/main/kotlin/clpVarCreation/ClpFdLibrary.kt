@@ -27,7 +27,8 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         LexChain,
         TuplesIn,
         Element,
-        Disjoint2
+        Disjoint2,
+        Circuit
     ).associate { it.descriptionPair },
     theory = Theory.of(
         listOf(
