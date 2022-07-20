@@ -8,7 +8,7 @@ import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
 
-class CumulativeTest {
+class CumulativeTwoTest {
 
     private val termParser = TermParser.withDefaultOperators()
     private val theoryParser = ClausesParser.withDefaultOperators()

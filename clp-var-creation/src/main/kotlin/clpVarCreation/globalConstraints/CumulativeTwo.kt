@@ -13,7 +13,7 @@ import it.unibo.tuprolog.solve.primitive.Solve
 import org.chocosolver.solver.variables.IntVar
 import org.chocosolver.solver.variables.Task
 
-object Cumulative : BinaryRelation.NonBacktrackable<ExecutionContext>("cumulative") {
+object CumulativeTwo : BinaryRelation.NonBacktrackable<ExecutionContext>("cumulative") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term): Solve.Response {
         ensuringArgumentIsList(0)
         ensuringArgumentIsList(1)

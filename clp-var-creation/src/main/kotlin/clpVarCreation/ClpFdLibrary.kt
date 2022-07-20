@@ -30,7 +30,7 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         Disjoint2,
         Circuit,
         GlobalCardinality,
-        Cumulative
+        CumulativeTwo
     ).associate { it.descriptionPair },
     theory = Theory.of(
         listOf(
