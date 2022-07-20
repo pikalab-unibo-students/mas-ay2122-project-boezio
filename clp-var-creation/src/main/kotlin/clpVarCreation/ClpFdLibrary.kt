@@ -29,7 +29,8 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         Element,
         Disjoint2,
         Circuit,
-        GlobalCardinality
+        GlobalCardinality,
+        Cumulative
     ).associate { it.descriptionPair },
     theory = Theory.of(
         listOf(
