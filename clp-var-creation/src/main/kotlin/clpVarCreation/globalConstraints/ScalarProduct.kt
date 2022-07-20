@@ -15,7 +15,7 @@ import org.chocosolver.solver.variables.IntVar
 object ScalarProduct : QuaternaryRelation.NonBacktrackable<ExecutionContext>("scalar_product") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term, fourth: Term): Solve.Response {
         ensuringArgumentIsList(0)
-        // this predicate is more limited than SWI Prolog one because it accepts only integer coefficients
+        // this predicate is more limited than SWI Prolog one because it accepts only variables as second term
         val listCoeffs = first.castToList().toList().filterIsInstance<LogicInteger>().toSet()
         ensuringArgumentIsList(1)
         val listVars = second.castToList().toList().filterIsInstance<Var>().distinct().toSet()
