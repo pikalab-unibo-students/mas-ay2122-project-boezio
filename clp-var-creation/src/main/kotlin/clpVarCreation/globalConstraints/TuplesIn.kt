@@ -2,6 +2,7 @@ package clpVarCreation.globalConstraints
 
 import clpVarCreation.chocoModel
 import clpVarCreation.flip
+import clpVarCreation.setChocoModel
 import clpVarCreation.variablesMap
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
@@ -36,8 +37,9 @@ object TuplesIn : BinaryRelation.NonBacktrackable<ExecutionContext>("tuples_in")
             val elemRelation = elem.castToList().toList().filterIsInstance<LogicInteger>().map { it.value.toInt() }.toIntArray()
             relation.add(elemRelation)
         }
+        chocoModel.table(tuple, relation, "CT+").post()
         return replySuccess {
-            chocoModel.table(tuple, relation, "CT+").post()
+            setChocoModel(chocoModel)
         }
     }
 }

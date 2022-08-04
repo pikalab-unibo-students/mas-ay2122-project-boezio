@@ -31,8 +31,9 @@ object ScalarProduct : QuaternaryRelation.NonBacktrackable<ExecutionContext>("sc
         val varsFirstTerm = chocoModel.variablesMap(listVars).keys.map { it as IntVar }.toTypedArray()
         val expParser = ExpressionParser(chocoModel, varsMap.flip())
         val expression = fourth.accept(expParser).intVar()
+        chocoModel.scalar(varsFirstTerm, coeffs, operatorsMap[operator], expression).post()
         return replySuccess {
-            chocoModel.scalar(varsFirstTerm, coeffs, operatorsMap[operator], expression).post()
+            setChocoModel(chocoModel)
         }
     }
 }

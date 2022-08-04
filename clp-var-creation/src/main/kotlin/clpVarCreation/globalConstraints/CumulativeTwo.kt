@@ -2,6 +2,7 @@ package clpVarCreation.globalConstraints
 
 import clpVarCreation.chocoModel
 import clpVarCreation.flip
+import clpVarCreation.setChocoModel
 import clpVarCreation.variablesMap
 import it.unibo.tuprolog.core.Integer as LogicInteger
 import it.unibo.tuprolog.core.Struct
@@ -67,8 +68,9 @@ object CumulativeTwo : BinaryRelation.NonBacktrackable<ExecutionContext>("cumula
         val chocoLimit = varsMap[limitTerm.castToVar()] as IntVar
         val chocoTasks = tasks.toTypedArray()
         val chocoHeights = heights.toTypedArray()
+        chocoModel.cumulative(chocoTasks, chocoHeights, chocoLimit).post()
         return replySuccess {
-            chocoModel.cumulative(chocoTasks, chocoHeights, chocoLimit).post()
+            setChocoModel(chocoModel)
         }
     }
 }

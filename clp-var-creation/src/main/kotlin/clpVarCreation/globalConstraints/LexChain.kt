@@ -2,6 +2,7 @@ package clpVarCreation.globalConstraints
 
 import clpVarCreation.chocoModel
 import clpVarCreation.flip
+import clpVarCreation.setChocoModel
 import clpVarCreation.variablesMap
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
@@ -29,8 +30,9 @@ object LexChain : UnaryPredicate.NonBacktrackable<ExecutionContext>("lex_chain")
         val varsMap = chocoModel.variablesMap(firstListVars.union(secondListVars)).flip()
         val firstList = firstListVars.map{ varsMap[it] }.map{ it as IntVar }.toTypedArray()
         val secondList = secondListVars.map{ varsMap[it] }.map { it as IntVar }.toTypedArray()
+        chocoModel.lexLessEq(firstList, secondList).post()
         return replySuccess {
-            chocoModel.lexLessEq(firstList, secondList).post()
+            setChocoModel(chocoModel)
         }
     }
 }

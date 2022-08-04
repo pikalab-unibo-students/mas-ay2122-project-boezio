@@ -24,8 +24,9 @@ object Sum : TernaryRelation.NonBacktrackable<ExecutionContext>("sum") {
         val varsFirstTerm = chocoModel.variablesMap(listVars).keys.map { it as IntVar }.toTypedArray()
         val expParser = ExpressionParser(chocoModel, varsMap.flip())
         val expression = third.accept(expParser).intVar()
+        chocoModel.sum(varsFirstTerm, operatorsMap[operator], expression).post()
         return replySuccess {
-            chocoModel.sum(varsFirstTerm, operatorsMap[operator], expression).post()
+            setChocoModel(chocoModel)
         }
     }
 }

@@ -2,6 +2,7 @@ package clpVarCreation.globalConstraints
 
 import clpVarCreation.chocoModel
 import clpVarCreation.flip
+import clpVarCreation.setChocoModel
 import clpVarCreation.variablesMap
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
@@ -41,8 +42,9 @@ object Disjoint2 : UnaryPredicate.NonBacktrackable<ExecutionContext>("disjoint2"
         val chocoY = yCoordinates.toTypedArray()
         val chocoWidth = width.toTypedArray()
         val chocoHeight = height.toTypedArray()
+        chocoModel.diffN(chocoX, chocoY, chocoWidth, chocoHeight, true).post()
         return replySuccess {
-            chocoModel.diffN(chocoX, chocoY, chocoWidth, chocoHeight, true).post()
+            setChocoModel(chocoModel)
         }
     }
 }

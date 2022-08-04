@@ -2,6 +2,7 @@ package clpVarCreation.globalConstraints
 
 import clpVarCreation.chocoModel
 import clpVarCreation.flip
+import clpVarCreation.setChocoModel
 import clpVarCreation.variablesMap
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.Integer as LogicInteger
@@ -47,8 +48,9 @@ object GlobalCardinality : BinaryRelation.NonBacktrackable<ExecutionContext>("gl
         val chocoVars = listTerms.filterIsInstance<Var>().map { varsMap[it] as IntVar }.toTypedArray()
         val chocoValues = values.toIntArray()
         val chocoOccurrences = occurrences.toTypedArray()
+        chocoModel.globalCardinality(chocoVars, chocoValues, chocoOccurrences, true).post()
         return replySuccess {
-            chocoModel.globalCardinality(chocoVars, chocoValues, chocoOccurrences, true).post()
+            setChocoModel(chocoModel)
         }
     }
 }

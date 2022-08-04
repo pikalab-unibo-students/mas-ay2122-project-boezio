@@ -2,6 +2,7 @@ package clpVarCreation.globalConstraints
 
 import clpVarCreation.chocoModel
 import clpVarCreation.flip
+import clpVarCreation.setChocoModel
 import clpVarCreation.variablesMap
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -29,8 +30,9 @@ object Element : TernaryRelation.NonBacktrackable<ExecutionContext>("element") {
         val varsMap = chocoModel.variablesMap(logicVars).flip()
         val chocoValue = varsMap[value] as IntVar
         val chocoIndex = varsMap[index] as IntVar
+        chocoModel.element(chocoValue, integerList, chocoIndex).post()
         return replySuccess {
-            chocoModel.element(chocoValue, integerList, chocoIndex).post()
+            setChocoModel(chocoModel)
         }
     }
 }
