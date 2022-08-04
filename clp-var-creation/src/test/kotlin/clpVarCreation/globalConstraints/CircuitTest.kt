@@ -1,5 +1,6 @@
 package clpVarCreation.globalConstraints
 
+import clpVarCreation.BaseTest
 import clpVarCreation.ClpFdLibrary
 import clpVarCreation.assertSolutionAssigns
 import it.unibo.tuprolog.core.parsing.TermParser
@@ -8,10 +9,7 @@ import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
 
-class CircuitTest {
-
-    private val termParser = TermParser.withDefaultOperators()
-    private val theoryParser = ClausesParser.withDefaultOperators()
+class CircuitTest: BaseTest() {
 
     @Test
     fun testCircuit() {
