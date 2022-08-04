@@ -11,7 +11,7 @@ import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 import org.chocosolver.solver.variables.IntVar
 
-object GlobalCardinality : BinaryRelation.NonBacktrackable<ExecutionContext>("global_cardinality") {
+object GlobalCardinalityTwo : BinaryRelation.NonBacktrackable<ExecutionContext>("global_cardinality") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term): Solve.Response {
         ensuringArgumentIsList(0)
         val listTerms = first.castToList().toList()

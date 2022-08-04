@@ -9,7 +9,7 @@ import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
 
-class GlobalCardinalityTest: BaseTest() {
+class GlobalCardinalityTwoTest: BaseTest() {
 
     @Test
     fun testGlobalCardinality() {
