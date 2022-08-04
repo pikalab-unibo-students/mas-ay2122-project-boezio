@@ -2,6 +2,7 @@ package clpVarCreation.globalConstraints
 
 import clpVarCreation.chocoModel
 import clpVarCreation.flip
+import clpVarCreation.setChocoModel
 import clpVarCreation.variablesMap
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
@@ -21,8 +22,9 @@ object Circuit: UnaryPredicate.NonBacktrackable<ExecutionContext>("circuit") {
         val chocoModel = chocoModel
         val varsMap = chocoModel.variablesMap(circuitVars).flip()
         val chocoCircuit = circuitVars.map { varsMap[it] as IntVar}.toTypedArray()
+        chocoModel.circuit(chocoCircuit).post()
         return replySuccess {
-            chocoModel.circuit(chocoCircuit).post()
+            setChocoModel(chocoModel)
         }
     }
 }
