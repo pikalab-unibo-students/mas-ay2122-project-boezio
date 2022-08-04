@@ -6,8 +6,10 @@ import clpVarCreation.globalConstraints.*
 import clpVarCreation.relationalConstraints.*
 import clpVarCreation.search.Label
 import clpVarCreation.search.Labeling
+import it.unibo.tuprolog.solve.classic.stdlib.rule.Call
 import it.unibo.tuprolog.solve.library.AliasedLibrary
 import it.unibo.tuprolog.solve.library.Library
+import it.unibo.tuprolog.solve.stdlib.primitive.Univ
 import it.unibo.tuprolog.theory.Theory
 
 object ClpFdLibrary : AliasedLibrary by Library.aliased(
@@ -30,12 +32,16 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         Disjoint2,
         Circuit,
         GlobalCardinality,
-        CumulativeTwo
+        CumulativeTwo,
+//        Univ
     ).associate { it.descriptionPair },
     theory = Theory.of(
         listOf(
             In,
-            Label
+            Label,
+            Chain.Base,
+            Chain.Recursive,
+//            Call
         ).map { it.implementation }
     )
 )
