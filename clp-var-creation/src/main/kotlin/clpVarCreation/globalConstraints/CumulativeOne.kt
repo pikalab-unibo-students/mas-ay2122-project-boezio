@@ -20,8 +20,8 @@ import it.unibo.tuprolog.solve.stdlib.primitive.Univ
 
 object CumulativeOne : RuleWrapper<ExecutionContext>("cumulative", 1) {
 
-    val Tasks by variables
-    val L by variables
+    private val Tasks by variables
+    private val L by variables
 
     override val Scope.head: List<Term>
         get() = ktListOf(Tasks)
@@ -29,7 +29,7 @@ object CumulativeOne : RuleWrapper<ExecutionContext>("cumulative", 1) {
     override val Scope.body: Term
         get() = tupleOf(
             structOf(In.functor, L, intOf(1)),
-            structOf(CumulativeTwo.functor, Tasks, listFrom(structOf("limit", L)))
+            structOf(CumulativeTwo.functor, Tasks, listOf(structOf("limit", L)))
         )
 
 }
