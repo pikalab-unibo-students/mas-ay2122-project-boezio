@@ -17,7 +17,7 @@ class CircuitTest: BaseTest() {
         val theory = theoryParser.parseTheory(
             """
             problem(X,Y,Z) :- 
-                ins([X,Y,Z], '..'(1, 3)), 
+                ins([X,Y,Z], '..'(0, 2)), 
                 circuit([X,Y,Z]).
             """.trimIndent()
         )
@@ -35,9 +35,9 @@ class CircuitTest: BaseTest() {
 
         termParser.scope.with {
             solution.assertSolutionAssigns(
-                varOf("X") to intOf(2),
-                varOf("Y") to intOf(3),
-                varOf("Z") to intOf(1)
+                varOf("X") to intOf(1),
+                varOf("Y") to intOf(2),
+                varOf("Z") to intOf(0)
             )
         }
     }
