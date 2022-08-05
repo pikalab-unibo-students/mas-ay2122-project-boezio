@@ -40,7 +40,9 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
             Label,
             Chain.Base,
             Chain.Recursive,
-            CumulativeOne
+            CumulativeOne,
+            Serialized.Base,
+            Serialized.Recursive
 
 //            Call
         ).map { it.implementation }
