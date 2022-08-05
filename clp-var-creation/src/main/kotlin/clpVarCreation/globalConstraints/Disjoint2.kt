@@ -21,7 +21,7 @@ object Disjoint2 : UnaryPredicate.NonBacktrackable<ExecutionContext>("disjoint2"
         val yCoordinates = mutableListOf<IntVar>()
         val height = mutableListOf<IntVar>()
         val chocoModel = chocoModel
-        val logicVars = first.variables.toList()
+        val logicVars = first.variables.toSet()
         val varsMap = chocoModel.variablesMap(logicVars).flip()
         for (rectangle in rectangles) {
             require(rectangle.let { it is Struct && it.arity == 4 }) {
