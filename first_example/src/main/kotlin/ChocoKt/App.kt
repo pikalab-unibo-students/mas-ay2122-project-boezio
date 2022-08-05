@@ -8,37 +8,30 @@ fun main() {
 
     val model = Model()
 
-    // definition of the variables
-    val numValues = 3
+    val S1 = model.intVar(0,100)
+    val S2 = model.intVar(0,100)
+    val S3 = model.intVar(0,100)
+    val S4 = model.intVar(0,100)
 
-    println(model.vars.map { it.name })
+    val D1 = model.intVar(1)
+    val D2 = model.intVar(5)
+    val D3 = model.intVar(3)
+    val D4 = model.intVar(2)
 
-    val x: IntVar = model.intVar("x", 1, numValues)
-    val y = model.intVar("y", 1, numValues)
-    val z = model.intVar("z", 1, numValues)
+    val starts = listOf(S1,S2,S3,S4).toTypedArray()
+    val durations = listOf(D1,D2,D3,D4).toTypedArray()
+    val size = starts.size
+    val y = model.intVarArray(size, List(size){0}.toIntArray())
+    val height = model.intVarArray(size, List(size){0}.toIntArray())
 
-    println(model.vars.map { it.name })
-
-    // definition of constraints
-    model.arithm(x, "!=", y).post()
+    // constraints
+    model.diffN(starts, y, durations, height, true).post()
 
     // searching for a feasible solution
     val solver: Solver = model.solver
 
-    if(solver.solve()){
-        println("$x")
-        println("$y")
-        println("$z")
-    } else {
-        println("The solver has proved the problem has no solution")
-    }
-
-    if(solver.solve()){
-        println("$x")
-        println("$y")
-        println("$z")
-    } else {
-        println("The solver has proved the problem has no solution")
+    if(solver.solve()) {
+        println("${S1.value} ${S2.value} ${S3.value} ${S4.value}")
     }
 
 }
