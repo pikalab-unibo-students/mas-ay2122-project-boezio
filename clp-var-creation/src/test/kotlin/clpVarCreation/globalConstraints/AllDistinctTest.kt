@@ -41,4 +41,33 @@ class AllDistinctTest: BaseTest() {
             )
         }
     }
+
+    @Test
+    fun testAllDistinctVarAndInt() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X) :- 
+                in(X, '..'(1, 2)), 
+                all_distinct([X,2]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X),label([X])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(1)
+            )
+        }
+    }
 }
