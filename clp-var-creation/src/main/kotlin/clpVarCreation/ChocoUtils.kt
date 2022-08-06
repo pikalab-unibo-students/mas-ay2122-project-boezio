@@ -37,6 +37,18 @@ internal val Solve.Request<ExecutionContext>.operatorsMap
         )
     }
 
+internal fun Solve.Request<ExecutionContext>.getIntAsVars(termList: List<Term>): List<IntVar>{
+    val integerAsVars = mutableListOf<IntVar>()
+    // Conversion of integers to int values
+    for (elem in termList){
+        if(elem is Integer){
+            val intValue = elem.castToInteger().intValue.toInt()
+            integerAsVars.add(chocoModel.intVar(intValue))
+        }
+    }
+    return integerAsVars
+}
+
 internal fun SideEffectsBuilder.setChocoModel(chocoModel: ChocoModel) {
     setDurableData(CHOCO_MODEL, chocoModel)
 }
