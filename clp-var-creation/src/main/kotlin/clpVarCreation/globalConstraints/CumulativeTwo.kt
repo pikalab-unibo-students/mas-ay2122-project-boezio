@@ -1,5 +1,6 @@
 package clpVarCreation.globalConstraints
 
+import clpVarCreation.*
 import clpVarCreation.chocoModel
 import clpVarCreation.flip
 import clpVarCreation.setChocoModel
@@ -32,29 +33,31 @@ object CumulativeTwo : BinaryRelation.NonBacktrackable<ExecutionContext>("cumula
             }
             val arguments = element.castToStruct().args
             val start = arguments[0]
-            require(start is Var) {
-                "$start is not a variable"
+            require(start.let { it is Var || it is LogicInteger }) {
+                "$start is neither a variable nor an integer"
             }
-            val chocoStart = varsMap[start.castToVar()] as IntVar
+            val chocoStart = getAsIntVar(start, varsMap)
+
             val duration = arguments[1]
-            require(duration is LogicInteger || duration is Var) {
+            require(duration.let { it is Var || it is LogicInteger } ) {
                 "$duration is neither an integer nor a variable"
             }
+            val chocoDuration = getAsIntVar(duration, varsMap)
+
             val end = arguments[2]
-            require(end is Var) {
-                "$end is not a variable"
+            require(end.let { it is Var || it is LogicInteger }) {
+                "$end is neither a variable nor an integer"
             }
-            val chocoEnd = varsMap[end.castToVar()] as IntVar
+            val chocoEnd = getAsIntVar(end, varsMap)
+
             val height = arguments[3]
-            require(height is Var) {
-                "$height is not a variable"
+            require(height.let { it is Var || it is LogicInteger }) {
+                "$height is neither a variable nor an integer"
             }
-            val chocoHeight = varsMap[height.castToVar()] as IntVar
-            if (duration is LogicInteger) {
-                tasks.add(Task(chocoStart, duration.castToInteger().value.toInt(), chocoEnd))
-            } else {
-                tasks.add(Task(chocoStart, varsMap[duration.castToVar()] as IntVar, chocoEnd))
-            }
+            val chocoHeight = getAsIntVar(height, varsMap)
+
+            tasks.add(Task(chocoStart, chocoDuration, chocoEnd))
+
             heights.add(chocoHeight)
         }
         val options = second.castToList().toList()
@@ -62,10 +65,10 @@ object CumulativeTwo : BinaryRelation.NonBacktrackable<ExecutionContext>("cumula
             "$options are invalid options"
         }
         val limitTerm = options[0].castToStruct().args[0]
-        require(limitTerm is Var) {
-            "$limitTerm is not declared as a variable"
+        require(limitTerm.let { it is Var || it is LogicInteger }) {
+            "$limitTerm is not declared neither as a variable nor an integer"
         }
-        val chocoLimit = varsMap[limitTerm.castToVar()] as IntVar
+        val chocoLimit = getAsIntVar(limitTerm, varsMap)
         val chocoTasks = tasks.toTypedArray()
         val chocoHeights = heights.toTypedArray()
         chocoModel.cumulative(chocoTasks, chocoHeights, chocoLimit).post()

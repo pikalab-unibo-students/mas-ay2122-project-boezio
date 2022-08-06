@@ -49,6 +49,13 @@ internal fun Solve.Request<ExecutionContext>.getIntAsVars(termList: List<Term>):
     return integerAsVars
 }
 
+internal fun Solve.Request<ExecutionContext>.getAsIntVar(term: Term, map: Map<Var, Variable>): IntVar{
+    if(term is Var)
+        return map[term.castToVar()] as IntVar
+    else
+        return chocoModel.intVar(term.castToInteger().value.toInt())
+}
+
 internal fun SideEffectsBuilder.setChocoModel(chocoModel: ChocoModel) {
     setDurableData(CHOCO_MODEL, chocoModel)
 }
