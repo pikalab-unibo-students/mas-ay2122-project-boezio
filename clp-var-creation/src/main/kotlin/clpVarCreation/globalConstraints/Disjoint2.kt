@@ -1,5 +1,6 @@
 package clpVarCreation.globalConstraints
 
+import clpVarCreation.*
 import clpVarCreation.chocoModel
 import clpVarCreation.flip
 import clpVarCreation.setChocoModel
@@ -11,6 +12,7 @@ import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.primitive.UnaryPredicate
 import org.chocosolver.solver.variables.IntVar
+import it.unibo.tuprolog.core.Integer as LogicInteger
 
 object Disjoint2 : UnaryPredicate.NonBacktrackable<ExecutionContext>("disjoint2") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
@@ -29,14 +31,14 @@ object Disjoint2 : UnaryPredicate.NonBacktrackable<ExecutionContext>("disjoint2"
             }
             val rectStructArguments = rectangle.castToStruct().args
             for (i in 0 until 4) {
-                require(rectStructArguments[i] is Var) {
-                    "$rectStructArguments[i] is not a variable"
+                require(rectStructArguments[i].let { it is Var || it is LogicInteger }) {
+                    "${rectStructArguments[i]} is neither a variable nor an integer"
                 }
             }
-            xCoordinates.add(varsMap[rectStructArguments[0].castToVar()] as IntVar)
-            width.add(varsMap[rectStructArguments[1].castToVar()] as IntVar)
-            yCoordinates.add(varsMap[rectStructArguments[2].castToVar()] as IntVar)
-            height.add(varsMap[rectStructArguments[3].castToVar()] as IntVar)
+            xCoordinates.add(getAsIntVar(rectStructArguments[0], varsMap))
+            width.add(getAsIntVar(rectStructArguments[1], varsMap))
+            yCoordinates.add(getAsIntVar(rectStructArguments[2], varsMap))
+            height.add(getAsIntVar(rectStructArguments[3], varsMap))
         }
         val chocoX = xCoordinates.toTypedArray()
         val chocoY = yCoordinates.toTypedArray()
