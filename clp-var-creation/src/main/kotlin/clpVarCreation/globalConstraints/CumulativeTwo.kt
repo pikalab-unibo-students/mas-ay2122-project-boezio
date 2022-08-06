@@ -32,32 +32,16 @@ object CumulativeTwo : BinaryRelation.NonBacktrackable<ExecutionContext>("cumula
                 "$element is not a valid task"
             }
             val arguments = element.castToStruct().args
-            val start = arguments[0]
-            require(start.let { it is Var || it is LogicInteger }) {
-                "$start is neither a variable nor an integer"
+            for (i in 0 until 4) {
+                require(arguments[i].let { it is Var || it is LogicInteger }) {
+                    "${arguments[i]} is neither a variable nor an integer"
+                }
             }
-            val chocoStart = getAsIntVar(start, varsMap)
-
-            val duration = arguments[1]
-            require(duration.let { it is Var || it is LogicInteger } ) {
-                "$duration is neither an integer nor a variable"
-            }
-            val chocoDuration = getAsIntVar(duration, varsMap)
-
-            val end = arguments[2]
-            require(end.let { it is Var || it is LogicInteger }) {
-                "$end is neither a variable nor an integer"
-            }
-            val chocoEnd = getAsIntVar(end, varsMap)
-
-            val height = arguments[3]
-            require(height.let { it is Var || it is LogicInteger }) {
-                "$height is neither a variable nor an integer"
-            }
-            val chocoHeight = getAsIntVar(height, varsMap)
-
+            val chocoStart = getAsIntVar(arguments[0], varsMap)
+            val chocoDuration = getAsIntVar(arguments[1], varsMap)
+            val chocoEnd = getAsIntVar(arguments[2], varsMap)
+            val chocoHeight = getAsIntVar(arguments[3], varsMap)
             tasks.add(Task(chocoStart, chocoDuration, chocoEnd))
-
             heights.add(chocoHeight)
         }
         val options = second.castToList().toList()
