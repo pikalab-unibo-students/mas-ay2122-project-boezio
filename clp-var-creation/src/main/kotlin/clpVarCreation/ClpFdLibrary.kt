@@ -24,7 +24,6 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         AllDistinct,
         Sum,
         ScalarProduct,
-        LexChain,
         TuplesIn,
         Element,
         Disjoint2,
@@ -41,7 +40,9 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
             Label,
             Chain.Base,
             Chain.Recursive,
-            CumulativeOne
+            CumulativeOne,
+            LexChainN.Base,
+            LexChainN.Recursive
 //            Call
         ).map { it.implementation }
     )

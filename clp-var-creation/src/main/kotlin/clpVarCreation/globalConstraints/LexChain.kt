@@ -1,5 +1,6 @@
 package clpVarCreation.globalConstraints
 
+import clpVarCreation.*
 import clpVarCreation.chocoModel
 import clpVarCreation.flip
 import clpVarCreation.setChocoModel
@@ -24,13 +25,27 @@ object LexChain : UnaryPredicate.NonBacktrackable<ExecutionContext>("lex_chain")
                 "$elem is not a list"
             }
         }
-        val firstListVars = outerList[0].castToList().toList().filterIsInstance<Var>().distinct().toSet()
-        val secondListVars = outerList[1].castToList().toList().filterIsInstance<Var>().distinct().toSet()
+        val firstTermList = outerList[0].castToList().toList()
+        val firstSize = firstTermList.size
+        val secondTermList = outerList[1].castToList().toList()
+        val secondSize = secondTermList.size
+        val firstListVars = firstTermList.filterIsInstance<Var>().distinct().toSet()
+        val secondListVars = secondTermList.filterIsInstance<Var>().distinct().toSet()
         val chocoModel = chocoModel
         val varsMap = chocoModel.variablesMap(firstListVars.union(secondListVars)).flip()
-        val firstList = firstListVars.map{ varsMap[it] }.map{ it as IntVar }.toTypedArray()
-        val secondList = secondListVars.map{ varsMap[it] }.map { it as IntVar }.toTypedArray()
-        chocoModel.lexLessEq(firstList, secondList).post()
+        val firstList = mutableListOf<IntVar>()
+        val secondList = mutableListOf<IntVar>()
+        for(i in 0 until firstSize){
+            val listElem = getAsIntVar(firstTermList[i], varsMap)
+            firstList.add(listElem)
+        }
+        for(i in 0 until secondSize){
+            val listElem = getAsIntVar(secondTermList[i], varsMap)
+            secondList.add(listElem)
+        }
+        val first = firstList.toTypedArray()
+        val second = secondList.toTypedArray()
+        chocoModel.lexLessEq(first, second).post()
         return replySuccess {
             setChocoModel(chocoModel)
         }

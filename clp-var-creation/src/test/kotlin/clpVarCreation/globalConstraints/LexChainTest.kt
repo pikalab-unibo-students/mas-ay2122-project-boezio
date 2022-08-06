@@ -42,4 +42,66 @@ class LexChainTest: BaseTest() {
             )
         }
     }
+
+    @Test
+    fun testLexChainWithInteger() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X,Y,Z) :- 
+                ins([X,Y,Z], '..'(1, 10)), 
+                lex_chain([[X,Y],[Z,1]]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y,Z),label([X,Y,Z])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(1),
+                varOf("Y") to intOf(1),
+                varOf("Z") to intOf(1)
+            )
+        }
+    }
+
+    @Test
+    fun testLexChainNWithInteger() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X,Y,Z) :- 
+                ins([X,Y,Z], '..'(1, 10)), 
+                lex_chain([[X],[Y],[Z]]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y,Z),label([X,Y,Z])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(1),
+                varOf("Y") to intOf(1),
+                varOf("Z") to intOf(1)
+            )
+        }
+    }
 }
