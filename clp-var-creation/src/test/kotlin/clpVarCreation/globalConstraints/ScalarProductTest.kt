@@ -108,4 +108,33 @@ class ScalarProductTest: BaseTest() {
         }
     }
 
+    @Test
+    fun testScalarProductMixedVs() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X) :- 
+                in(X, '..'(1, 10)),
+                scalar_product([1,2], [X,5], #=, 11).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X),label([X])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(1)
+            )
+        }
+    }
+
 }
