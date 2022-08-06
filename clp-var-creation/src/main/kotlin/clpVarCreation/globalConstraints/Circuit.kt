@@ -1,5 +1,6 @@
 package clpVarCreation.globalConstraints
 
+import clpVarCreation.*
 import clpVarCreation.chocoModel
 import clpVarCreation.flip
 import clpVarCreation.setChocoModel
@@ -16,13 +17,13 @@ object Circuit: UnaryPredicate.NonBacktrackable<ExecutionContext>("circuit") {
         ensuringArgumentIsList(0)
         val circuit = first.castToList().toList()
         val circuitVars = circuit.filterIsInstance<Var>().distinct()
-        require(circuit.size == circuitVars.size) {
-            "$circuit does not contain only variables"
-        }
         val chocoModel = chocoModel
         val varsMap = chocoModel.variablesMap(circuitVars).flip()
-        val chocoCircuit = circuitVars.map { varsMap[it] as IntVar}.toTypedArray()
-        chocoModel.circuit(chocoCircuit).post()
+        val intAsVars = getIntAsVars(circuit)
+        val chocoCircuit = circuitVars.map { varsMap[it] as IntVar}.toMutableList()
+        chocoCircuit.addAll(intAsVars)
+        val allVars = chocoCircuit.toList().toTypedArray()
+        chocoModel.circuit(allVars).post()
         return replySuccess {
             setChocoModel(chocoModel)
         }
