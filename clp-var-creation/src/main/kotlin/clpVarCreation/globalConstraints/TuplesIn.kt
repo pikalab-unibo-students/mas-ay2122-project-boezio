@@ -15,7 +15,7 @@ import it.unibo.tuprolog.core.List as LogicList
 import org.chocosolver.solver.variables.IntVar
 import it.unibo.tuprolog.core.Integer as LogicInteger
 
-object TuplesIn : BinaryRelation.NonBacktrackable<ExecutionContext>("tuples_in") {
+object TuplesIn : BinaryRelation.NonBacktrackable<ExecutionContext>("tuples") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term): Solve.Response {
         ensuringArgumentIsList(0)
         ensuringArgumentIsList(1)

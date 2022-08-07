@@ -7,9 +7,11 @@ import it.unibo.tuprolog.solve.rule.RuleWrapper
 
 /*
 
-tuples_in([A],C).
+tuples_in([A],C):-
+    tuples([A],C).
+
 tuples_in([A|B],C):-
-	tuples_in([A],C),
+	tuples([A],C),
 	tuples_in(B,C).
 
  */
@@ -22,6 +24,9 @@ abstract class TuplesInN: RuleWrapper<ExecutionContext>("tuples_in", 2) {
     object Base : TuplesInN() {
         override val Scope.head: List<Term>
             get() = ktListOf(listOf(A),C)
+
+        override val Scope.body: Term
+            get() = structOf(TuplesIn.functor, listOf(A), C)
     }
 
     object Recursive : TuplesInN() {
@@ -32,7 +37,7 @@ abstract class TuplesInN: RuleWrapper<ExecutionContext>("tuples_in", 2) {
 
         override val Scope.body: Term
             get() = tupleOf(
-                structOf(functor, listOf(A), C),
+                structOf(TuplesIn.functor, listOf(A), C),
                 structOf(functor, B, C)
             )
     }

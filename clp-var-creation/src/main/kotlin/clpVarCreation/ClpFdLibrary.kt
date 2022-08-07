@@ -23,7 +23,7 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         LessEquals,
         AllDistinct,
         ScalarProduct,
-        //TuplesIn,
+        TuplesIn,
         Element,
         Disjoint2,
         Circuit,
