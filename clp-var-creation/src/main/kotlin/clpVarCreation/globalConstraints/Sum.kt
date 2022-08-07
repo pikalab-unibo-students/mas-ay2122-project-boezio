@@ -1,32 +1,34 @@
 package clpVarCreation.globalConstraints
 
-import clpVarCreation.*
-import clpVarCreation.chocoModel
-import clpVarCreation.variablesMap
-import it.unibo.tuprolog.core.Atom
+import it.unibo.tuprolog.core.Scope
 import it.unibo.tuprolog.core.Term
-import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
-import it.unibo.tuprolog.solve.primitive.Solve
-import it.unibo.tuprolog.solve.primitive.TernaryRelation
-import org.chocosolver.solver.variables.IntVar
+import it.unibo.tuprolog.solve.rule.RuleWrapper
 
-object Sum : TernaryRelation.NonBacktrackable<ExecutionContext>("sum") {
-    override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term): Solve.Response {
-        ensuringArgumentIsList(0)
-        val listVars = first.castToList().toList().filterIsInstance<Var>().distinct().toSet()
-        ensuringArgumentIsAtom(1)
-        val operator = second.asAtom()
-        val exprVars = third.variables.toSet()
-        val logicVars = listVars.union(exprVars)
-        val chocoModel = chocoModel
-        val varsMap = chocoModel.variablesMap(logicVars)
-        val varsFirstTerm = chocoModel.variablesMap(listVars).keys.map { it as IntVar }.toTypedArray()
-        val expParser = ExpressionParser(chocoModel, varsMap.flip())
-        val expression = third.accept(expParser).intVar()
-        chocoModel.sum(varsFirstTerm, operatorsMap[operator], expression).post()
-        return replySuccess {
-            setChocoModel(chocoModel)
-        }
-    }
+/*
+sum(Vs, Op, Expr) :-
+	same(Cs, 1),
+	length(Vs, Lv),
+	length(Cs, Lv),
+	scalar_product(Cs, Vs, Op, Expr).
+ */
+
+object Sum : RuleWrapper<ExecutionContext>("sum", 3) {
+
+    val Vs by variables
+    val Cs by variables
+    val Op by variables
+    val Expr by variables
+    val Lv by variables
+
+    override val Scope.head: List<Term>
+        get() = ktListOf(Vs, Op, Expr)
+
+    override val Scope.body: Term
+        get() = tupleOf(
+            structOf(Same.Base.functor, Cs, intOf(1)),
+            structOf("length", Vs, Lv),
+            structOf("length", Cs, Lv),
+            structOf(ScalarProduct.functor, Cs, Vs, Op, Expr)
+        )
 }
