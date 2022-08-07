@@ -1,5 +1,6 @@
 package clpVarCreation.globalConstraints
 
+import clpVarCreation.*
 import clpVarCreation.chocoModel
 import clpVarCreation.flip
 import clpVarCreation.setChocoModel
@@ -26,7 +27,10 @@ object TuplesIn : BinaryRelation.NonBacktrackable<ExecutionContext>("tuples_in")
         val logicVars = innerList.filterIsInstance<Var>().distinct()
         val chocoModel = chocoModel
         val varsMap = chocoModel.variablesMap(logicVars).flip()
-        val tuple = innerList.filterIsInstance<Var>().map { varsMap[it] as IntVar }.toTypedArray()
+        val tuple = mutableListOf<IntVar>()
+        for(elem in innerList){
+            tuple.add(getAsIntVar(elem, varsMap))
+        }
         val relation = Tuples(true)
         val tuples = second.castToList().toList()
         val numElemList = innerList.size
@@ -37,7 +41,7 @@ object TuplesIn : BinaryRelation.NonBacktrackable<ExecutionContext>("tuples_in")
             val elemRelation = elem.castToList().toList().filterIsInstance<LogicInteger>().map { it.value.toInt() }.toIntArray()
             relation.add(elemRelation)
         }
-        chocoModel.table(tuple, relation, "CT+").post()
+        chocoModel.table(tuple.toTypedArray(), relation, "CT+").post()
         return replySuccess {
             setChocoModel(chocoModel)
         }

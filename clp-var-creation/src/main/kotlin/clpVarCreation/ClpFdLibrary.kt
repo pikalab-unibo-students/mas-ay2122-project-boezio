@@ -23,7 +23,7 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         LessEquals,
         AllDistinct,
         ScalarProduct,
-        TuplesIn,
+        //TuplesIn,
         Element,
         Disjoint2,
         Circuit,
@@ -44,7 +44,9 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
             LexChainN.Recursive,
             Sum,
             Same.Base,
-            Same.Recursive
+            Same.Recursive,
+            TuplesInN.Base,
+            TuplesInN.Recursive
 //            Call
         ).map { it.implementation }
     )
