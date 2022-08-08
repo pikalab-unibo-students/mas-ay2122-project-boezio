@@ -8,10 +8,11 @@ import it.unibo.tuprolog.solve.rule.RuleWrapper
 
 /*
 
-lex_chain([A,B]).
+lex_chain([A,B]):-
+    lex([A,B]).
 
 lex_chain([A |B,C]) :-
-    lex_chain([A,B]),
+    lex([A,B]),
     lex_chain([B,C]).
 
  */
@@ -24,6 +25,9 @@ abstract class LexChainN: RuleWrapper<ExecutionContext>("lex_chain", 1) {
     object Base : LexChainN() {
         override val Scope.head: List<Term>
             get() = ktListOf(listOf(A,B))
+
+        override val Scope.body: Term
+            get() = structOf(LexChain.functor, listOf(A,B))
     }
 
     object Recursive : LexChainN() {
@@ -34,7 +38,7 @@ abstract class LexChainN: RuleWrapper<ExecutionContext>("lex_chain", 1) {
 
         override val Scope.body: Term
             get() = tupleOf(
-                structOf(functor, listOf(A,B)),
+                structOf(LexChain.functor, listOf(A,B)),
                 structOf(functor, listOf(B,C))
             )
     }

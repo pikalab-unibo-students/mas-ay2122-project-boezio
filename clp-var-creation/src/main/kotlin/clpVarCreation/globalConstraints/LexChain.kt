@@ -13,7 +13,7 @@ import it.unibo.tuprolog.solve.primitive.UnaryPredicate
 import it.unibo.tuprolog.core.List as LogicList
 import org.chocosolver.solver.variables.IntVar
 
-object LexChain : UnaryPredicate.NonBacktrackable<ExecutionContext>("lex_chain") {
+object LexChain : UnaryPredicate.NonBacktrackable<ExecutionContext>("lex") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
         ensuringArgumentIsList(0)
         val outerList = first.castToList().toList()

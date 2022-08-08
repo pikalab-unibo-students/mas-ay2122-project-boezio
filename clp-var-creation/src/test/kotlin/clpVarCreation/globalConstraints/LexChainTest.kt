@@ -79,14 +79,14 @@ class LexChainTest: BaseTest() {
 
         val theory = theoryParser.parseTheory(
             """
-            problem(X,Y,Z) :- 
-                ins([X,Y,Z], '..'(1, 10)), 
-                lex_chain([[X],[Y],[Z]]).
+            problem(X,Y) :- 
+                ins([X,Y], '..'(1, 10)), 
+                lex_chain([[2],[X],[Y]]).
             """.trimIndent()
         )
 
         val goal = termParser.parseStruct(
-            "problem(X,Y,Z),label([X,Y,Z])"
+            "problem(X,Y),label([X,Y])"
         )
 
         val solver = Solver.prolog.solverOf(
@@ -98,9 +98,8 @@ class LexChainTest: BaseTest() {
 
         termParser.scope.with {
             solution.assertSolutionAssigns(
-                varOf("X") to intOf(1),
-                varOf("Y") to intOf(1),
-                varOf("Z") to intOf(1)
+                varOf("X") to intOf(2),
+                varOf("Y") to intOf(2)
             )
         }
     }

@@ -30,7 +30,8 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         GlobalCardinalityTwo,
         GlobalCardinalityThree,
         CumulativeTwo,
-        Serialized
+        Serialized,
+        LexChain
 //        Univ
     ).associate { it.descriptionPair },
     theory = Theory.of(
