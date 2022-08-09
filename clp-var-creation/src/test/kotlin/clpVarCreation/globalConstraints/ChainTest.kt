@@ -12,12 +12,7 @@ import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
 
-class ChainTest {
-
-    private val univOp = Operator("=..", Specifier.XFX, 700)
-    private val standardOps = OperatorSet.DEFAULT + univOp
-    private val termParser = TermParser.withOperators(standardOps)
-    private val theoryParser = ClausesParser.withOperators(standardOps)
+class ChainTest: BaseTest() {
 
     @Test
     fun testChain() {
@@ -34,9 +29,9 @@ class ChainTest {
             "problem(X,Y,Z),label([X,Y,Z])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = Libraries.of(ClpFdLibrary),
+            staticKb = theory
         )
 
         val solution = solver.solveOnce(goal)
