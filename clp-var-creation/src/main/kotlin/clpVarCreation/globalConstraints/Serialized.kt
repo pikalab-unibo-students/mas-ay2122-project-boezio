@@ -33,7 +33,8 @@ object Serialized : BinaryRelation.NonBacktrackable<ExecutionContext>("serialize
         val chocoStarts = firstVars.map { varsMap[it] as IntVar }.toTypedArray()
         val chocoDurations = secondVars.map { varsMap[it] as IntVar }.toTypedArray()
         val zeros = chocoModel.intVarArray(size, List(size){0}.toIntArray())
-        chocoModel.diffN(chocoStarts, zeros, chocoDurations, zeros, false).post()
+        val ones = chocoModel.intVarArray(size, List(size){1}.toIntArray())
+        chocoModel.diffN(chocoStarts, zeros, chocoDurations, ones, false).post()
         return replySuccess {
             setChocoModel(chocoModel)
         }

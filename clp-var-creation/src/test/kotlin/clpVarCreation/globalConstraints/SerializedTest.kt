@@ -10,7 +10,7 @@ import kotlin.test.Ignore
 
 class SerializedTest: BaseTest() {
 
-    @Test @Ignore
+    @Test
     fun testSerialized() {
 
         val theory = theoryParser.parseTheory(
