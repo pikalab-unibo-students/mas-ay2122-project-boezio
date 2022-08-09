@@ -3,6 +3,9 @@ package clpVarCreation.globalConstraints
 import clpVarCreation.BaseTest
 import clpVarCreation.ClpFdLibrary
 import clpVarCreation.assertSolutionAssigns
+import it.unibo.tuprolog.core.operators.Operator
+import it.unibo.tuprolog.core.operators.OperatorSet
+import it.unibo.tuprolog.core.operators.Specifier
 import it.unibo.tuprolog.core.parsing.TermParser
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
@@ -11,8 +14,10 @@ import org.junit.jupiter.api.Test
 
 class ChainTest {
 
-    private val termParser = TermParser.withStandardOperators()
-    private val theoryParser = ClausesParser.withStandardOperators()
+    private val univOp = Operator("=..", Specifier.XFX, 700)
+    private val standardOps = OperatorSet.DEFAULT + univOp
+    private val termParser = TermParser.withOperators(standardOps)
+    private val theoryParser = ClausesParser.withOperators(standardOps)
 
     @Test
     fun testChain() {

@@ -6,8 +6,11 @@ import clpVarCreation.globalConstraints.*
 import clpVarCreation.relationalConstraints.*
 import clpVarCreation.search.Label
 import clpVarCreation.search.Labeling
+import it.unibo.tuprolog.solve.classic.stdlib.rule.Call
 import it.unibo.tuprolog.solve.library.AliasedLibrary
 import it.unibo.tuprolog.solve.library.Library
+import it.unibo.tuprolog.solve.stdlib.primitive.EnsureExecutable
+import it.unibo.tuprolog.solve.stdlib.primitive.Univ
 import it.unibo.tuprolog.theory.Theory
 
 object ClpFdLibrary : AliasedLibrary by Library.aliased(
@@ -31,7 +34,9 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         GlobalCardinalityThree,
         CumulativeTwo,
         Serialized,
-        LexChain
+        LexChain,
+        Univ,
+        EnsureExecutable
 //        Univ
     ).associate { it.descriptionPair },
     theory = Theory.of(
@@ -40,6 +45,7 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
             Label,
             Chain.Base,
             Chain.Recursive,
+            Call,
             CumulativeOne,
             LexChainN.Base,
             LexChainN.Recursive,
