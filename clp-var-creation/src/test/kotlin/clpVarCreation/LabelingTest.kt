@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 import java.lang.IllegalArgumentException
 
 
-internal class LabelingTest {
+internal class LabelingTest: BaseTest() {
 
     private val theory = ClausesParser.withDefaultOperators().parseTheory(
         """
@@ -297,12 +297,6 @@ internal class LabelingTest {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        val solution = try {
-            solver.solveOnce(goal)
-        } catch (e: IllegalArgumentException) {
-            true
-        }
-
-        assertTrue(solution as Boolean)
+        assertException(solver, goal)
     }
 }

@@ -60,13 +60,7 @@ class InsAssignmentTest: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        val solution = try {
-            solver.solveOnce(goal)
-        } catch (e: IllegalArgumentException) {
-            true
-        }
-
-        assertTrue(solution as Boolean)
+        assertException(solver, goal)
     }
 
     @Test
