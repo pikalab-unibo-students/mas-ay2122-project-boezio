@@ -11,10 +11,11 @@ import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
+import kotlin.test.Ignore
 
 class ChainTest: BaseTest() {
 
-    @Test
+    @Test @Ignore
     fun testChain() {
 
         val theory = theoryParser.parseTheory(
