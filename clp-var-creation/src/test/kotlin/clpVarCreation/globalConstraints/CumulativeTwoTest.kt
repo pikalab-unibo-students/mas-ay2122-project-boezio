@@ -3,13 +3,10 @@ package clpVarCreation.globalConstraints
 import clpVarCreation.BaseTest
 import clpVarCreation.ClpFdLibrary
 import clpVarCreation.assertSolutionAssigns
-import it.unibo.tuprolog.core.parsing.TermParser
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
-import it.unibo.tuprolog.theory.parsing.ClausesParser
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.lang.IllegalArgumentException
+
 
 class CumulativeTwoTest: BaseTest() {
 
@@ -131,13 +128,7 @@ class CumulativeTwoTest: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        val solution = try {
-            solver.solveOnce(goal)
-        } catch (e: IllegalArgumentException){
-            true
-        }
-
-        assertTrue(solution as Boolean)
+        assertException(solver, goal)
     }
 
     @Test
@@ -162,13 +153,7 @@ class CumulativeTwoTest: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        val solution = try {
-            solver.solveOnce(goal)
-        } catch (e: IllegalArgumentException){
-            true
-        }
-
-        assertTrue(solution as Boolean)
+        assertException(solver, goal)
     }
 
     @Test
@@ -193,13 +178,7 @@ class CumulativeTwoTest: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        val solution = try {
-            solver.solveOnce(goal)
-        } catch (e: IllegalArgumentException){
-            true
-        }
-
-        assertTrue(solution as Boolean)
+        assertException(solver, goal)
     }
 
     @Test
@@ -224,12 +203,6 @@ class CumulativeTwoTest: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        val solution = try {
-            solver.solveOnce(goal)
-        } catch (e: IllegalArgumentException){
-            true
-        }
-
-        assertTrue(solution as Boolean)
+        assertException(solver, goal)
     }
 }
