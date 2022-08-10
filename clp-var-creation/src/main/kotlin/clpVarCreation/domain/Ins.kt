@@ -32,18 +32,12 @@ object Ins : BinaryRelation.NonBacktrackable<ExecutionContext>("ins") {
                     return replyFail()
                 }
                 for (name in varNames) {
-                    require(chocoModel.vars.none { it.name == name }) {
-                        "Variable $name already defined"
-                    }
                     chocoModel.intVar(name, lb, ub)
                 }
             }
             is LogicInt -> {
                 val domainInt = second.castToInteger().intValue.toInt()
                 for (name in varNames) {
-                    require(chocoModel.vars.none { it.name == name }) {
-                        "Variable $name already defined"
-                    }
                     chocoModel.intVar(name, domainInt)
                 }
             }
