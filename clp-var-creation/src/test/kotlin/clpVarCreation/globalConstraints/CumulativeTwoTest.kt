@@ -7,7 +7,9 @@ import it.unibo.tuprolog.core.parsing.TermParser
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.lang.IllegalArgumentException
 
 class CumulativeTwoTest: BaseTest() {
 
@@ -105,5 +107,129 @@ class CumulativeTwoTest: BaseTest() {
                 varOf("E2") to intOf(5)
             )
         }
+    }
+
+    @Test
+    fun testCumulativeInvalidFunctorTask() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(E1, E2) :- 
+                ins([E1, E2, S1, S2], '..'(1, 10)), 
+                in(H1, '..'(1, 1)), 
+                ins([H2, L, D1], '..'(2, 2)),
+                cumulative([invalid(S1,D1,E1,H1, _), task(S2,2,E2,H2,_)], [limit(L)]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(E1,E2),label([E1,E2])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        val solution = try {
+            solver.solveOnce(goal)
+        } catch (e: IllegalArgumentException){
+            true
+        }
+
+        assertTrue(solution as Boolean)
+    }
+
+    @Test
+    fun testCumulativeInvalidTaskArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(E1, E2) :- 
+                ins([E1, E2, S1, S2], '..'(1, 10)), 
+                in(H1, '..'(1, 1)), 
+                ins([H2, L, D1], '..'(2, 2)),
+                cumulative([task(a,D1,E1,H1, _), task(S2,2,E2,H2,_)], [limit(L)]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(E1,E2),label([E1,E2])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        val solution = try {
+            solver.solveOnce(goal)
+        } catch (e: IllegalArgumentException){
+            true
+        }
+
+        assertTrue(solution as Boolean)
+    }
+
+    @Test
+    fun testCumulativeInvalidOption() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(E1, E2) :- 
+                ins([E1, E2, S1, S2], '..'(1, 10)), 
+                in(H1, '..'(1, 1)), 
+                ins([H2, L, D1], '..'(2, 2)),
+                cumulative([task(S1,D1,E1,H1, _), task(S2,2,E2,H2,_)], [limit(L), invalid(L)]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(E1,E2),label([E1,E2])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        val solution = try {
+            solver.solveOnce(goal)
+        } catch (e: IllegalArgumentException){
+            true
+        }
+
+        assertTrue(solution as Boolean)
+    }
+
+    @Test
+    fun testCumulativeInvalidLimitArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(E1, E2) :- 
+                ins([E1, E2, S1, S2], '..'(1, 10)), 
+                in(H1, '..'(1, 1)), 
+                ins([H2, L, D1], '..'(2, 2)),
+                cumulative([task(S1,D1,E1,H1, _), task(S2,2,E2,H2,_)], [limit(a)]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(E1,E2),label([E1,E2])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        val solution = try {
+            solver.solveOnce(goal)
+        } catch (e: IllegalArgumentException){
+            true
+        }
+
+        assertTrue(solution as Boolean)
     }
 }
