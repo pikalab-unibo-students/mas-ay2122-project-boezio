@@ -3,10 +3,8 @@ package clpVarCreation.globalConstraints
 import clpVarCreation.BaseTest
 import clpVarCreation.ClpFdLibrary
 import clpVarCreation.assertSolutionAssigns
-import it.unibo.tuprolog.core.parsing.TermParser
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
-import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
 
 class SumTest: BaseTest() {
@@ -27,9 +25,9 @@ class SumTest: BaseTest() {
             "problem(X,Y),label([X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            otherLibraries = Libraries.of(ClpFdLibrary)
         )
 
         val solution = solver.solveOnce(goal)

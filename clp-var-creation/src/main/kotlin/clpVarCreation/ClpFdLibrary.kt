@@ -34,7 +34,8 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         GlobalCardinalityThree,
         CumulativeTwo,
         Serialized,
-        LexChain
+        LexChain,
+        Sum
 //        Univ
     ).associate { it.descriptionPair },
     theory = Theory.of(
@@ -46,7 +47,6 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
             CumulativeOne,
             LexChainN.Base,
             LexChainN.Recursive,
-            Sum,
             Same.Base,
             Same.Recursive,
             TuplesInN.Base,
