@@ -4,7 +4,10 @@ import it.unibo.tuprolog.core.parsing.TermParser
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import java.lang.IllegalArgumentException
+
 
 internal class LabelingTest {
 
@@ -237,5 +240,69 @@ internal class LabelingTest {
                 varOf("Y") to intOf(1)
             )
         }
+    }
+
+    @Test
+    fun testNotImplementedBisect() {
+
+        val theory = ClausesParser.withDefaultOperators().parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                '#>'(X, Y).
+            """.trimIndent()
+        )
+
+        val parser = TermParser.withDefaultOperators()
+
+        val goal = parser.parseStruct(
+            "problem(X, Y), labeling([max('-'(X, Y), bisect)],[X, Y])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        val solution = try {
+            solver.solveOnce(goal)
+        } catch (e: IllegalArgumentException) {
+            true
+        }
+
+        assertTrue(solution as Boolean)
+    }
+
+    @Test
+    fun testNotImplementedEnum() {
+
+        val theory = ClausesParser.withDefaultOperators().parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                '#>'(X, Y).
+            """.trimIndent()
+        )
+
+        val parser = TermParser.withDefaultOperators()
+
+        val goal = parser.parseStruct(
+            "problem(X, Y), labeling([max('-'(X, Y), enum)],[X, Y])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        val solution = try {
+            solver.solveOnce(goal)
+        } catch (e: IllegalArgumentException) {
+            true
+        }
+
+        assertTrue(solution as Boolean)
     }
 }
