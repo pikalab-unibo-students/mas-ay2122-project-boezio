@@ -3,6 +3,8 @@ package clpVarCreation
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import java.lang.IllegalArgumentException
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
@@ -60,7 +62,9 @@ class InsAssignmentTest: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        assertException(solver, goal)
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
+        }
     }
 
     @Test

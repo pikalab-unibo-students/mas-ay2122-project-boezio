@@ -12,15 +12,4 @@ abstract class BaseTest {
     protected val termParser = TermParser.withDefaultOperators()
     protected val theoryParser = ClausesParser.withDefaultOperators()
 
-    fun assertException(solver: Solver, goal: Struct){
-
-        val solution = try{
-            solver.solveOnce(goal)
-        }catch (e: IllegalArgumentException){
-            true
-        }
-
-        assertTrue(solution as Boolean)
-    }
-
 }

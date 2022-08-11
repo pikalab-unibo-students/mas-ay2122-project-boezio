@@ -6,7 +6,8 @@ import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import java.lang.IllegalArgumentException
+import org.junit.jupiter.api.assertThrows
+
 
 
 internal class LabelingTest: BaseTest() {
@@ -265,13 +266,9 @@ internal class LabelingTest: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        val solution = try {
+        assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
-        } catch (e: IllegalArgumentException) {
-            true
         }
-
-        assertTrue(solution as Boolean)
     }
 
     @Test
@@ -297,6 +294,8 @@ internal class LabelingTest: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        assertException(solver, goal)
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
+        }
     }
 }

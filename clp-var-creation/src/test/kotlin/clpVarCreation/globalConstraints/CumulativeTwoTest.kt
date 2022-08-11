@@ -6,6 +6,7 @@ import clpVarCreation.assertSolutionAssigns
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 
 class CumulativeTwoTest: BaseTest() {
@@ -128,7 +129,9 @@ class CumulativeTwoTest: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        assertException(solver, goal)
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
+        }
     }
 
     @Test
@@ -153,7 +156,9 @@ class CumulativeTwoTest: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        assertException(solver, goal)
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
+        }
     }
 
     @Test
@@ -178,7 +183,9 @@ class CumulativeTwoTest: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        assertException(solver, goal)
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
+        }
     }
 
     @Test
@@ -203,6 +210,8 @@ class CumulativeTwoTest: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        assertException(solver, goal)
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
+        }
     }
 }

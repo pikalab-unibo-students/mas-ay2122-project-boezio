@@ -8,6 +8,7 @@ import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalArgumentException
 
 class Disjoint2Test: BaseTest() {
@@ -74,7 +75,9 @@ class Disjoint2Test: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        assertException(solver, goal)
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
+        }
     }
 
     @Test
@@ -102,6 +105,8 @@ class Disjoint2Test: BaseTest() {
             libraries = Libraries.of(ClpFdLibrary)
         )
 
-        assertException(solver, goal)
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
+        }
     }
 }
