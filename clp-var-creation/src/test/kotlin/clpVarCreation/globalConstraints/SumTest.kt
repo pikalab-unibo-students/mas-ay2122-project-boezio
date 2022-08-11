@@ -6,6 +6,8 @@ import clpVarCreation.assertSolutionAssigns
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import java.lang.IllegalArgumentException
 
 class SumTest: BaseTest() {
 
@@ -258,6 +260,32 @@ class SumTest: BaseTest() {
                 varOf("X") to intOf(1),
                 varOf("Y") to intOf(1)
             )
+        }
+    }
+
+    @Test
+    fun testSumInvalidVs() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)),
+                sum([a,Y], #=<, 3).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
         }
     }
 }
