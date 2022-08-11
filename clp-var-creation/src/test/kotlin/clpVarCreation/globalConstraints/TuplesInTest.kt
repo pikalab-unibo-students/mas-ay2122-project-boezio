@@ -8,6 +8,8 @@ import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import java.lang.IllegalArgumentException
 
 class TuplesInTest: BaseTest() {
 
@@ -98,6 +100,56 @@ class TuplesInTest: BaseTest() {
                 varOf("X") to intOf(1),
                 varOf("Y") to intOf(2)
             )
+        }
+    }
+
+    @Test
+    fun testInvalidTuples() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y, Z, W) :- 
+                ins([X,Y,Z,W], '..'(1,10)), 
+                tuples_in([[a,Y],[Z,W]], [[1,2],[1,5],[4,0],[4,3]]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y,Z,W),label([X,Y,Z,W])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
+        }
+    }
+
+    @Test
+    fun testInvalidRelation() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y, Z, W) :- 
+                ins([X,Y,Z,W], '..'(1,10)), 
+                tuples_in([[a,Y],[Z,W]], [[X,2],[1,5],[4,0],[4,3]]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y,Z,W),label([X,Y,Z,W])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
         }
     }
 }

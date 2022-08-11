@@ -5,6 +5,7 @@ import clpVarCreation.chocoModel
 import clpVarCreation.flip
 import clpVarCreation.setChocoModel
 import clpVarCreation.variablesMap
+import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -29,16 +30,20 @@ object TuplesIn : BinaryRelation.NonBacktrackable<ExecutionContext>("tuples") {
         val varsMap = chocoModel.variablesMap(logicVars).flip()
         val tuple = mutableListOf<IntVar>()
         for(elem in innerList){
+            require(elem.let { it is Var || it is Integer }){
+                "$elem is neither a variable nor an integer"
+            }
             tuple.add(getAsIntVar(elem, varsMap))
         }
         val relation = Tuples(true)
         val tuples = second.castToList().toList()
         val numElemList = innerList.size
         for (elem in tuples) {
-            require(elem.let { it is LogicList && it.castToList().toList().size == numElemList }) {
+            val integerElems = elem.castToList().toList().filterIsInstance<LogicInteger>()
+            require(elem.let { it is LogicList && integerElems.size == numElemList }) {
                 "$elem is invalid"
             }
-            val elemRelation = elem.castToList().toList().filterIsInstance<LogicInteger>().map { it.value.toInt() }.toIntArray()
+            val elemRelation = integerElems.map { it.value.toInt() }.toIntArray()
             relation.add(elemRelation)
         }
         chocoModel.table(tuple.toTypedArray(), relation, "CT+").post()
