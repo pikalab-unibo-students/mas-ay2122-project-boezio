@@ -8,6 +8,8 @@ import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import java.lang.IllegalArgumentException
 
 class LexChainTest: BaseTest() {
 
@@ -101,6 +103,31 @@ class LexChainTest: BaseTest() {
                 varOf("X") to intOf(2),
                 varOf("Y") to intOf(2)
             )
+        }
+    }
+
+    @Test
+    fun testLexChainInvalidArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X,Y) :- 
+                ins([X,Y], '..'(1, 10)), 
+                lex_chain([[a],[X],[Y]]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
         }
     }
 }

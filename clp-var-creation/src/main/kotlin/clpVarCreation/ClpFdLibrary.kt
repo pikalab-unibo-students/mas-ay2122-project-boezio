@@ -47,8 +47,6 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
             CumulativeOne,
             LexChainN.Base,
             LexChainN.Recursive,
-            Same.Base,
-            Same.Recursive,
             TuplesInN.Base,
             TuplesInN.Recursive
 //            Call

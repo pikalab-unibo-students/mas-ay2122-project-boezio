@@ -5,6 +5,7 @@ import clpVarCreation.chocoModel
 import clpVarCreation.flip
 import clpVarCreation.setChocoModel
 import clpVarCreation.variablesMap
+import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -36,10 +37,16 @@ object LexChain : UnaryPredicate.NonBacktrackable<ExecutionContext>("lex") {
         val firstList = mutableListOf<IntVar>()
         val secondList = mutableListOf<IntVar>()
         for(i in 0 until firstSize){
+            require(firstTermList[i].let { it is Var || it is Integer }){
+                "${firstTermList[i]} is neither a variable nor an integer"
+            }
             val listElem = getAsIntVar(firstTermList[i], varsMap)
             firstList.add(listElem)
         }
         for(i in 0 until secondSize){
+            require(secondTermList[i].let { it is Var || it is Integer }){
+                "${secondTermList[i]} is neither a variable nor an integer"
+            }
             val listElem = getAsIntVar(secondTermList[i], varsMap)
             secondList.add(listElem)
         }
