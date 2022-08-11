@@ -8,6 +8,8 @@ import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.Libraries
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import java.lang.IllegalArgumentException
 
 class ScalarProductTest: BaseTest() {
 
@@ -134,6 +136,56 @@ class ScalarProductTest: BaseTest() {
             solution.assertSolutionAssigns(
                 varOf("X") to intOf(1)
             )
+        }
+    }
+
+    @Test
+    fun testInvalidCs() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X) :- 
+                in(X, '..'(1, 10)),
+                scalar_product([a,2], [X,5], #=, 11).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X),label([X])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
+        }
+    }
+
+    @Test
+    fun testInvalidVs() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X) :- 
+                in(X, '..'(1, 10)),
+                scalar_product([1,2], [a,5], #=, 11).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X),label([X])"
+        )
+
+        val solver = Solver.prolog.solverOf(
+            staticKb = theory,
+            libraries = Libraries.of(ClpFdLibrary)
+        )
+
+        assertThrows<IllegalArgumentException> {
+            solver.solveOnce(goal)
         }
     }
 

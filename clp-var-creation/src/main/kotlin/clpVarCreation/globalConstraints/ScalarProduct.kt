@@ -15,13 +15,15 @@ import org.chocosolver.solver.variables.IntVar
 object ScalarProduct : QuaternaryRelation.NonBacktrackable<ExecutionContext>("scalar_product") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term, fourth: Term): Solve.Response {
         ensuringArgumentIsList(0)
-        val listCoeffs = first.castToList().toList().filterIsInstance<LogicInteger>().toSet()
+        val listCoeffs = first.castToList().toList()
+        val listIntegerCoeffs = listCoeffs.filterIsInstance<LogicInteger>().toSet()
+        require(listCoeffs.size == listIntegerCoeffs.size){
+            "Coefficients must be all integer values"
+        }
         ensuringArgumentIsList(1)
         val secondTerms = second.castToList().toList()
         val listVars = secondTerms.filterIsInstance<Var>().distinct().toSet()
-        if (secondTerms.size != listCoeffs.size)
-            throw IllegalStateException()
-        val coeffs = listCoeffs.map { it.value.toInt() }.toIntArray()
+        val coeffs = listIntegerCoeffs.map { it.value.toInt() }.toIntArray()
         ensuringArgumentIsAtom(2)
         val operator = third.asAtom()
         val exprVars = fourth.variables.toSet()
@@ -30,6 +32,9 @@ object ScalarProduct : QuaternaryRelation.NonBacktrackable<ExecutionContext>("sc
         val varsMap = chocoModel.variablesMap(logicVars).flip()
         val Vs = mutableListOf<IntVar>()
         for(elem in secondTerms){
+            require(elem.let { it is Var || it is LogicInteger }){
+                "$elem is neither a variable nor an integer"
+            }
             Vs.add(getAsIntVar(elem, varsMap))
         }
         val expParser = ExpressionParser(chocoModel, varsMap)
