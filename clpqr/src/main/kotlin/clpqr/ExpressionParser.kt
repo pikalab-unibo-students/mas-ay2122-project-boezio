@@ -7,6 +7,7 @@ import org.chocosolver.solver.expression.continuous.arithmetic.CArExpression
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression.IntPrimitive
 import org.chocosolver.solver.variables.Variable
+import org.chocosolver.solver.variables.impl.FixedRealVarImpl
 
 class ExpressionParser<T : Variable>(
     private val chocoModel: Model,
@@ -18,12 +19,17 @@ class ExpressionParser<T : Variable>(
     override fun visitVar(term: Var): CArExpression =
         asExpression(variables[term] ?: error("No such a variable: $term"))
 
-    override fun visitInteger(term: Integer): CArExpression =
-        IntPrimitive(term.value.toIntExact(), chocoModel)
+    override fun visitInteger(term: Integer): CArExpression {
+        val value = term.value.toDouble()
+        return FixedRealVarImpl("$value",value, chocoModel)
+    }
 
     override fun visitReal(term: Real): CArExpression {
-        return super.visitReal(term)
+        val value = term.value.toDouble()
+        return FixedRealVarImpl("$value",value, chocoModel)
     }
+
+
 
     override fun visitStruct(term: Struct): CArExpression {
         when (term.arity) {
