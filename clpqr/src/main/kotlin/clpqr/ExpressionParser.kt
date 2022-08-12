@@ -30,8 +30,6 @@ class ExpressionParser<T : Variable>(
         return FixedRealVarImpl("$value",value, chocoModel)
     }
 
-
-
     override fun visitStruct(term: Struct): CArExpression {
         when (term.arity) {
             2 -> when (term.functor) {
@@ -51,10 +49,7 @@ class ExpressionParser<T : Variable>(
                 "cos" -> return unaryExpression(term, CArExpression::cos)
                 "tan" -> return unaryExpression(term, CArExpression::tan)
                 "exp" -> return unaryExpression(term, CArExpression::exp)
-                "pow" -> {
-                    val first = term[0].accept(this)
-                    (CArExpression::pow)(first, 2.0)
-                }
+                "pow" -> return term[0].accept(this).pow(2.0)
             }
         }
         return super.visitStruct(term) // indirectly calls defaultValue(term)
