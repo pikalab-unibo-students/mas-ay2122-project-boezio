@@ -24,37 +24,6 @@ val Solve.Request<ExecutionContext>.chocoModel
         context.customData.durable[CHOCO_MODEL] as ChocoModel
     }
 
-val Solve.Request<ExecutionContext>.operatorsMap
-    get(): Map<Atom, String> {
-        return mapOf(
-            Atom.of("#=") to "=",
-            Atom.of("#\\=") to "!=",
-            Atom.of("#>") to ">",
-            Atom.of("#<") to "<",
-            Atom.of("#>=") to ">=",
-            Atom.of("#=<") to "<="
-        )
-    }
-
-fun Solve.Request<ExecutionContext>.getIntAsVars(termList: List<Term>): List<IntVar>{
-    val integerAsVars = mutableListOf<IntVar>()
-    // Conversion of integers to int values
-    for (elem in termList){
-        if(elem is Integer){
-            val intValue = elem.castToInteger().intValue.toInt()
-            integerAsVars.add(chocoModel.intVar(intValue))
-        }
-    }
-    return integerAsVars
-}
-
-fun Solve.Request<ExecutionContext>.getAsIntVar(term: Term, map: Map<Var, Variable>): IntVar{
-    if(term is Var)
-        return map[term.castToVar()] as IntVar
-    else
-        return chocoModel.intVar(term.castToInteger().value.toInt())
-}
-
 fun SideEffectsBuilder.setChocoModel(chocoModel: ChocoModel) {
     setDurableData(CHOCO_MODEL, chocoModel)
 }

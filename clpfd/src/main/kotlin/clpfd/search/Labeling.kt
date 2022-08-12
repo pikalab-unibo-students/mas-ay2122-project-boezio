@@ -3,7 +3,6 @@ package clpfd.search
 import clpfd.*
 import clpCore.*
 import it.unibo.tuprolog.core.Struct
-import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -34,8 +33,6 @@ object Labeling : BinaryRelation.NonBacktrackable<ExecutionContext>("labeling") 
             replyWith(solver.solutions(chocoToLogic).last())
         }
     }
-
-    private fun <K, V> Map<K, V>.flip(): Map<V, K> = map { (k, v) -> v to k }.toMap()
 
     private fun createChocoSolver(
         model: ChocoModel,

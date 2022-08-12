@@ -1,6 +1,7 @@
 package clpfd.globalConstraints
 
 import clpCore.*
+import clpfd.getAsIntVar
 
 import it.unibo.tuprolog.core.Integer as LogicInteger
 import it.unibo.tuprolog.core.Struct

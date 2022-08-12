@@ -1,6 +1,7 @@
 package clpfd.globalConstraints
 
 import clpCore.*
+import clpfd.getAsIntVar
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
