@@ -4,6 +4,7 @@ import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.sideffects.SideEffectsBuilder
+import org.chocosolver.solver.Solver
 import org.chocosolver.solver.variables.BoolVar
 import org.chocosolver.solver.variables.IntVar
 import org.chocosolver.solver.variables.RealVar
@@ -77,3 +78,17 @@ val Variable.valueAsTerm: Term
     }
 
 fun <K, V> Map<K, V>.flip(): Map<V, K> = map { (k, v) -> v to k }.toMap()
+
+
+// why? see https://choco-solver.org/docs/solving/solving/#mono-objective-optimization
+// how? see https://kotlinlang.org/docs/sequences.html#from-chunks
+fun Solver.solutions(chocoToLogic: Map<Variable, Var>): Sequence<Substitution> = sequence {
+    var atLeastOne = false
+    while (solve()) {
+        atLeastOne = true
+        yield(Substitution.of(chocoToLogic.map { (k, v) -> v to k.valueAsTerm }))
+    }
+    if (!atLeastOne) {
+        yield(Substitution.failed())
+    }
+}

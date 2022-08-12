@@ -35,19 +35,6 @@ object Labeling : BinaryRelation.NonBacktrackable<ExecutionContext>("labeling") 
         }
     }
 
-    // why? see https://choco-solver.org/docs/solving/solving/#mono-objective-optimization
-    // how? see https://kotlinlang.org/docs/sequences.html#from-chunks
-    private fun ChocoSolver.solutions(chocoToLogic: Map<Variable, Var>): Sequence<Substitution> = sequence {
-        var atLeastOne = false
-        while (solve()) {
-            atLeastOne = true
-            yield(Substitution.of(chocoToLogic.map { (k, v) -> v to k.valueAsTerm }))
-        }
-        if (!atLeastOne) {
-            yield(Substitution.failed())
-        }
-    }
-
     private fun <K, V> Map<K, V>.flip(): Map<V, K> = map { (k, v) -> v to k }.toMap()
 
     private fun createChocoSolver(
