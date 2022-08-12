@@ -1,7 +1,7 @@
 package clpfd.domain
 
-import clpfd.chocoModel
-import clpfd.setChocoModel
+import clpCore.chocoModel
+import clpCore.setChocoModel
 import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term

@@ -1,9 +1,9 @@
 package clpfd.relationalConstraints
 
 import clpfd.ExpressionParser
-import clpfd.chocoModel
-import clpfd.flip
-import clpfd.variablesMap
+import clpCore.chocoModel
+import clpCore.flip
+import clpCore.variablesMap
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.BinaryRelation

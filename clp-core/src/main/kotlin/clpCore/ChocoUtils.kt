@@ -1,4 +1,4 @@
-package clpfd
+package clpCore
 
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -16,14 +16,14 @@ import org.chocosolver.solver.Model as ChocoModel
 
 private const val CHOCO_MODEL = "chocoModel"
 
-internal val Solve.Request<ExecutionContext>.chocoModel
+val Solve.Request<ExecutionContext>.chocoModel
     get() = if (CHOCO_MODEL !in context.customData.durable) {
         ChocoModel()
     } else {
         context.customData.durable[CHOCO_MODEL] as ChocoModel
     }
 
-internal val Solve.Request<ExecutionContext>.operatorsMap
+val Solve.Request<ExecutionContext>.operatorsMap
     get(): Map<Atom, String> {
         return mapOf(
             Atom.of("#=") to "=",
@@ -35,7 +35,7 @@ internal val Solve.Request<ExecutionContext>.operatorsMap
         )
     }
 
-internal fun Solve.Request<ExecutionContext>.getIntAsVars(termList: List<Term>): List<IntVar>{
+fun Solve.Request<ExecutionContext>.getIntAsVars(termList: List<Term>): List<IntVar>{
     val integerAsVars = mutableListOf<IntVar>()
     // Conversion of integers to int values
     for (elem in termList){
@@ -47,23 +47,23 @@ internal fun Solve.Request<ExecutionContext>.getIntAsVars(termList: List<Term>):
     return integerAsVars
 }
 
-internal fun Solve.Request<ExecutionContext>.getAsIntVar(term: Term, map: Map<Var, Variable>): IntVar{
+fun Solve.Request<ExecutionContext>.getAsIntVar(term: Term, map: Map<Var, Variable>): IntVar{
     if(term is Var)
         return map[term.castToVar()] as IntVar
     else
         return chocoModel.intVar(term.castToInteger().value.toInt())
 }
 
-internal fun SideEffectsBuilder.setChocoModel(chocoModel: ChocoModel) {
+fun SideEffectsBuilder.setChocoModel(chocoModel: ChocoModel) {
     setDurableData(CHOCO_MODEL, chocoModel)
 }
 
-internal fun ChocoModel.variablesMap(logicVariables: Iterable<Var>): Map<Variable, Var> {
+fun ChocoModel.variablesMap(logicVariables: Iterable<Var>): Map<Variable, Var> {
     val logicVariablesByName = logicVariables.groupBy { it.completeName }.mapValues { it.value.single() }
     return vars.filter { it.name in logicVariablesByName }.associateWith { logicVariablesByName[it.name]!! }
 }
 
-internal val Variable.valueAsTerm: Term
+val Variable.valueAsTerm: Term
     get() = when (this) {
         is IntVar -> Integer.of(value)
         // RealVar.toString returns <name_var>=<value>
@@ -76,4 +76,4 @@ internal val Variable.valueAsTerm: Term
         else -> throw IllegalStateException("Not supported type of Choco variable: ${this::class.java.name}")
     }
 
-internal fun <K, V> Map<K, V>.flip(): Map<V, K> = map { (k, v) -> v to k }.toMap()
+fun <K, V> Map<K, V>.flip(): Map<V, K> = map { (k, v) -> v to k }.toMap()

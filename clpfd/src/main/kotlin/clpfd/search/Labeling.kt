@@ -1,7 +1,7 @@
 package clpfd.search
 
 import clpfd.*
-import clpfd.chocoModel
+import clpCore.*
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.Term

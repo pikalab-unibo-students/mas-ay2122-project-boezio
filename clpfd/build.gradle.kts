@@ -27,6 +27,8 @@ dependencies {
     implementation("it.unibo.tuprolog:solve-classic-jvm:0.20.9")
     implementation("it.unibo.tuprolog:parser-theory-jvm:0.20.9")
 
+    implementation(project(":clp-core"))
+
     testImplementation(kotlin("test"))
 }
 

@@ -1,9 +1,9 @@
 package clpfd.globalConstraints
 
-import clpfd.chocoModel
-import clpfd.getIntAsVars
-import clpfd.setChocoModel
-import clpfd.variablesMap
+import clpCore.chocoModel
+import clpCore.getIntAsVars
+import clpCore.setChocoModel
+import clpCore.variablesMap
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
