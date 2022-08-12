@@ -21,7 +21,7 @@ object In : BinaryRelation.NonBacktrackable<ExecutionContext>("in") {
         val chocoSolver: ChocoSolver? = if ("chocoSolver" in context.customData.durable)
             context.customData.durable.get("chocoSolver") as ChocoSolver else null
 
-        replySuccess {
+        return replySuccess {
             addDurableData("chocoSolver", chocoSolver!!)
         }
     }

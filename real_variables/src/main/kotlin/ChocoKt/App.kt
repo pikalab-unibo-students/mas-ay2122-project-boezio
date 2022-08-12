@@ -3,9 +3,10 @@ import org.chocosolver.solver.Model
 fun main() {
 
     val model = Model()
+    val precision = model.precision
 
     val x = model.realVar(4.0)
-    val y = model.realVar(0.2,10.0,0.001)
+    val y = model.realVar(0.2,10.0,precision)
 
     // Constraints
     y.lt(5.0).equation().post()
