@@ -3,6 +3,7 @@ package clpqr
 import it.unibo.tuprolog.core.Real
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.solve.flags.NotableFlag
+import org.chocosolver.solver.Model
 
 object Precision : NotableFlag {
     override val admissibleValues: Sequence<Term>
@@ -13,7 +14,7 @@ object Precision : NotableFlag {
     }
 
     override val defaultValue: Term
-        get() = Real.of("0.00001") // TODO set an actual value
+        get() = Real.of(Model().precision)
 
     override val name: String
         get() = "precision"
