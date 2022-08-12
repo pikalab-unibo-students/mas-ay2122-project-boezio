@@ -36,7 +36,6 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
         Serialized,
         LexChain,
         Sum
-//        Univ
     ).associate { it.descriptionPair },
     theory = Theory.of(
         listOf(
@@ -49,7 +48,6 @@ object ClpFdLibrary : AliasedLibrary by Library.aliased(
             LexChainN.Recursive,
             TuplesInN.Base,
             TuplesInN.Recursive
-//            Call
         ).map { it.implementation }
     )
 )
