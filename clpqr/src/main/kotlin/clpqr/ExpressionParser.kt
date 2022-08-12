@@ -51,7 +51,7 @@ class ExpressionParser<T : Variable>(
                 "cos" -> return unaryExpression(term, CArExpression::cos)
                 "tan" -> return unaryExpression(term, CArExpression::tan)
                 "exp" -> return unaryExpression(term, CArExpression::exp)
-                "pow" -> throw IllegalStateException()
+                "pow" -> (CArExpression::pow)(term, 2.0)
             }
         }
         return super.visitStruct(term) // indirectly calls defaultValue(term)
