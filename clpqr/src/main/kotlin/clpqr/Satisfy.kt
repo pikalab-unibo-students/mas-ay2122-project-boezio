@@ -26,9 +26,8 @@ object Satisfy: UnaryPredicate.NonBacktrackable<ExecutionContext>("satisfy") {
         val logicVars = first.variables.toList()
         val chocoModel = chocoModel
         val varsMap = chocoModel.variablesMap(logicVars)
-        val config = Configuration(precision = (context.flags[Precision] as Real).decimalValue.toDouble())
+        val config = Configuration()
         return solve(chocoModel, config, varsMap)
-
     }
 
 }
