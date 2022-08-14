@@ -7,5 +7,6 @@ object ClpQRLibrary: AliasedLibrary by Library.aliased(
     alias = "prolog.clp.qr",
     primitives = listOf(
         Constraint,
-        Satisfy
+        Satisfy,
+        Entailed
     ).associate { it.descriptionPair })
