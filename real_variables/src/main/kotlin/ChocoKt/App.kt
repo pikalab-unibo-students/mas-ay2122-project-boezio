@@ -1,16 +1,17 @@
 import org.chocosolver.solver.Model
+import java.awt.geom.Arc2D
 
 fun main() {
 
     val model = Model()
     val precision = model.precision
 
-    val x = model.realVar(4.0)
-    val y = model.realVar(0.2,10.0,precision)
+    val x = model.realVar(Double.MIN_VALUE, Double.MAX_VALUE, precision)
+    val y = model.realVar(Double.MIN_VALUE, Double.MAX_VALUE, precision)
 
     // Constraints
-    y.lt(5.0).equation().post()
-    x.add(y).eq(5.0).equation().post()
+    x.gt(y).equation().post()
+    x.add(y).eq(10.0).equation().post()
 
     // solution generation
     val solver = model.solver
