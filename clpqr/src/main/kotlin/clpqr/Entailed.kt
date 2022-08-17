@@ -1,6 +1,7 @@
 package clpqr
 
 import clpCore.chocoModel
+import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Tuple
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -10,8 +11,8 @@ import it.unibo.tuprolog.solve.primitive.UnaryPredicate
 
 object Entailed: UnaryPredicate.NonBacktrackable<ExecutionContext>("entailed") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
-        if (first !is Tuple) {
-            throw TypeError.forArgument(context, signature, TypeError.Expected.PAIR, first, 0)
+        if (first !is Struct) {
+            throw TypeError.forArgument(context, signature, TypeError.Expected.COMPOUND, first, 0)
         }
         val chocoModel = chocoModel
         // Checking constraints
