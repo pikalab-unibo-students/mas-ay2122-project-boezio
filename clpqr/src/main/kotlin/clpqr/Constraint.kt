@@ -17,11 +17,11 @@ object Constraint: UnaryPredicate.NonBacktrackable<ExecutionContext>("{}") {
         val chocoModel = chocoModel
         val modelVarNames = chocoModel.vars.map { it.name }
         // Creation of new variables (simplified version)
-        val vars = first.variables
+        val vars = first.variables.distinct().toList()
         val precision = ((context.flags[Precision] ?: Precision.defaultValue) as Real).decimalValue.toDouble()
         for (variable in vars) {
             if (modelVarNames.none { it == variable.name }) {
-                chocoModel.realVar(variable.name, Double.MIN_VALUE, Double.MAX_VALUE, precision)
+                chocoModel.realVar(variable.completeName, Double.MIN_VALUE, Double.MAX_VALUE, precision)
             }
         }
 

@@ -1,6 +1,5 @@
 package clpqr.search
 
-import it.unibo.tuprolog.core.Struct
 import org.chocosolver.solver.Model as ChocoModel
 
 enum class ProblemType {

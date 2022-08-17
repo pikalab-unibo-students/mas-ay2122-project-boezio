@@ -20,14 +20,15 @@ object Satisfy: UnaryPredicate.NonBacktrackable<ExecutionContext>("satisfy") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
 
         ensuringArgumentIsList(0)
-        require(first.castToList().args.all { it is Var }){
-            "Some elements are not variables"
+        require(first.castToList().toList().all { it is Var }){
+            "First argument does not contain only variables"
         }
         val logicVars = first.variables.toList()
         val chocoModel = chocoModel
         val varsMap = chocoModel.variablesMap(logicVars)
         val config = Configuration()
-        return solve(chocoModel, config, varsMap)
+        val solver = createChocoSolver(chocoModel, config, varsMap)
+        return replyWith(solver.solutions(varsMap).first())
     }
 
 }

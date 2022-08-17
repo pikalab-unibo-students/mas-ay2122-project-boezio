@@ -9,13 +9,14 @@ import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
 import clpqr.search.Configuration as Configuration
 import org.chocosolver.solver.Model
+import org.chocosolver.solver.Solver
 import org.chocosolver.solver.variables.Variable
 
-internal fun Solve.Request<ExecutionContext>.solve(
+internal fun Solve.Request<ExecutionContext>.createChocoSolver(
     chocoModel: Model,
     config: Configuration,
     variables: Map<Variable, Var>
-): Solve.Response {
+): Solver {
 
     if(config.problemType != ProblemType.SATISFY){
         val parser = ExpressionParser(chocoModel, variables.flip())
@@ -23,10 +24,5 @@ internal fun Solve.Request<ExecutionContext>.solve(
         val precision = (context.flags[Precision] as Real).decimalValue.toDouble()
         chocoModel.setObjective(config.problemType.toChoco()!!, objectiveExpression.realVar(precision))
     }
-    val solver = chocoModel.solver
-    return if (config.problemType == ProblemType.SATISFY) {
-        replyWith(solver?.solutions(variables)!!.first())
-    } else {
-        replyWith(solver?.solutions(variables)!!.last())
-    }
+    return chocoModel.solver
 }

@@ -36,8 +36,13 @@ fun ChocoModel.variablesMap(logicVariables: Iterable<Var>): Map<Variable, Var> {
 val Variable.valueAsTerm: Term
     get() = when (this) {
         is IntVar -> Integer.of(value)
-        // RealVar.toString returns <name_var>=<value>
-        is RealVar -> Real.of((this.toString().split("=")[1]).toDouble())
+        // RealVar.toString returns <name_var>=[lb..ub] which is a range of the first found solution
+        is RealVar -> {
+            val range = this.toString().split("=")[1].replace("[","").replace("]","").replace(",",".")
+            val bounds = range.split("..")
+            val ub = Real.of(bounds[1].toDouble())
+            ub
+        }
         is BoolVar -> when (booleanValue) {
             ESat.TRUE -> Truth.of(true)
             ESat.FALSE -> Truth.of(false)

@@ -5,6 +5,7 @@ import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.flags.FlagStore
 import it.unibo.tuprolog.solve.library.Libraries
 import org.junit.jupiter.api.Test
+import kotlin.test.assertNotNull
 
 class SatisfyTest: BaseTest() {
 
@@ -29,6 +30,8 @@ class SatisfyTest: BaseTest() {
         )
 
         val solution = solver.solveOnce(goal)
+
+        assertNotNull(solution)
 
     }
 }
