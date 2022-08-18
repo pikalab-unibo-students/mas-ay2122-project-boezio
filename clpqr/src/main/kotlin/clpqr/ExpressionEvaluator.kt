@@ -5,6 +5,7 @@ import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
 import org.chocosolver.solver.Model
 import org.chocosolver.solver.variables.Variable
+import java.lang.IllegalStateException
 import kotlin.math.*
 
 class ExpressionEvaluator<T : Variable>(
@@ -14,7 +15,11 @@ class ExpressionEvaluator<T : Variable>(
         error("Unsupported sub-expression: $term")
 
     override fun visitVar(term: Var): Double =
-        variables[term]?.valueAsTerm?.castToReal()?.value!!.toDouble()
+        when(val valueAsTerm = variables[term]?.valueAsTerm){
+            is Integer -> valueAsTerm.value.toDouble()
+            is Real -> valueAsTerm.value.toDouble()
+            else -> throw IllegalStateException()
+        }
 
     override fun visitInteger(term: Integer): Double =
         term.value.toDouble()
