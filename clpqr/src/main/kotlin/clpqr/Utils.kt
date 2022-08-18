@@ -33,25 +33,25 @@ internal fun Solver.optimalSolution(
     optimum: Var,
     vector: List<Var>,
     vertex: Var
-): Substitution {
+): Sequence<Substitution> = sequence {
 
     //generate last solution
-    while(solve()){}
-    // map of variables in vector
-    val vectorMap = mutableMapOf<Variable, Var>()
-    for(variable in vector){
-        for(entry in varsMap){
-            if(entry.value == variable){
-                vectorMap[entry.key] = entry.value
+    while(solve()){
+        // map of variables in vector
+        val vectorMap = mutableMapOf<Variable, Var>()
+        for(variable in vector){
+            for(entry in varsMap){
+                if(entry.value == variable){
+                    vectorMap[entry.key] = entry.value
+                }
             }
         }
+        // values of variables in vector
+        val vertexList = vectorMap.map { (k, _) -> k.valueAsTerm } as LogicList
+        // optimum value
+        val parser = ExpressionEvaluator(varsMap.flip())
+        val expressionValue = expression.accept(parser)
+
+        yield(Substitution.of(mapOf(optimum to Real.of(expressionValue), vertex to vertexList)))
     }
-    // values of variables in vector
-    val vertexList = vectorMap.map { (k, _) -> k.valueAsTerm } as LogicList
-    // optimum value
-    val parser = ExpressionEvaluator(varsMap.flip())
-    val expressionValue = expression.accept(parser)
-
-    return Substitution.of(mapOf(optimum to Real.of(expressionValue), vertex to vertexList))
-
 }

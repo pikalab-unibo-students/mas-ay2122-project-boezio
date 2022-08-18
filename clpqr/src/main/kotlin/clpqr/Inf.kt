@@ -28,6 +28,6 @@ object Inf: QuaternaryRelation.NonBacktrackable<ExecutionContext>("inf") {
         val varsMap = chocoModel.variablesMap(expressionVars)
         val config = Configuration(problemType = ProblemType.MINIMIZE, objective = first)
         val solver = createChocoSolver(chocoModel, config, varsMap)
-        return replyWith(solver.optimalSolution(varsMap, first, inf, vector, vertex))
+        return replyWith(solver.optimalSolution(varsMap, first, inf, vector, vertex).last())
     }
 }
