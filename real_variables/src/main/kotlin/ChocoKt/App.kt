@@ -10,7 +10,7 @@ fun main() {
 
     // Constraints
     x.gt(y).equation().post()
-    x.add(y).eq(10.0).equation().post()
+    y.gt(1.0).equation().post()
 
     // solution generation
     val solver = model.solver

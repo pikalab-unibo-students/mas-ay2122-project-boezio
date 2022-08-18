@@ -15,18 +15,19 @@ import it.unibo.tuprolog.solve.primitive.Solve
 object Inf: QuaternaryRelation.NonBacktrackable<ExecutionContext>("inf") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term, fourth: Term): Solve.Response {
         ensuringArgumentIsStruct(0)
-        val expressionVars = first.variables.toList()
+        val expressionVars = first.variables.distinct().toList()
         ensuringArgumentIsVariable(1)
         val inf = second.castToVar()
         ensuringArgumentIsList(3)
         require(third.castToList().args.all { it is Var }){
             "Vector is not a list of variables"
         }
-        ensuringArgumentIsVariable(3)
+        val vector = third.variables.distinct().toList()
+        ensuringArgumentIsVariable(4)
         val vertex = fourth.castToVar()
         val varsMap = chocoModel.variablesMap(expressionVars)
         val config = Configuration(problemType = ProblemType.MINIMIZE, objective = first)
-        //return solve(chocoModel, config, varsMap)
-        return replySuccess {  }
+        val solver = createChocoSolver(chocoModel, config, varsMap)
+        return replyWith(solver.optimalSolution(varsMap, inf, vector, vertex))
     }
 }
