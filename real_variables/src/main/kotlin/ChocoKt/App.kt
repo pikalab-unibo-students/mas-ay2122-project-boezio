@@ -7,6 +7,7 @@ fun main() {
 
     val x = model.realVar("X", Double.MIN_VALUE, Double.MAX_VALUE, precision)
     val y = model.realVar("Y", Double.MIN_VALUE, Double.MAX_VALUE, precision)
+    val z = model.realVar("Z", 4.0)
 
     // Constraints
     x.gt(y).equation().post()
@@ -16,7 +17,7 @@ fun main() {
     val solver = model.solver
 
     if(solver.solve()) {
-        println("$x \n$y")
+        println("$x\n$y\n$z")
     }
 
 

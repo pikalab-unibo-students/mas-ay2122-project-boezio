@@ -38,10 +38,15 @@ val Variable.valueAsTerm: Term
         is IntVar -> Integer.of(value)
         // RealVar.toString returns <name_var>=[lb..ub] which is a range of the first found solution
         is RealVar -> {
-            val range = this.toString().split("=")[1].replace("[","").replace("]","").replace(",",".")
-            val bounds = range.split("..")
-            val ub = Real.of(bounds[1].toDouble())
-            ub
+            // real variables containing a constant do not allow to know the value directly
+            if(this.lb == this.ub){
+                Real.of(this.lb)
+            }else{
+                val range = this.toString().split("=")[1].replace("[","").replace("]","").replace(",",".")
+                val bounds = range.split("..")
+                val ub = Real.of(bounds[1].toDouble())
+                ub
+            }
         }
         is BoolVar -> when (booleanValue) {
             ESat.TRUE -> Truth.of(true)
