@@ -47,9 +47,10 @@ internal fun Solver.optimalSolution(
     val parser = ExpressionEvaluator(varsMap.flip())
     while(solve()){
         // values of variables in vector
-        val vertexList = vectorMap.map { (k, _) -> k.valueAsTerm } as LogicList
+        val vertexList = vectorMap.map { (k, _) -> k.valueAsTerm }
+        val prologList = Tuple.of(vertexList).castToCons()
         // optimum value
         val expressionValue = expression.accept(parser)
-        yield(Substitution.of(mapOf(optimum to Real.of(expressionValue), vertex to vertexList)))
+        yield(Substitution.of(mapOf(optimum to Real.of(expressionValue), vertex to prologList)))
     }
 }

@@ -11,8 +11,8 @@ import it.unibo.tuprolog.solve.primitive.UnaryPredicate
 
 object Constraint: UnaryPredicate.NonBacktrackable<ExecutionContext>("{}") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
-        if (first !is Tuple) {
-            throw TypeError.forArgument(context, signature, TypeError.Expected.PAIR, first, 0)
+        if (first !is Struct) {
+            throw TypeError.forArgument(context, signature, TypeError.Expected.COMPOUND, first, 0)
         }
         val chocoModel = chocoModel
         val modelVarNames = chocoModel.vars.map { it.name }
@@ -20,7 +20,7 @@ object Constraint: UnaryPredicate.NonBacktrackable<ExecutionContext>("{}") {
         val vars = first.variables.distinct().toList()
         val precision = ((context.flags[Precision] ?: Precision.defaultValue) as Real).decimalValue.toDouble()
         for (variable in vars) {
-            if (modelVarNames.none { it == variable.name }) {
+            if (modelVarNames.none { it == variable.completeName }) {
                 chocoModel.realVar(variable.completeName, Double.MIN_VALUE, Double.MAX_VALUE, precision)
             }
         }

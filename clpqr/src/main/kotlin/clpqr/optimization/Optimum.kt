@@ -18,18 +18,17 @@ abstract class Optimum(operator: String): QuaternaryRelation.NonBacktrackable<Ex
     protected abstract val problemType: ProblemType
 
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term, fourth: Term): Solve.Response {
-        ensuringArgumentIsStruct(0)
         val expressionVars = first.variables.distinct().toList()
         ensuringArgumentIsVariable(1)
         val inf = second.castToVar()
-        ensuringArgumentIsList(3)
-        require(third.castToList().args.all { it is Var }){
+        ensuringArgumentIsList(2)
+        require(third.castToList().toList().all { it is Var }){
             "Vector is not a list of variables"
         }
         val vector = third.variables.distinct().toList()
-        ensuringArgumentIsVariable(4)
+        ensuringArgumentIsVariable(3)
         val vertex = fourth.castToVar()
-        val varsMap = chocoModel.variablesMap(expressionVars)
+        val varsMap = chocoModel.variablesMap(expressionVars.toSet().union(vector.toSet()))
         val config = Configuration(problemType = problemType, objective = first)
         val solver = createChocoSolver(chocoModel, config, varsMap)
         return replyWith(solver.optimalSolution(varsMap, first, inf, vector, vertex).last())

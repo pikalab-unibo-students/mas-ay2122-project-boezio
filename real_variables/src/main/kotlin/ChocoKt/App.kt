@@ -7,16 +7,21 @@ fun main() {
 
     val x = model.realVar("X", Double.MIN_VALUE, Double.MAX_VALUE, precision)
     val y = model.realVar("Y", Double.MIN_VALUE, Double.MAX_VALUE, precision)
-    val z = model.realVar("Z", 4.0)
+    val z = model.realVar("Z", Double.MIN_VALUE, Double.MAX_VALUE, precision)
 
     // Constraints
-    x.gt(y).equation().post()
-    y.gt(1.0).equation().post()
+    x.mul(2.0).add(y).le(16.0).equation().post()
+    x.add(y.mul(2.0)).le(11.0).equation().post()
+    x.add(y.mul(3.0)).le(15.0).equation().post()
+    z.eq(x.mul(30.0).add(y.mul(50.0))).equation().post()
+
+    // solve as maximization problem
+    model.setObjective(Model.MAXIMIZE, z)
 
     // solution generation
     val solver = model.solver
 
-    if(solver.solve()) {
+    while(solver.solve()) {
         println("$x\n$y\n$z")
     }
 
