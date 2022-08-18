@@ -1,9 +1,10 @@
-package clpqr
+package clpqr.optimization
 
 
 import clpCore.chocoModel
-import clpCore.flip
 import clpCore.variablesMap
+import clpqr.createChocoSolver
+import clpqr.optimalSolution
 import clpqr.search.Configuration
 import clpqr.search.ProblemType
 import it.unibo.tuprolog.core.Term
@@ -12,7 +13,10 @@ import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.QuaternaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 
-object Inf: QuaternaryRelation.NonBacktrackable<ExecutionContext>("inf") {
+abstract class Optimum(operator: String): QuaternaryRelation.NonBacktrackable<ExecutionContext>(operator) {
+
+    protected abstract val problemType: ProblemType
+
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term, fourth: Term): Solve.Response {
         ensuringArgumentIsStruct(0)
         val expressionVars = first.variables.distinct().toList()
@@ -26,8 +30,9 @@ object Inf: QuaternaryRelation.NonBacktrackable<ExecutionContext>("inf") {
         ensuringArgumentIsVariable(4)
         val vertex = fourth.castToVar()
         val varsMap = chocoModel.variablesMap(expressionVars)
-        val config = Configuration(problemType = ProblemType.MINIMIZE, objective = first)
+        val config = Configuration(problemType = problemType, objective = first)
         val solver = createChocoSolver(chocoModel, config, varsMap)
         return replyWith(solver.optimalSolution(varsMap, first, inf, vector, vertex).last())
     }
+
 }
