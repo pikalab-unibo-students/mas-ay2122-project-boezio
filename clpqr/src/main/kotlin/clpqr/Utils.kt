@@ -27,30 +27,24 @@ internal fun Solve.Request<ExecutionContext>.createChocoSolver(
     return chocoModel.solver
 }
 
-internal fun Solver.optimalSolution(
-    varsMap: Map<Variable, Var>,
-    expression: Term,
-    optimum: Var,
-    vector: List<Var>,
-    vertex: Var
-): Sequence<Substitution> = sequence {
-
+internal fun Solver.getVectorValue(varsMap: Map<Variable, Var>, vector: List<Var>): List<Term> {
+    while (solve()) { }
     // filter solution variables
     val vectorMap = mutableMapOf<Variable, Var>()
-    for(variable in vector){
-        for(entry in varsMap){
-            if(entry.value == variable){
+    for (variable in vector) {
+        for (entry in varsMap) {
+            if (entry.value == variable) {
                 vectorMap[entry.key] = entry.value
             }
         }
     }
-    val parser = ExpressionEvaluator(varsMap.flip())
-    while(solve()){
-        // values of variables in vector
-        val vertexList = vectorMap.map { (k, _) -> k.valueAsTerm }
-        val prologList = Tuple.of(vertexList).castToCons()
-        // optimum value
-        val expressionValue = expression.accept(parser)
-        yield(Substitution.of(mapOf(optimum to Real.of(expressionValue), vertex to prologList)))
+    // values of variables in vector
+    return vectorMap.map { (k, _) -> k.valueAsTerm }
+}
+
+internal fun Solver.calculateExpression(varsMap: Map<Variable, Var>, expression: Term): Double {
+    while (solve()) {
     }
+    val parser = ExpressionEvaluator(varsMap.flip())
+    return expression.accept(parser)
 }
