@@ -36,10 +36,10 @@ abstract class Optimum(operator: String): QuaternaryRelation.NonBacktrackable<Ex
         val config = Configuration(problemType = problemType, objective = first)
         val solver = createChocoSolver(chocoModel, config, varsMap)
         // Substitution for Vertex
-        val vertexValue = solver.getVectorValue(varsMap, vector)
+        val vertexValue = solver.getVectorValue(varsMap, vector).last()
         val vertexList = LogicList.of(vertexValue)
         // Substitution for optima
-        val optimumValue = Real.of(solver.calculateExpression(varsMap, first))
+        val optimumValue = Real.of(solver.calculateExpression(varsMap, first).last())
         return replyWith(Substitution.of(mapOf(optimum to optimumValue, vertex to vertexList)))
     }
 }

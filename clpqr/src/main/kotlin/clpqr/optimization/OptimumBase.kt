@@ -23,7 +23,7 @@ abstract class OptimumBase(operator: String): BinaryRelation.NonBacktrackable<Ex
         val config = Configuration(problemType = problemType, objective = first)
         val solver = createChocoSolver(chocoModel, config, varsMap)
         // Substitution for optima
-        val optimumValue = Real.of(solver.calculateExpression(varsMap, first))
+        val optimumValue = Real.of(solver.calculateExpression(varsMap, first).last())
         return replyWith(Substitution.of(optimum to optimumValue))
     }
 }

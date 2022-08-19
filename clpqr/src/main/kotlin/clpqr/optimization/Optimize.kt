@@ -19,7 +19,7 @@ abstract class Optimize(operator: String): UnaryPredicate.NonBacktrackable<Execu
         val varsMap = chocoModel.vars.associateWith { Var.of(it.name) }
         val solver = createChocoSolver(chocoModel, config, varsMap)
         val logicVars = varsMap.values.toList()
-        val solutions = solver.getVectorValue(varsMap, logicVars)
+        val solutions = solver.getVectorValue(varsMap, logicVars).last()
         val mapSolutions = mutableMapOf<Var,Term>()
         for((i,solution) in solutions.withIndex()){
             mapSolutions[logicVars[i]] = solution

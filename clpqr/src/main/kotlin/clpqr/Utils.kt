@@ -10,7 +10,6 @@ import clpqr.search.Configuration as Configuration
 import org.chocosolver.solver.Model
 import org.chocosolver.solver.Solver
 import org.chocosolver.solver.variables.Variable
-import it.unibo.tuprolog.core.List as LogicList
 
 internal fun Solve.Request<ExecutionContext>.createChocoSolver(
     chocoModel: Model,
@@ -27,8 +26,7 @@ internal fun Solve.Request<ExecutionContext>.createChocoSolver(
     return chocoModel.solver
 }
 
-internal fun Solver.getVectorValue(varsMap: Map<Variable, Var>, vector: List<Var>): List<Term> {
-    while (solve()) { }
+internal fun Solver.getVectorValue(varsMap: Map<Variable, Var>, vector: List<Var>): Sequence<List<Term>> = sequence {
     // filter solution variables
     val vectorMap = mutableMapOf<Variable, Var>()
     for (variable in vector) {
@@ -38,13 +36,15 @@ internal fun Solver.getVectorValue(varsMap: Map<Variable, Var>, vector: List<Var
             }
         }
     }
-    // values of variables in vector
-    return vectorMap.map { (k, _) -> k.valueAsTerm }
+    while (solve()) {
+        // values of variables in vector
+        yield(vectorMap.map { (k, _) -> k.valueAsTerm })
+    }
 }
 
-internal fun Solver.calculateExpression(varsMap: Map<Variable, Var>, expression: Term): Double {
-    while (solve()) {
-    }
+internal fun Solver.calculateExpression(varsMap: Map<Variable, Var>, expression: Term): Sequence<Double> = sequence {
     val parser = ExpressionEvaluator(varsMap.flip())
-    return expression.accept(parser)
+    while (solve()) {
+        yield(expression.accept(parser))
+    }
 }

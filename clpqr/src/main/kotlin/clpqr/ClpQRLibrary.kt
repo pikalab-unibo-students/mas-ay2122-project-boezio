@@ -1,7 +1,6 @@
 package clpqr
 
-import clpqr.optimization.Inf
-import clpqr.optimization.Sup
+import clpqr.optimization.*
 import it.unibo.tuprolog.solve.library.AliasedLibrary
 import it.unibo.tuprolog.solve.library.Library
 
@@ -12,5 +11,9 @@ object ClpQRLibrary: AliasedLibrary by Library.aliased(
         Satisfy,
         Entailed,
         Inf,
-        Sup
+        Sup,
+        InfBase,
+        SupBase,
+        Minimize,
+        Maximize
     ).associate { it.descriptionPair })
