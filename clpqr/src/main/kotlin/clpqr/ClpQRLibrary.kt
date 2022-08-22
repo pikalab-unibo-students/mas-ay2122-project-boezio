@@ -3,6 +3,7 @@ package clpqr
 import clpqr.optimization.*
 import it.unibo.tuprolog.solve.library.AliasedLibrary
 import it.unibo.tuprolog.solve.library.Library
+import it.unibo.tuprolog.theory.Theory
 
 object ClpQRLibrary: AliasedLibrary by Library.aliased(
     alias = "prolog.clp.qr",
@@ -12,8 +13,14 @@ object ClpQRLibrary: AliasedLibrary by Library.aliased(
         Entailed,
         Inf,
         Sup,
-        Inf,
-        Sup,
         Minimize,
-        Maximize
-    ).associate { it.descriptionPair })
+        Maximize,
+        BBInfFive,
+        BBInfThree
+    ).associate { it.descriptionPair },
+    theory = Theory.of(
+        listOf(
+            BBInfFour
+        ).map { it.implementation }
+    )
+)
