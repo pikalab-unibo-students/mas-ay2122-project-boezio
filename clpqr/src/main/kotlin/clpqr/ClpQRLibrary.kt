@@ -12,8 +12,8 @@ object ClpQRLibrary: AliasedLibrary by Library.aliased(
         Entailed,
         Inf,
         Sup,
-        InfBase,
-        SupBase,
+        Inf,
+        Sup,
         Minimize,
         Maximize
     ).associate { it.descriptionPair })
