@@ -1,14 +1,11 @@
-package clpqr
+package clpqr.utils
 
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
 import org.chocosolver.solver.Model
 import org.chocosolver.solver.expression.continuous.arithmetic.CArExpression
-import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression
-import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression.IntPrimitive
 import org.chocosolver.solver.variables.Variable
 import org.chocosolver.solver.variables.impl.FixedRealVarImpl
-import java.lang.IllegalStateException
 
 class ExpressionParser<T : Variable>(
     private val chocoModel: Model,

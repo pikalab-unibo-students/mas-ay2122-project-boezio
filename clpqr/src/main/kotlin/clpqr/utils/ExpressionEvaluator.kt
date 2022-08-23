@@ -1,9 +1,8 @@
-package clpqr
+package clpqr.utils
 
 import clpCore.valueAsTerm
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
-import org.chocosolver.solver.Model
 import org.chocosolver.solver.variables.Variable
 import java.lang.IllegalStateException
 import kotlin.math.*

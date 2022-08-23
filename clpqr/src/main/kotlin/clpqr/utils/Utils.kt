@@ -1,7 +1,8 @@
-package clpqr
+package clpqr.utils
 
 import clpCore.flip
 import clpCore.valueAsTerm
+import clpqr.Precision
 import clpqr.search.ProblemType
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
