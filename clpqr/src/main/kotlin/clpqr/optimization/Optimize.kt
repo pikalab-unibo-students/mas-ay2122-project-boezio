@@ -1,6 +1,7 @@
 package clpqr.optimization
 
 import clpCore.chocoModel
+import clpCore.solutions
 import clpqr.createChocoSolver
 import clpqr.getVectorValue
 import clpqr.search.Configuration
@@ -15,15 +16,9 @@ abstract class Optimize(operator: String): UnaryPredicate.NonBacktrackable<Execu
     protected abstract val problemType: ProblemType
 
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
-        val config = Configuration(problemType = problemType, objective = first)
         val varsMap = chocoModel.vars.associateWith { Var.of(it.name) }
+        val config = Configuration(problemType = problemType, objective = first)
         val solver = createChocoSolver(chocoModel, config, varsMap)
-        val logicVars = varsMap.values.toList()
-        val solutions = solver.getVectorValue(varsMap, logicVars).last()
-        val mapSolutions = mutableMapOf<Var,Term>()
-        for((i,solution) in solutions.withIndex()){
-            mapSolutions[logicVars[i]] = solution
-        }
-        return replyWith(Substitution.of(mapSolutions))
+        return replyWith(solver.solutions(varsMap).last())
     }
 }
