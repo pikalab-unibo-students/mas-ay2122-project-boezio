@@ -1,6 +1,7 @@
 package clpqr.optimization
 
 import clpCore.chocoModel
+import clpCore.solutions
 import clpCore.variablesMap
 import clpqr.calculateExpression
 import clpqr.createChocoSolver
@@ -22,8 +23,13 @@ abstract class Optimum(operator: String): BinaryRelation.NonBacktrackable<Execut
         val varsMap = chocoModel.variablesMap(expressionVars)
         val config = Configuration(problemType = problemType, objective = first)
         val solver = createChocoSolver(chocoModel, config, varsMap)
-        // Substitution for optima
+        // Substitution for optimum
         val optimumValue = Real.of(solver.calculateExpression(varsMap, first).last())
-        return replyWith(Substitution.of(optimum to optimumValue))
+        // Substitution for each variable in the model
+        val allVarsMap = chocoModel.vars.associateWith { Var.of(it.name) }
+        val varsSubstitution = solver.solutions(allVarsMap).last()
+        // overall substitution
+        val finalSubstitution = varsSubstitution.toMap() + mapOf(optimum to optimumValue)
+        return replyWith(Substitution.of(finalSubstitution))
     }
 }
