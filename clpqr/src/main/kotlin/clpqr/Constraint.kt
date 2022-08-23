@@ -2,6 +2,7 @@ package clpqr
 
 import clpCore.chocoModel
 import clpCore.setChocoModel
+import clpqr.utils.ConstraintImposer
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.exception.error.TypeError

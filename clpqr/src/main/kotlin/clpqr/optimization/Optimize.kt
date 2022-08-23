@@ -2,10 +2,9 @@ package clpqr.optimization
 
 import clpCore.chocoModel
 import clpCore.solutions
-import clpqr.createChocoSolver
-import clpqr.getVectorValue
 import clpqr.search.Configuration
 import clpqr.search.ProblemType
+import clpqr.utils.createChocoSolver
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve

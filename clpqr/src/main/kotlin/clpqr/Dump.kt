@@ -1,14 +1,14 @@
 package clpqr
 
-import clpCore.chocoModel
-import clpCore.solutions
-import clpCore.variablesMap
-import clpqr.search.Configuration
+import clpqr.utils.ConstraintReplacer
+import clpqr.utils.constraints
+import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.primitive.TernaryRelation
+import it.unibo.tuprolog.core.List as LogicList
 
 
 object Dump: TernaryRelation.NonBacktrackable<ExecutionContext>("dump") {
@@ -22,9 +22,12 @@ object Dump: TernaryRelation.NonBacktrackable<ExecutionContext>("dump") {
         val newVars = second.castToList().toList()
         ensuringArgumentIsVariable(2)
         val codedAnswers = third.castToVar()
-
-        return replySuccess {  }
-
+        // conversion of constraints
+        val varsMap = target.zip(newVars).toMap()
+        val replacer = ConstraintReplacer(varsMap)
+        val newConstraints = constraints.map { it.accept(replacer) }
+        val codedAnswerValue = LogicList.of(newConstraints)
+        return replyWith(Substitution.of(codedAnswers to codedAnswerValue))
     }
 
 }

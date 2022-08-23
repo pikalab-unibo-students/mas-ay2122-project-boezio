@@ -1,9 +1,9 @@
 package clpqr
 
 import clpCore.chocoModel
+import clpqr.utils.ConstraintChecker
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
-import it.unibo.tuprolog.core.Tuple
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.Solve
