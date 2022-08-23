@@ -19,7 +19,8 @@ object ClpQRLibrary: AliasedLibrary by Library.aliased(
         Minimize,
         Maximize,
         BBInfFive,
-        BBInfThree
+        BBInfThree,
+        Dump
     ).associate { it.descriptionPair },
     theory = Theory.of(
         listOf(
