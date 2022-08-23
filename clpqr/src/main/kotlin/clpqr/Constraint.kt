@@ -24,12 +24,19 @@ object Constraint: UnaryPredicate.NonBacktrackable<ExecutionContext>("{}") {
                 chocoModel.realVar(variable.completeName, Double.MIN_VALUE, Double.MAX_VALUE, precision)
             }
         }
-
+        // Storing constraint using 2p-Kt classes
+        val constraints = constraints
+        if(first is Tuple){
+            constraints.addAll(first.args)
+        }else{
+            constraints.add(first)
+        }
         // Imposing constraints
         first.accept(ConstraintImposer(chocoModel))
 
         return replySuccess {
             setChocoModel(chocoModel)
+            setConstraints(constraints)
         }
     }
 }

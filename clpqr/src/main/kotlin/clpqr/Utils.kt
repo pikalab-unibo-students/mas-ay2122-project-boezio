@@ -6,6 +6,7 @@ import clpqr.search.ProblemType
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
+import it.unibo.tuprolog.solve.sideffects.SideEffectsBuilder
 import clpqr.search.Configuration as Configuration
 import org.chocosolver.solver.Model
 import org.chocosolver.solver.Solver
@@ -47,4 +48,16 @@ internal fun Solver.calculateExpression(varsMap: Map<Variable, Var>, expression:
     while (solve()) {
         yield(expression.accept(parser))
     }
+}
+
+private const val CONSTRAINTS = "constraints"
+val Solve.Request<ExecutionContext>.constraints
+    get() = if (CONSTRAINTS !in context.customData.durable) {
+        mutableListOf<Term>()
+    } else {
+        context.customData.durable[CONSTRAINTS] as MutableList<Term>
+    }
+
+fun SideEffectsBuilder.setConstraints(constraints: MutableList<Term>) {
+    setDurableData(CONSTRAINTS, constraints)
 }
