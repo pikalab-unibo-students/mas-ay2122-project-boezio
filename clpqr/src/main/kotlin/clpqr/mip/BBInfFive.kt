@@ -2,6 +2,7 @@ package clpqr.mip
 
 import clpCore.chocoModel
 import clpCore.flip
+import clpCore.solutions
 import clpCore.variablesMap
 import clpqr.calculateExpression
 import clpqr.createChocoSolver
@@ -44,7 +45,7 @@ object BBInfFive: QuinaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") {
         if(eps != 0.0){
             throw IllegalStateException()
         }
-        val varsMap = chocoModel.variablesMap(vector.toSet().union(expressionVars.toSet())).flip()
+        val varsMap = chocoModel.vars.associateWith { Var.of(it.name) }.flip()
         // impose an integer constraint for variables contained in the first argument
         for(variable in vector){
             val intVar = chocoModel.intVar(Double.MIN_VALUE.toInt(), Double.MAX_VALUE.toInt())
@@ -57,6 +58,10 @@ object BBInfFive: QuinaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") {
         val vertexList = List.of(vertexValue)
         // Substitution for optima
         val infValue = Real.of(solver.calculateExpression(varsMap.flip(), second).last())
-        return replyWith(Substitution.of(mapOf(inf to infValue, vertex to vertexList)))
+        // Substitution for all variables
+        val allVarsSubstitution = solver.solutions(varsMap.flip()).last()
+        // Overall substitution
+        val substitution = allVarsSubstitution.toMap() + mapOf(inf to infValue, vertex to vertexList)
+        return replyWith(Substitution.of(substitution))
     }
 }
