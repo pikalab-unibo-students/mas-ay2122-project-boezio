@@ -1,4 +1,4 @@
-package clpqr.optimization
+package clpqr.mip
 
 import clpCore.chocoModel
 import clpCore.flip

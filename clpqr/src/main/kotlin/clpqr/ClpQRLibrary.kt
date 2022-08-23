@@ -1,5 +1,8 @@
 package clpqr
 
+import clpqr.mip.BBInfFive
+import clpqr.mip.BBInfFour
+import clpqr.mip.BBInfThree
 import clpqr.optimization.*
 import it.unibo.tuprolog.solve.library.AliasedLibrary
 import it.unibo.tuprolog.solve.library.Library

@@ -1,4 +1,4 @@
-package clpqr.optimization
+package clpqr.mip
 
 import it.unibo.tuprolog.core.Real
 import it.unibo.tuprolog.core.Scope
