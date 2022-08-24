@@ -10,7 +10,7 @@ import kotlin.test.assertNotNull
 class SatisfyTest: BaseTest() {
 
     @Test
-    fun testSatisfy(){
+    fun testSatisfyTuple(){
 
         val theory = theoryParser.parseTheory(
             """
@@ -20,7 +20,7 @@ class SatisfyTest: BaseTest() {
         )
 
         val goal = termParser.parseStruct(
-            "problem(X,Y),satisfy([X,Y])"
+            "problem(X, Y),satisfy([X, Y])"
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
@@ -31,7 +31,31 @@ class SatisfyTest: BaseTest() {
 
         val solution = solver.solveOnce(goal)
 
+        // problem with scope, duplicated variables
         assertNotNull(solution)
+
+    }
+
+    @Test
+    fun testSatisfyStruct(){
+
+        val goal = termParser.parseStruct(
+            "{}('='('+'(X,Y), 10.0)), satisfy([X, Y])"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = Libraries.of(ClpQRLibrary),
+            flags = FlagStore.DEFAULT + (Precision to Real.of(precision))
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to realOf(3.3333587646484375),
+                varOf("Y") to realOf(6.666717529296873)
+            )
+        }
 
     }
 }

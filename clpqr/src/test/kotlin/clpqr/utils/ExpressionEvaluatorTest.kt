@@ -1,6 +1,5 @@
-package clpqr
+package clpqr.utils
 
-import clpqr.utils.ExpressionEvaluator
 import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Real
 import it.unibo.tuprolog.core.Struct
