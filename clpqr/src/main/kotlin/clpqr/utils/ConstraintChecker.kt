@@ -42,7 +42,7 @@ class ConstraintChecker(private val chocoModel: Model) : DefaultTermVisitor<Bool
         operation: (CArExpression, CArExpression) -> CReExpression,
         model: Model
     ):Boolean{
-        val logicalVars = (firstTerm.variables + secondTerm.variables).toSet()
+        val logicalVars = (firstTerm.variables + secondTerm.variables).toList()
         val varMap = model.variablesMap(logicalVars).flip()
         val parser = ExpressionParser(model, varMap)
         val firstExpression = firstTerm.accept(parser)

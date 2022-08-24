@@ -14,23 +14,16 @@ class EntailedTest: BaseTest() {
     @Test
     fun testEntailedTrue(){
 
-        val theory = theoryParser.parseTheory(
-            """
-            problem(X, Y) :- 
-                {}(','('>'(X,Y),'='('+'(X,Y), 10.0))),
-                entailed('<'(Y,X)).
-            """.trimIndent()
-        )
-
         val goal = termParser.parseStruct(
-            "problem(X,Y),satisfy([X,Y])"
+            "{}(','('>'(X,Y),'='('+'(X,Y), 10.0))), entailed('<'(Y,X)), satisfy([X,Y])"
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
             otherLibraries = Libraries.of(ClpQRLibrary),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
-            staticKb = theory
+            flags = FlagStore.DEFAULT + (Precision to Real.of(precision))
         )
+
+        // failure because the constraint to check is undefined
 
         val solution = solver.solveOnce(goal)
         val yesSolution = solution is Solution.Yes
@@ -42,22 +35,13 @@ class EntailedTest: BaseTest() {
     @Test
     fun testEntailedFalse(){
 
-        val theory = theoryParser.parseTheory(
-            """
-            problem(X, Y) :- 
-                {}(','('>'(X,Y),'='('+'(X,Y), 10.0))),
-                entailed('>'(Y,X)).
-            """.trimIndent()
-        )
-
         val goal = termParser.parseStruct(
-            "problem(X,Y),satisfy([X,Y])"
+            "{}('='('+'(X,Y), 10.0)), entailed('='('+'(X,Y), 5.0)), satisfy([X,Y])"
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
             otherLibraries = Libraries.of(ClpQRLibrary),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
-            staticKb = theory
+            flags = FlagStore.DEFAULT + (Precision to Real.of(precision))
         )
 
         val solution = solver.solveOnce(goal)
