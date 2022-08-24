@@ -26,7 +26,7 @@ class SupTest: BaseTest() {
         )
 
         val goal = termParser.parseStruct(
-            "problem(X,Y,Z),sup(Z,Sup,[X,Y],Vertex)"
+            "problem(X,Y,Z),sup(Z,Sup)"
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
