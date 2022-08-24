@@ -3,9 +3,8 @@ package clpqr.mip
 import clpCore.chocoModel
 import clpCore.flip
 import clpCore.solutions
-import clpCore.variablesMap
-import clpqr.calculateExpression
-import clpqr.createChocoSolver
+import clpqr.utils.calculateExpression
+import clpqr.utils.createChocoSolver
 import clpqr.search.Configuration
 import clpqr.search.ProblemType
 import it.unibo.tuprolog.core.*
