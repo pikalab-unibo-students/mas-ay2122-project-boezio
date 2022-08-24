@@ -21,13 +21,13 @@ object Dump: TernaryRelation.NonBacktrackable<ExecutionContext>("dump") {
         ensuringArgumentIsList(1)
         val newVars = second.castToList().toList()
         ensuringArgumentIsVariable(2)
-        val codedAnswers = third.castToVar()
+        val codedAnswer = third.castToVar()
         // conversion of constraints
         val varsMap = target.zip(newVars).toMap()
         val replacer = ConstraintReplacer(varsMap)
         val newConstraints = constraints.map { it.accept(replacer) }
         val codedAnswerValue = LogicList.of(newConstraints)
-        return replyWith(Substitution.of(codedAnswers to codedAnswerValue))
+        return replyWith(Substitution.of(codedAnswer to codedAnswerValue))
     }
 
 }
