@@ -30,14 +30,7 @@ internal fun Solve.Request<ExecutionContext>.createChocoSolver(
 
 internal fun Solver.getVectorValue(varsMap: Map<Variable, Var>, vector: List<Var>): Sequence<List<Term>> = sequence {
     // filter solution variables
-    val vectorMap = mutableMapOf<Variable, Var>()
-    for (variable in vector) {
-        for (entry in varsMap) {
-            if (entry.value == variable) {
-                vectorMap[entry.key] = entry.value
-            }
-        }
-    }
+    val vectorMap = varsMap.filter { (_,v) -> vector.any { it == v } }
     while (solve()) {
         // values of variables in vector
         yield(vectorMap.map { (k, _) -> k.valueAsTerm })
