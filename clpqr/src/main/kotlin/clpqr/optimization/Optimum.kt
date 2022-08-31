@@ -7,6 +7,7 @@ import clpqr.search.Configuration
 import clpqr.search.ProblemType
 import clpqr.utils.calculateExpression
 import clpqr.utils.createChocoSolver
+import clpqr.utils.filterNotConstantVar
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.BinaryRelation
@@ -26,7 +27,8 @@ abstract class Optimum(operator: String): BinaryRelation.NonBacktrackable<Execut
         // Substitution for optimum
         val optimumValue = Real.of(solver.calculateExpression(varsMap, first).last())
         // Substitution for each variable in the model
-        val allVarsMap = chocoModel.vars.associateWith { Var.of(it.name) }
+        var allVarsMap = chocoModel.vars.associateWith { Var.of(it.name) }
+        allVarsMap = allVarsMap.filterNotConstantVar()
         val varsSubstitution = solver.solutions(allVarsMap).last()
         // overall substitution
         val finalSubstitution = varsSubstitution.toMap() + mapOf(optimum to optimumValue)

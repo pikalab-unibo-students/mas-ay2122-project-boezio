@@ -5,6 +5,7 @@ import clpCore.solutions
 import clpqr.search.Configuration
 import clpqr.search.ProblemType
 import clpqr.utils.createChocoSolver
+import clpqr.utils.filterNotConstantVar
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
@@ -15,7 +16,8 @@ abstract class Optimize(operator: String): UnaryPredicate.NonBacktrackable<Execu
     protected abstract val problemType: ProblemType
 
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
-        val varsMap = chocoModel.vars.associateWith { Var.of(it.name) }
+        var varsMap = chocoModel.vars.associateWith { Var.of(it.name) }
+        varsMap = varsMap.filterNotConstantVar()
         val config = Configuration(problemType = problemType, objective = first)
         val solver = createChocoSolver(chocoModel, config, varsMap)
         return replyWith(solver.solutions(varsMap).last())

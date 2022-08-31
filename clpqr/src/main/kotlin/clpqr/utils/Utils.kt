@@ -62,3 +62,7 @@ val Solve.Request<ExecutionContext>.constraints
 fun SideEffectsBuilder.setConstraints(constraints: MutableList<Term>) {
     setDurableData(CONSTRAINTS, constraints)
 }
+
+fun Map<Variable, Var>.filterNotConstantVar(): Map<Variable, Var> {
+    return this.filter { (k,_) -> !k.name[0].isDigit() }
+}
