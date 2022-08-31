@@ -5,11 +5,12 @@ import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.flags.FlagStore
 import it.unibo.tuprolog.solve.library.Libraries
 import org.junit.jupiter.api.Test
+import kotlin.test.Ignore
 import kotlin.test.assertNotNull
 
 class SatisfyTest: BaseTest() {
 
-    @Test
+    @Test @Ignore
     fun testSatisfyTuple(){
 
         val theory = theoryParser.parseTheory(
