@@ -17,6 +17,7 @@ abstract class Optimize(operator: String): UnaryPredicate.NonBacktrackable<Execu
 
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
         var varsMap = chocoModel.vars.associateWith { Var.of(it.name) }
+        // there are some variables which are constants
         varsMap = varsMap.filterNotConstantVar()
         val config = Configuration(problemType = problemType, objective = first)
         val solver = createChocoSolver(chocoModel, config, varsMap)
