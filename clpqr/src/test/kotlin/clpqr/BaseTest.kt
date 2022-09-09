@@ -8,6 +8,6 @@ abstract class BaseTest {
 
     protected val termParser = TermParser.withDefaultOperators()
     protected val theoryParser = ClausesParser.withDefaultOperators()
-    protected val precision = Model().precision
+    protected val precision = 0.1
 
 }

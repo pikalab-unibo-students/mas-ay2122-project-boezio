@@ -11,9 +11,8 @@ import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.primitive.UnaryPredicate
 
-object Satisfy: UnaryPredicate.NonBacktrackable<ExecutionContext>("satisfy") {
-    override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
-
+object Satisfy: UnaryPredicate<ExecutionContext>("satisfy") {
+    override fun Solve.Request<ExecutionContext>.computeAll(first: Term): Sequence<Solve.Response> {
         ensuringArgumentIsList(0)
         require(first.castToList().toList().all { it is Var }){
             "First argument does not contain only variables"
@@ -23,7 +22,7 @@ object Satisfy: UnaryPredicate.NonBacktrackable<ExecutionContext>("satisfy") {
         val varsMap = chocoModel.variablesMap(logicVars)
         val config = Configuration()
         val solver = createChocoSolver(chocoModel, config, varsMap)
-        return replyWith(solver.solutions(varsMap).first())
+        return solver.solutions(varsMap).map { replyWith(it) }
     }
 
 }

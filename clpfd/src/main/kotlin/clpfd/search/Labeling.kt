@@ -17,8 +17,8 @@ import org.chocosolver.solver.variables.IntVar
 import org.chocosolver.solver.variables.Variable
 import it.unibo.tuprolog.core.List as LogicList
 
-object Labeling : BinaryRelation.NonBacktrackable<ExecutionContext>("labeling") {
-    override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term): Solve.Response {
+object Labeling : BinaryRelation<ExecutionContext>("labeling") {
+    override fun Solve.Request<ExecutionContext>.computeAll(first: Term, second: Term): Sequence<Solve.Response> {
         ensuringArgumentIsList(0)
         val keys: Set<Struct> = (first as LogicList).toList().filterIsInstance<Struct>().toSet()
         ensuringArgumentIsList(1)
@@ -28,9 +28,9 @@ object Labeling : BinaryRelation.NonBacktrackable<ExecutionContext>("labeling") 
         val chocoToLogic: Map<Variable, Var> = chocoModel.variablesMap(logicVariables)
         val solver = createChocoSolver(chocoModel, configuration, chocoToLogic)
         return if (configuration.problemType == ProblemType.SATISFY) {
-            replyWith(solver.solutions(chocoToLogic).first())
+            solver.solutions(chocoToLogic).map { replyWith(it) }
         } else {
-            replyWith(solver.solutions(chocoToLogic).last())
+            sequenceOf(replyWith(solver.solutions(chocoToLogic).last()))
         }
     }
 
