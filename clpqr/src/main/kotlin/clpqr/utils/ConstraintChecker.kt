@@ -6,6 +6,9 @@ import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Tuple
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
+import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.classic.ClassicExecutionContext
+import it.unibo.tuprolog.solve.exception.Warning
 import org.chocosolver.solver.Model
 import org.chocosolver.solver.expression.continuous.arithmetic.CArExpression
 import org.chocosolver.solver.expression.continuous.relational.CReExpression
@@ -36,6 +39,25 @@ class ConstraintChecker(private val chocoModel: Model) : DefaultTermVisitor<Bool
             else -> throw IllegalStateException("Cannot handle constraint ${struct.functor}")
         }
     }
+
+    private class UndefinedWarning: Warning(
+        message = "constraints check is undefined",
+        context = ClassicExecutionContext()
+    ){
+        override fun pushContext(newContext: ExecutionContext): Warning {
+            return this
+        }
+
+        override fun updateContext(newContext: ExecutionContext, index: Int): Warning {
+            return this
+        }
+
+        override fun updateLastContext(newContext: ExecutionContext): Warning {
+            return this
+        }
+
+    }
+
     private fun checkConstraint(
         firstTerm: Term,
         secondTerm: Term,
@@ -50,8 +72,7 @@ class ConstraintChecker(private val chocoModel: Model) : DefaultTermVisitor<Bool
         return when(operation(firstExpression, secondExpression).equation().isSatisfied){
             ESat.TRUE -> true
             ESat.FALSE -> false
-            else -> false
+            else -> throw UndefinedWarning()
         }
     }
 }
-

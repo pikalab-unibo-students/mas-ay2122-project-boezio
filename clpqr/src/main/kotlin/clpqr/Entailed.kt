@@ -15,7 +15,9 @@ object Entailed: UnaryPredicate.NonBacktrackable<ExecutionContext>("entailed") {
             throw TypeError.forArgument(context, signature, TypeError.Expected.COMPOUND, first, 0)
         }
         val chocoModel = chocoModel
-        // Checking constraints
+        // solve() is called to allow the correct cal of isSatisfied
+        chocoModel.solver.solve()
+        // check of constraints
         val entailed = first.accept(ConstraintChecker(chocoModel))
         return if(entailed){
             replySuccess()
