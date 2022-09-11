@@ -1,17 +1,19 @@
 package clpqr
 
 import it.unibo.tuprolog.core.Real
+import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.flags.FlagStore
 import it.unibo.tuprolog.solve.library.Libraries
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import kotlin.math.abs
 import kotlin.test.Ignore
 import kotlin.test.assertNotNull
 
 class SatisfyTest: BaseTest() {
 
     @Test
-//    @Ignore
     fun testSatisfyTuple(){
 
         val theory = theoryParser.parseTheory(
@@ -30,14 +32,11 @@ class SatisfyTest: BaseTest() {
             staticKb = theory
         )
 
-//        for (solution in solver.solve(goal)) {
-//            println(solution.substitution)
-//        }
-
         val solution = solver.solveOnce(goal)
 
         termParser.scope.with {
-            solution.assertSolutionAssigns(
+            solution.assertSolutionAssignsDouble(
+                 precision,
                 varOf("X") to realOf("5.000000000000002"),
                 varOf("Y") to realOf("5.000000000000003")
             )
@@ -59,7 +58,8 @@ class SatisfyTest: BaseTest() {
         val solution = solver.solveOnce(goal)
 
         termParser.scope.with {
-            solution.assertSolutionAssigns(
+            solution.assertSolutionAssignsDouble(
+                 precision,
                 varOf("X") to realOf("3.359375"),
                 varOf("Y") to realOf("6.718749999999998")
             )
