@@ -22,7 +22,7 @@ object Satisfy: UnaryPredicate<ExecutionContext>("satisfy") {
         val varsMap = chocoModel.variablesMap(logicVars)
         val config = Configuration()
         val solver = createChocoSolver(chocoModel, config, varsMap)
-        return solver.solutions(varsMap).map { replyWith(it) }
+        return solver.solutions(varsMap).drop(1).map { replyWith(it) }
     }
 
 }
