@@ -37,8 +37,8 @@ class SatisfyTest: BaseTest() {
         termParser.scope.with {
             solution.assertSolutionAssignsDouble(
                  precision,
-                varOf("X") to realOf("5.000000000000002"),
-                varOf("Y") to realOf("5.000000000000003")
+                varOf("X") to realOf("8.362656249999997"),
+                varOf("Y") to realOf("1.7153125")
             )
         }
     }
@@ -60,8 +60,8 @@ class SatisfyTest: BaseTest() {
         termParser.scope.with {
             solution.assertSolutionAssignsDouble(
                  precision,
-                varOf("X") to realOf("3.359375"),
-                varOf("Y") to realOf("6.718749999999998")
+                varOf("X") to realOf("3.4375"),
+                varOf("Y") to realOf("6.630625000000003")
             )
         }
 
