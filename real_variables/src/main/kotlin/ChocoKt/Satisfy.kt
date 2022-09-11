@@ -10,7 +10,7 @@ fun main(){
     val x = model.realVar("X", Double.MIN_VALUE, Double.MAX_VALUE, precision)
     val y = model.realVar("Y", Double.MIN_VALUE, Double.MAX_VALUE, precision)
 
-    //x.ge(y).equation().post()
+    x.ge(y).equation().post()
     x.add(y).eq(10.0).equation().post()
 
     val solver = model.solver
