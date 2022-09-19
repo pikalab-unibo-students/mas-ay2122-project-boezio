@@ -2,6 +2,7 @@ package clpqr.optimization
 
 import clpCore.chocoModel
 import clpCore.solutions
+import clpCore.variablesMap
 import clpqr.search.Configuration
 import clpqr.search.ProblemType
 import clpqr.utils.createChocoSolver
@@ -16,11 +17,14 @@ abstract class Optimize(operator: String): UnaryPredicate.NonBacktrackable<Execu
     protected abstract val problemType: ProblemType
 
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
+
         var varsMap = chocoModel.vars.associateWith { Var.of(it.name) }
         // there are some variables which are constants
         varsMap = varsMap.filterNotConstantVar()
+        val expressionVars = first.variables.toList()
+        val expressionMap = chocoModel.variablesMap(expressionVars)
         val config = Configuration(problemType = problemType, objective = first)
-        val solver = createChocoSolver(chocoModel, config, varsMap)
+        val solver = createChocoSolver(chocoModel, config, expressionMap)
         return replyWith(solver.solutions(varsMap).last())
     }
 }

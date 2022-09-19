@@ -1,6 +1,9 @@
 package clpqr.optimization
 
-import clpqr.*
+import clpqr.BaseTest
+import clpqr.ClpQRLibrary
+import clpqr.Precision
+import clpqr.assertSolutionAssignsDouble
 import it.unibo.tuprolog.core.Real
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.flags.FlagStore
@@ -8,22 +11,22 @@ import it.unibo.tuprolog.solve.library.Libraries
 import org.junit.jupiter.api.Test
 import kotlin.test.Ignore
 
-class SupTest: BaseTest() {
+class InfTest: BaseTest() {
 
     @Test
-    fun testSupVariable(){
+    fun testInfVariable(){
 
         val theory = theoryParser.parseTheory(
             """
             problem(X, Y, Z) :- 
-                { 2*X+Y =< 16, X+2*Y =< 11,
-                  X+3*Y =< 15, Z = 30*X+50*Y
+                { 2*X+Y >= 16, X+2*Y >= 11,
+                  X+3*Y >= 15, Z = 30*X+50*Y
                 }.
             """.trimIndent()
         )
 
         val goal = termParser.parseStruct(
-            "problem(X,Y,Z),sup(Z,Sup)"
+            "problem(X,Y,Z),inf(Z,Inf)"
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
@@ -34,12 +37,12 @@ class SupTest: BaseTest() {
 
         val solution = solver.solveOnce(goal)
 
-        val sup = "309.9924428241242000"
+        val inf = "338.00128254557313"
 
         termParser.scope.with {
             solution.assertSolutionAssignsDouble(
-                 precision,
-                varOf("Sup") to realOf(sup)
+                precision,
+                varOf("Inf") to realOf(inf)
             )
         }
     }
