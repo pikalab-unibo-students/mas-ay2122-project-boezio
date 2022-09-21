@@ -18,13 +18,10 @@ abstract class Optimize(operator: String): UnaryPredicate.NonBacktrackable<Execu
 
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
 
-        var varsMap = chocoModel.vars.associateWith { Var.of(it.name.split("_")[0]) }
-        // there are some variables which are constants
-        varsMap = varsMap.filterNotConstantVar()
-        val expressionVars = first.variables.toList()
-        val expressionMap = chocoModel.variablesMap(expressionVars)
+        val vars = context.substitution.values.associateWith { it.castToVar() }.values
+        val varsMap = chocoModel.vars.zip(vars).toMap()
         val config = Configuration(problemType = problemType, objective = first)
-        val solver = createChocoSolver(chocoModel, config, expressionMap)
+        val solver = createChocoSolver(chocoModel, config, varsMap)
         return replyWith(solver.solutions(varsMap).last())
     }
 }
