@@ -3,6 +3,7 @@ package clpqr.mip
 import clpCore.chocoModel
 import clpCore.flip
 import clpCore.solutions
+import clpCore.variablesMap
 import clpqr.utils.calculateExpression
 import clpqr.utils.createChocoSolver
 import clpqr.utils.getVectorValue
@@ -12,6 +13,7 @@ import clpqr.utils.filterNotConstantVar
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.List
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.primitive.PrimitiveWrapper.Companion.ensuringArgumentIsGround
 import it.unibo.tuprolog.solve.primitive.QuinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 import org.chocosolver.solver.variables.RealVar
@@ -35,7 +37,7 @@ object BBInfFive: QuinaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") {
         val inf = third.castToVar()
         ensuringArgumentIsVariable(3)
         val vertex = fourth.castToVar()
-        ensuringArgumentIsAtom(4)
+        ensuringArgumentIsGround(4)
         // range of eps described in SWI Prolog
         require(fifth.let { it is Real && it.value.toDouble() >= 0 && it.value.toDouble() <= 0.5 }){
             "$fifth is not a valid eps value"
@@ -45,24 +47,27 @@ object BBInfFive: QuinaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") {
         if(eps != 0.0){
             throw IllegalStateException()
         }
-        var varsMap = chocoModel.vars.associateWith { Var.of(it.name) }
-        varsMap = varsMap.filterNotConstantVar()
+        val vars = vector.toMutableList()
+        vars.addAll(second.variables)
+        val varsMap = chocoModel.variablesMap(vars)
         // impose an integer constraint for variables contained in the first argument
         for(variable in vector){
-            val intVar = chocoModel.intVar(Double.MIN_VALUE.toInt(), Double.MAX_VALUE.toInt())
+            // TODO check min and max value
+            val intVar = chocoModel.intVar(-500, 500)
             chocoModel.eq(varsMap.flip()[variable] as RealVar, intVar).post()
         }
         val config = Configuration(problemType = ProblemType.MINIMIZE, objective = second)
-        val solver = createChocoSolver(chocoModel, config, varsMap)
+        var solver = createChocoSolver(chocoModel, config, varsMap)
         // Substitution for Vertex
         val vertexValue = solver.getVectorValue(varsMap, vector).last()
         val vertexList = List.of(vertexValue)
         // Substitution for optima
+        solver = createChocoSolver(chocoModel, config, varsMap)
         val infValue = Real.of(solver.calculateExpression(varsMap, second).last())
         // Substitution for all variables
-        val allVarsSubstitution = solver.solutions(varsMap).last()
+        // val allVarsSubstitution = solver.solutions(varsMap).last()
         // Overall substitution
-        val substitution = allVarsSubstitution.toMap() + mapOf(inf to infValue, vertex to vertexList)
+        val substitution = mapOf(inf to infValue, vertex to vertexList)
         return replyWith(Substitution.of(substitution))
     }
 }
