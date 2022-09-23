@@ -1,10 +1,9 @@
 package clpqr.mip
 
-import clpqr.BaseTest
-import clpqr.ClpQRLibrary
-import clpqr.Precision
-import clpqr.assertSolutionAssignsDouble
+import clpqr.*
+import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Real
+import it.unibo.tuprolog.core.List as LogicList
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.flags.FlagStore
 import it.unibo.tuprolog.solve.library.Libraries
@@ -26,16 +25,14 @@ class BBInfFiveTest: BaseTest() {
 
         val solution = solver.solveOnce(goal)
 
-        val xExpected = "2.0"
-        val yExpected = "1.0"
-        val zExpected = "1.0"
+        val xExpected = "2.0099999999999993"
+        val elem = Real.of(1.0)
+        val vertexExpected = LogicList.of(elem, elem)
 
         termParser.scope.with {
-            solution.assertSolutionAssignsDouble(
-                precision,
-                varOf("X") to realOf(xExpected),
-                varOf("Y") to realOf(yExpected),
-                varOf("Z") to realOf(zExpected)
+            solution.assertSolutionAssigns(
+                varOf("Inf") to realOf(xExpected),
+                varOf("Vertex") to vertexExpected
             )
         }
     }

@@ -57,12 +57,12 @@ object BBInfFive: QuinaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") {
             chocoModel.eq(varsMap.flip()[variable] as RealVar, intVar).post()
         }
         val config = Configuration(problemType = ProblemType.MINIMIZE, objective = second)
-        var solver = createChocoSolver(chocoModel, config, varsMap)
+        val solver = createChocoSolver(chocoModel, config, varsMap)
         // Substitution for Vertex
         val vertexValue = solver.getVectorValue(varsMap, vector).last()
         val vertexList = List.of(vertexValue)
-        // Substitution for optima
-        solver = createChocoSolver(chocoModel, config, varsMap)
+        // Substitution for optimum
+        solver.hardReset()
         val infValue = Real.of(solver.calculateExpression(varsMap, second).last())
         // Substitution for all variables
         // val allVarsSubstitution = solver.solutions(varsMap).last()
