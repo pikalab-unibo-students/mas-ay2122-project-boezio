@@ -1,21 +1,24 @@
 package clpqr.mip
 
-import clpqr.*
-import it.unibo.tuprolog.core.Integer
+import clpqr.BaseTest
+import clpqr.ClpQRLibrary
+import clpqr.Precision
+import clpqr.assertSolutionAssigns
+import it.unibo.tuprolog.core.List
 import it.unibo.tuprolog.core.Real
-import it.unibo.tuprolog.core.List as LogicList
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.flags.FlagStore
 import it.unibo.tuprolog.solve.library.Libraries
 import org.junit.jupiter.api.Test
+import kotlin.test.Ignore
 
-class BBInfFiveTest: BaseTest() {
+class BBInfFourTests: BaseTest() {
 
-    @Test
-    fun testBBInfFiveVariable(){
+    @Test @Ignore
+    fun testBBInfFourVariable(){
 
         val goal = termParser.parseStruct(
-            "{X >= Y+Z, Y >= 1, Z >= 1}, bb_inf([Y,Z],X,Inf,Vertex,0.0)."
+            "{X >= Y+Z, Y >= 1, Z >= 1}, bb_inf([Y,Z],Y,Inf,Vertex)."
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
@@ -27,7 +30,7 @@ class BBInfFiveTest: BaseTest() {
 
         val xExpected = "2.0"
         val elem = Real.of(1.0)
-        val vertexExpected = LogicList.of(elem, elem)
+        val vertexExpected = List.of(elem, elem)
 
         termParser.scope.with {
             solution.assertSolutionAssigns(
