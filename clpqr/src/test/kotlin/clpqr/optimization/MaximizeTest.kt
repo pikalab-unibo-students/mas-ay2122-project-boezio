@@ -1,9 +1,6 @@
 package clpqr.optimization
 
-import clpqr.BaseTest
-import clpqr.ClpQRLibrary
-import clpqr.Precision
-import clpqr.assertSolutionAssignsDouble
+import clpqr.*
 import it.unibo.tuprolog.core.Real
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.flags.FlagStore
@@ -41,12 +38,11 @@ class MaximizeTest: BaseTest() {
         val zExpected = "309.9924428241242000"
 
         termParser.scope.with {
-            solution.assertSolutionAssignsDouble(
+            solution.assertSolutionAssigns(
                 precision,
                 varOf("X") to realOf(xExpected),
                 varOf("Y") to realOf(yExpected),
                 varOf("Z") to realOf(zExpected)
-
             )
         }
     }

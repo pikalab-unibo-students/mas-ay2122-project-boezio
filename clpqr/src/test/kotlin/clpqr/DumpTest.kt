@@ -19,8 +19,7 @@ class DumpTest: BaseTest() {
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = Libraries.of(ClpQRLibrary),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision))
+            otherLibraries = Libraries.of(ClpQRLibrary)
         )
 
         val solution = solver.solveOnce(goal)
@@ -33,6 +32,7 @@ class DumpTest: BaseTest() {
 
         termParser.scope.with {
             solution.assertSolutionAssigns(
+                0.0,
                 varOf("Cons") to codedAnswer
             )
         }
@@ -46,8 +46,7 @@ class DumpTest: BaseTest() {
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = Libraries.of(ClpQRLibrary),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision))
+            otherLibraries = Libraries.of(ClpQRLibrary)
         )
 
         val solution = solver.solveOnce(goal)
@@ -62,6 +61,7 @@ class DumpTest: BaseTest() {
 
         termParser.scope.with {
             solution.assertSolutionAssigns(
+                0.0,
                 varOf("Cons") to codedAnswer
             )
         }

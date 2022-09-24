@@ -35,8 +35,8 @@ class SatisfyTest: BaseTest() {
         val solution = solver.solveOnce(goal)
 
         termParser.scope.with {
-            solution.assertSolutionAssignsDouble(
-                 precision,
+            solution.assertSolutionAssigns(
+                precision,
                 varOf("X") to realOf("8.362656249999997"),
                 varOf("Y") to realOf("1.7153125")
             )
@@ -58,7 +58,7 @@ class SatisfyTest: BaseTest() {
         val solution = solver.solveOnce(goal)
 
         termParser.scope.with {
-            solution.assertSolutionAssignsDouble(
+            solution.assertSolutionAssigns(
                  precision,
                 varOf("X") to realOf("3.4375"),
                 varOf("Y") to realOf("6.630625000000003")

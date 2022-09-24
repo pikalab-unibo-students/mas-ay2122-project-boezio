@@ -1,9 +1,6 @@
 package clpqr.optimization
 
-import clpqr.BaseTest
-import clpqr.ClpQRLibrary
-import clpqr.Precision
-import clpqr.assertSolutionAssignsDouble
+import clpqr.*
 import it.unibo.tuprolog.core.Real
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.flags.FlagStore
@@ -40,7 +37,7 @@ class InfTest: BaseTest() {
         val inf = "338.00128254557313"
 
         termParser.scope.with {
-            solution.assertSolutionAssignsDouble(
+            solution.assertSolutionAssigns(
                 precision,
                 varOf("Inf") to realOf(inf)
             )
@@ -74,7 +71,7 @@ class InfTest: BaseTest() {
         val sup = "309.9924428241242000"
 
         termParser.scope.with {
-            solution.assertSolutionAssignsDouble(
+            solution.assertSolutionAssigns(
                 precision,
                 varOf("Sup") to realOf(sup)
             )

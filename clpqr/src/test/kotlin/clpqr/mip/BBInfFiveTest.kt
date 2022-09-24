@@ -25,12 +25,13 @@ class BBInfFiveTest: BaseTest() {
 
         val solution = solver.solveOnce(goal)
 
-        val xExpected = "2.0099999999999993"
+        val xExpected = "2.0"
         val elem = Real.of(1.0)
         val vertexExpected = LogicList.of(elem, elem)
 
         termParser.scope.with {
             solution.assertSolutionAssigns(
+                precision,
                 varOf("Inf") to realOf(xExpected),
                 varOf("Vertex") to vertexExpected
             )

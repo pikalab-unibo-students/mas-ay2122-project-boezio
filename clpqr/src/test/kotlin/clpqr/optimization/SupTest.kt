@@ -37,7 +37,7 @@ class SupTest: BaseTest() {
         val sup = "309.9924428241242000"
 
         termParser.scope.with {
-            solution.assertSolutionAssignsDouble(
+            solution.assertSolutionAssigns(
                  precision,
                 varOf("Sup") to realOf(sup)
             )
@@ -71,7 +71,7 @@ class SupTest: BaseTest() {
         val sup = "309.9924428241242000"
 
         termParser.scope.with {
-            solution.assertSolutionAssignsDouble(
+            solution.assertSolutionAssigns(
                 precision,
                 varOf("Sup") to realOf(sup)
             )
