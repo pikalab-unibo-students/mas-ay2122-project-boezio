@@ -30,7 +30,8 @@ object BBInfThree: TernaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") 
         val varsMap = chocoModel.variablesMap(vars)
         // impose an integer constraint for variables contained in the first argument
         for(variable in vector){
-            val intVar = chocoModel.intVar(Double.MIN_VALUE.toInt(), Double.MAX_VALUE.toInt())
+            // TODO fix problem with lower and upper bounds
+            val intVar = chocoModel.intVar(-500, 500)
             chocoModel.eq(varsMap.flip()[variable] as RealVar, intVar).post()
         }
         val config = Configuration(problemType = ProblemType.MINIMIZE, objective = second)
