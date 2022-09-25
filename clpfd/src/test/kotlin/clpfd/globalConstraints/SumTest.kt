@@ -4,7 +4,7 @@ import clpfd.BaseTest
 import clpfd.ClpFdLibrary
 import clpfd.assertSolutionAssigns
 import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.Libraries
+import  it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalArgumentException
@@ -29,7 +29,7 @@ class SumTest: BaseTest() {
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
             staticKb = theory,
-            otherLibraries = Libraries.of(ClpFdLibrary)
+            otherLibraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -61,7 +61,7 @@ class SumTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -94,7 +94,7 @@ class SumTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -126,7 +126,7 @@ class SumTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -157,7 +157,7 @@ class SumTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -188,7 +188,7 @@ class SumTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -219,7 +219,7 @@ class SumTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -250,7 +250,7 @@ class SumTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -281,7 +281,7 @@ class SumTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         assertThrows<IllegalArgumentException> {

@@ -2,7 +2,7 @@ package clpfd
 
 import it.unibo.tuprolog.core.parsing.TermParser
 import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.Libraries
+import it.unibo.tuprolog.solve.library.toRuntime
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -31,7 +31,7 @@ internal class LabelingTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -53,7 +53,7 @@ internal class LabelingTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -75,7 +75,7 @@ internal class LabelingTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -96,7 +96,7 @@ internal class LabelingTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -117,7 +117,7 @@ internal class LabelingTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -141,7 +141,7 @@ internal class LabelingTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -163,7 +163,7 @@ internal class LabelingTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -196,7 +196,7 @@ internal class LabelingTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -229,7 +229,7 @@ internal class LabelingTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)
@@ -262,7 +262,7 @@ internal class LabelingTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         assertThrows<IllegalArgumentException> {
@@ -290,7 +290,7 @@ internal class LabelingTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         assertThrows<IllegalArgumentException> {

@@ -4,7 +4,7 @@ import clpfd.BaseTest
 import clpfd.ClpFdLibrary
 import clpfd.assertSolutionAssigns
 import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.Libraries
+import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 
 class CumulativeOneTest: BaseTest() {
@@ -28,7 +28,7 @@ class CumulativeOneTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         val solution = solver.solveOnce(goal)

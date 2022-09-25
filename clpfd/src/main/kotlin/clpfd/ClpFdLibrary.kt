@@ -6,11 +6,10 @@ import clpfd.globalConstraints.*
 import clpfd.relationalConstraints.*
 import clpfd.search.Label
 import clpfd.search.Labeling
-import it.unibo.tuprolog.solve.library.AliasedLibrary
 import it.unibo.tuprolog.solve.library.Library
 import it.unibo.tuprolog.theory.Theory
 
-object ClpFdLibrary : AliasedLibrary by Library.aliased(
+object ClpFdLibrary: Library by Library.of(
     alias = "prolog.clp.int",
     primitives = listOf(
         Ins,

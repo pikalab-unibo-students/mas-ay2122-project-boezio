@@ -4,7 +4,7 @@ import clpfd.BaseTest
 import clpfd.ClpFdLibrary
 import clpfd.assertSolutionAssigns
 import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.Libraries
+import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import kotlin.test.Ignore
 
@@ -26,7 +26,7 @@ class ChainTest: BaseTest() {
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = Libraries.of(ClpFdLibrary),
+            otherLibraries = ClpFdLibrary.toRuntime(),
             staticKb = theory
         )
 

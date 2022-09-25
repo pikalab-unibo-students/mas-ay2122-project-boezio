@@ -3,7 +3,7 @@ package clpfd.globalConstraints
 import clpfd.BaseTest
 import clpfd.ClpFdLibrary
 import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.Libraries
+import  it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalStateException
@@ -29,7 +29,7 @@ class GlobalCardinalityThreeTest: BaseTest() {
 
         val solver = Solver.prolog.solverOf(
             staticKb = theory,
-            libraries = Libraries.of(ClpFdLibrary)
+            libraries = ClpFdLibrary.toRuntime()
         )
 
         assertThrows<IllegalStateException> {
