@@ -4,7 +4,7 @@ import it.unibo.tuprolog.core.Real
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.flags.FlagStore
-import it.unibo.tuprolog.solve.library.Libraries
+import  it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import kotlin.math.abs
@@ -27,7 +27,7 @@ class SatisfyTest: BaseTest() {
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = Libraries.of(ClpQRLibrary),
+            otherLibraries = ClpQRLibrary.toRuntime(),
             flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
             staticKb = theory
         )
@@ -51,7 +51,7 @@ class SatisfyTest: BaseTest() {
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = Libraries.of(ClpQRLibrary),
+            otherLibraries = ClpQRLibrary.toRuntime(),
             flags = FlagStore.DEFAULT + (Precision to Real.of(precision))
         )
 

@@ -4,11 +4,10 @@ import clpqr.mip.BBInfFive
 import clpqr.mip.BBInfFour
 import clpqr.mip.BBInfThree
 import clpqr.optimization.*
-import it.unibo.tuprolog.solve.library.AliasedLibrary
 import it.unibo.tuprolog.solve.library.Library
 import it.unibo.tuprolog.theory.Theory
 
-object ClpQRLibrary: AliasedLibrary by Library.aliased(
+object ClpQRLibrary: Library by Library.of(
     alias = "prolog.clp.qr",
     primitives = listOf(
         Constraint,

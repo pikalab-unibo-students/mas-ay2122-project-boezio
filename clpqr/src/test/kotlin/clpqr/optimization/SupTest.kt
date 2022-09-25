@@ -4,7 +4,7 @@ import clpqr.*
 import it.unibo.tuprolog.core.Real
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.flags.FlagStore
-import it.unibo.tuprolog.solve.library.Libraries
+import  it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import kotlin.test.Ignore
 
@@ -27,7 +27,7 @@ class SupTest: BaseTest() {
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = Libraries.of(ClpQRLibrary),
+            otherLibraries = ClpQRLibrary.toRuntime(),
             flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
             staticKb = theory
         )
@@ -61,7 +61,7 @@ class SupTest: BaseTest() {
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = Libraries.of(ClpQRLibrary),
+            otherLibraries = ClpQRLibrary.toRuntime(),
             flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
             staticKb = theory
         )

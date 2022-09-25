@@ -6,7 +6,7 @@ import it.unibo.tuprolog.core.Real
 import it.unibo.tuprolog.core.List as LogicList
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.flags.FlagStore
-import it.unibo.tuprolog.solve.library.Libraries
+import  it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 
 class BBInfFiveTest: BaseTest() {
@@ -19,7 +19,7 @@ class BBInfFiveTest: BaseTest() {
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = Libraries.of(ClpQRLibrary),
+            otherLibraries = ClpQRLibrary.toRuntime(),
             flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
         )
 
