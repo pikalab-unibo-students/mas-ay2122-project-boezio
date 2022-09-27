@@ -151,4 +151,229 @@ class SatTest: BaseTest() {
 
         assertTrue(solution.isNo)
     }
+
+    @Test
+    fun testSatXor(){
+
+        val goal = termParser.parseStruct(
+            "sat(#(X,Y))"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatEq(){
+
+        val goal = termParser.parseStruct(
+            "sat(X =:= Y)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatNotEq(){
+
+        val goal = termParser.parseStruct(
+            "sat(X =\\= Y)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatLessEq(){
+
+        val goal = termParser.parseStruct(
+            "sat(X =< Y)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatGreaterEq(){
+
+        val goal = termParser.parseStruct(
+            "sat(X >= Y)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatNot(){
+
+        val goal = termParser.parseStruct(
+            "sat(~(X))"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatMultipleAnd(){
+
+        val goal = termParser.parseStruct(
+            "sat(*([X,Y,Z]))"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatMultipleAndFalseOutcome(){
+
+        val goal = termParser.parseStruct(
+            "sat(*([0,Y,Z]))"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
+
+    @Test
+    fun testSatMultipleOr(){
+
+        val goal = termParser.parseStruct(
+            "sat(+([X,Y,Z]))"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatNestedExpression(){
+
+        val goal = termParser.parseStruct(
+            "sat(+([*([X,~(W),1]),Y,>(Z,0)]))"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatSingleVariable(){
+
+        val goal = termParser.parseStruct(
+            "sat(X)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatNoVariables(){
+
+        val goal = termParser.parseStruct(
+            "sat(1 + 0)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatNoVariablesNestedTrue(){
+
+        val goal = termParser.parseStruct(
+            "sat(+([1,*(1,1)]))"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatNoVariablesNestedFalse(){
+
+        val goal = termParser.parseStruct(
+            "sat(*([1,*(1,0)]))"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
+
 }
