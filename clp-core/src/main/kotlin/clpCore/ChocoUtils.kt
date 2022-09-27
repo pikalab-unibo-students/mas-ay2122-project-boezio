@@ -39,8 +39,8 @@ val Variable.valueAsTerm: Term
         // RealVar.toString returns <name_var>=[lb..ub] which is a range of the first found solution
         is RealVar -> Real.of(this.ub)
         is BoolVar -> when (booleanValue) {
-            ESat.TRUE -> Truth.of(true)
-            ESat.FALSE -> Truth.of(false)
+            ESat.TRUE -> Integer.of(1)
+            ESat.FALSE -> Integer.of(0)
             else -> throw IllegalStateException("Invalid value for ${BoolVar::class.java.simpleName}: $booleanValue")
         }
         else -> throw IllegalStateException("Not supported type of Choco variable: ${this::class.java.name}")

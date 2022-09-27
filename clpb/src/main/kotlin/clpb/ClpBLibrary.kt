@@ -6,6 +6,7 @@ import it.unibo.tuprolog.theory.Theory
 object ClpBLibrary: Library by Library.of(
     alias = "prolog.clp.boolean",
     primitives = listOf(
-        Sat
+        Sat,
+        Labeling
     ).associate { it.descriptionPair }
 )
