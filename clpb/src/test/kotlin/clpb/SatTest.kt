@@ -87,4 +87,68 @@ class SatTest: BaseTest() {
 
         assertTrue(solution.isNo)
     }
+
+    @Test
+    fun testSatLessThanTrue(){
+
+        val goal = termParser.parseStruct(
+            "sat(X < Y)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatLessThanFalse(){
+
+        val goal = termParser.parseStruct(
+            "sat(1 < Y)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
+
+    @Test
+    fun testSatGreaterThanTrue(){
+
+        val goal = termParser.parseStruct(
+            "sat(X > Y)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatGreaterThanFalse(){
+
+        val goal = termParser.parseStruct(
+            "sat(0 > Y)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
 }

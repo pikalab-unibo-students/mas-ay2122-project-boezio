@@ -40,13 +40,13 @@ class ExpressionParser<T : Variable>(
                 ">=" -> return binaryExpression(term, LogOp::xor)
                 // Expr1 < Expr2 is equivalent to not Expr1 and Expr2
                 "<" -> return LogOp.and(
-                    unaryExpression(LogicList.of(term[0]), UnaryOp.NOT),
+                    unaryExpression(Struct.of(term.functor, LogicList.of(term[0])), UnaryOp.NOT),
                     term[1].accept(this)
                 )
                 // Expr1 > Expr2 is equivalent to Expr1 and not Expr2
                 ">" -> return LogOp.and(
                     term[0].accept(this),
-                    unaryExpression(LogicList.of(term[1]), UnaryOp.NOT)
+                    unaryExpression(Struct.of(term.functor, LogicList.of(term[1])), UnaryOp.NOT)
                 )
             }
             1 -> when (term.functor) {
