@@ -1,34 +1,34 @@
-package clpb
+package clpb.utils
 
+import clpb.utils.UnaryOp
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.List as LogicList
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
 import org.chocosolver.solver.Model
+import org.chocosolver.solver.constraints.nary.cnf.ILogical
 import org.chocosolver.solver.constraints.nary.cnf.LogOp
+import org.chocosolver.solver.variables.BoolVar
 import org.chocosolver.solver.variables.Variable
 
 class ExpressionParser<T : Variable>(
     private val chocoModel: Model,
     private val variables: Map<Var, T>
-) : DefaultTermVisitor<LogOp>() {
-    override fun defaultValue(term: Term): LogOp =
+) : DefaultTermVisitor<ILogical>() {
+    override fun defaultValue(term: Term): ILogical =
         error("Unsupported sub-expression: $term")
 
-    override fun visitVar(term: Var): LogOp =
+    override fun visitVar(term: Var): ILogical =
         asExpression(variables[term] ?: error("No such a variable: $term"))
 
-    override fun visitInteger(term: Integer): LogOp {
-        val value = term.value.toInt()
-        return if(value == 1){
-            chocoModel.boolVar(true) as LogOp
-        } else if (value == 0){
-            chocoModel.boolVar(false) as LogOp
-        } else{
-            throw IllegalStateException()
+    override fun visitInteger(term: Integer): ILogical {
+        return when(term.value.toInt()){
+            1 -> chocoModel.boolVar(true)
+            0 -> chocoModel.boolVar(false)
+            else -> throw IllegalStateException()
         }
     }
 
-    override fun visitStruct(term: Struct): LogOp {
+    override fun visitStruct(term: Struct): ILogical {
         when (term.arity) {
             2 -> when (term.functor) {
                 "+" -> return binaryExpression(term, LogOp::or)
@@ -52,17 +52,17 @@ class ExpressionParser<T : Variable>(
             1 -> when (term.functor) {
                 "+" -> return unaryExpression(term, UnaryOp.OR)
                 "*" -> return unaryExpression(term, UnaryOp.AND)
-                "~" -> return unaryExpression(LogicList.of(term), UnaryOp.NOT)
+                "~" -> return unaryExpression(Struct.of(term.functor, LogicList.of(term[0])), UnaryOp.NOT)
             }
         }
         return super.visitStruct(term) // indirectly calls defaultValue(term)
     }
 
-    private fun asExpression(variable: Variable): LogOp {
-        return variable as LogOp // this may fail!
+    private fun asExpression(variable: Variable): ILogical {
+        return variable as BoolVar // this may fail!
     }
 
-    private fun unaryExpression(struct: Struct, op: UnaryOp): LogOp {
+    private fun unaryExpression(struct: Struct, op: UnaryOp): ILogical {
         require(struct[0] is LogicList){
             "${struct[0]} is not a logic list"
         }
@@ -76,7 +76,7 @@ class ExpressionParser<T : Variable>(
         }
     }
 
-    private fun binaryExpression(struct: Struct, operator: (LogOp, LogOp) -> LogOp): LogOp {
+    private fun binaryExpression(struct: Struct, operator: (ILogical, ILogical) -> ILogical): ILogical {
         val first = struct[0].accept(this)
         val second = struct[1].accept(this)
         return operator(first, second)
