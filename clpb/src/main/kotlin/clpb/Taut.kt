@@ -13,6 +13,7 @@ import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
+import org.chocosolver.solver.Model
 import org.chocosolver.solver.constraints.nary.cnf.LogOp
 
 object Taut: BinaryRelation.NonBacktrackable<ExecutionContext>("taut") {
@@ -23,7 +24,7 @@ object Taut: BinaryRelation.NonBacktrackable<ExecutionContext>("taut") {
         val modelVarNames = chocoModel.vars.map { it.name }
         // Creation of new variables
         val vars = first.variables.distinct().toList()
-        // In some cases there the expression could contain only a variable or anyone
+        // In some cases the expression could contain only a variable or anyone
         if(vars.isEmpty()){ // e.g sat(1 + 0)
             val evaluator = BoolExprEvaluator()
             val result = first.accept(evaluator)
@@ -38,21 +39,17 @@ object Taut: BinaryRelation.NonBacktrackable<ExecutionContext>("taut") {
                     chocoModel.boolVar(variable.completeName)
                 }
             }
-            if(first is Struct){ // if it is not, e.g. sat(X), it does not make sense to add constraints
+            return if(first is Struct){ // if it is not, e.g. sat(X), it does not make sense to add constraints
                 val varsMap = chocoModel.variablesMap(first.variables.distinct().toList())
                 // Imposing constraints
                 val expression = first.accept(ExpressionParser(chocoModel, varsMap.flip())) as LogOp
-                chocoModel.addClauses(expression)
-            }
-            // positive outcome if there is at least a solution
-            val solver = chocoModel.solver
-
-            return if(solver.solve()){
-                replySuccess {
-                    setChocoModel(chocoModel)
-                    // to avoid unexpected results in other predicates
-                    solver.hardReset()
-                }
+                // it is faster to check whether the negated proposition is satisfiable
+                chocoModel.addClauses(LogOp.nand(expression))
+                val solver = chocoModel.solver
+                if(solver.solve())
+                    replyWith(Substitution.of(truthValue to Integer.of(0)))
+                else
+                    replyWith(Substitution.of(truthValue to Integer.of(1)))
             }else{
                 replyFail {  }
             }
