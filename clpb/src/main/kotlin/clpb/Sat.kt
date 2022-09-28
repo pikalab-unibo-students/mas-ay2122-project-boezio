@@ -20,7 +20,7 @@ object Sat: UnaryPredicate.NonBacktrackable<ExecutionContext>("sat") {
         val modelVarNames = chocoModel.vars.map { it.name }
         // Creation of new variables
         val vars = first.variables.distinct().toList()
-        // In some cases there the expression could contain only a variable or anyone
+        // In some cases the expression could contain only a variable or anyone
         if(vars.isEmpty()){ // e.g sat(1 + 0)
             val evaluator = BoolExprEvaluator()
             val result = first.accept(evaluator)
