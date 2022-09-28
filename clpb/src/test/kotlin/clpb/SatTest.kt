@@ -376,4 +376,20 @@ class SatTest: BaseTest() {
         assertTrue(solution.isNo)
     }
 
+    @Test
+    fun testSatDoubleSatFalse(){
+
+        val goal = termParser.parseStruct(
+            "sat(X*1),sat(X =\\= 1)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
+
 }
