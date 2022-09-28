@@ -47,6 +47,8 @@ object Sat: UnaryPredicate.NonBacktrackable<ExecutionContext>("sat") {
             return if(solver.solve()){
                 replySuccess {
                     setChocoModel(chocoModel)
+                    // to avoid unexpected results in other predicates
+                    solver.hardReset()
                 }
             }else{
                 replyFail {  }

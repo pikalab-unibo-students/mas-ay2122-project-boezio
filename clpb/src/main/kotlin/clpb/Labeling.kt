@@ -15,7 +15,14 @@ object Labeling: UnaryPredicate<ExecutionContext>("labeling") {
         }
         val chocoModel = chocoModel
         val vars = first.variables.distinct().toList()
-        val varsMap = chocoModel.variablesMap(vars)
+        val varsMap = chocoModel.variablesMap(vars).toMutableMap()
+        // set of variables not contained in the model
+        val newVars = (vars.toSet() subtract varsMap.values.toSet()).toList()
+        for(variable in newVars){
+            chocoModel.boolVar(variable.completeName)
+        }
+        val newVarsMap = chocoModel.variablesMap(newVars)
+        varsMap.putAll(newVarsMap)
         val solver = chocoModel.solver
         return solver.solutions(varsMap).map { replyWith(it) }
     }
