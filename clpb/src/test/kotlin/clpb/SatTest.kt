@@ -392,4 +392,20 @@ class SatTest: BaseTest() {
         assertTrue(solution.isNo)
     }
 
+    @Test
+    fun testSatDoubleSatTrue(){
+
+        val goal = termParser.parseStruct(
+            "sat(X =< Y), sat(Y =< Z)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
 }

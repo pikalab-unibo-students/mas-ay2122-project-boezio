@@ -124,4 +124,62 @@ class LabelingTest: BaseTest() {
             )
         }
     }
+
+    @Test
+    fun testLabelingDoubleSatAndTautTrue(){
+
+        val goal = termParser.parseStruct(
+            "sat(X =< Y), sat(Y =< Z), taut(X =< Z, T), labeling([X])"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("T") to intOf(1),
+                varOf("X") to intOf(0),
+            )
+        }
+    }
+
+    @Test
+    fun testLabelingDoubleSatAndTautFalse(){
+
+        val goal = termParser.parseStruct(
+            "sat(X =< Y), sat(Y =< Z), taut(X > Z, T), labeling([X])"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("T") to intOf(0),
+                varOf("X") to intOf(0),
+            )
+        }
+    }
+
+    @Test
+    fun testLabelingTaut(){
+
+        val goal = termParser.parseStruct(
+            "taut('+'(X,'~'(X)), T), labeling([X])"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
 }

@@ -142,4 +142,65 @@ class TautTest: BaseTest() {
             )
         }
     }
+
+    @Test
+    fun testTautWithSat(){
+
+        val goal = termParser.parseStruct(
+            "sat(X),taut('+'(X,'~'(X)),T)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("T") to intOf(1)
+            )
+        }
+    }
+
+    @Test
+    fun testTautWithSatReversed(){
+
+        val goal = termParser.parseStruct(
+            "taut('+'(X,'~'(X)),T),sat(X)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("T") to intOf(1)
+            )
+        }
+    }
+
+    @Test
+    fun testTautTwoSatAndTaut(){
+
+        val goal = termParser.parseStruct(
+            "sat(X =< Y), sat(Y =< Z), taut(X =< Z, T)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("T") to intOf(1)
+            )
+        }
+    }
+
 }
