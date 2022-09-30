@@ -22,6 +22,6 @@ object BBInfFour: RuleWrapper<ExecutionContext>("bb_inf", 4) {
         get() = ktListOf(Ints, Expression, Inf, Vertex)
 
     override val Scope.body: Term
-        get() = structOf(functor, Ints, Expression, Inf, Vertex, Real.of(0.0))
+        get() = structOf(BBInfFive.functor, Ints, Expression, Inf, Vertex, Real.of(0.0))
 
 }

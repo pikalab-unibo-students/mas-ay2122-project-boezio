@@ -59,3 +59,6 @@ fun SideEffectsBuilder.setConstraints(constraints: MutableList<Term>) {
 fun Map<Variable, Var>.filterNotConstantVar(): Map<Variable, Var> {
     return this.filter { (k,_) -> !k.name[0].isDigit() }
 }
+
+internal val Solve.Request<ExecutionContext>.bound
+        get() = Int.MAX_VALUE / 2

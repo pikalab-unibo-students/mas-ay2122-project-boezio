@@ -4,12 +4,12 @@ import clpCore.chocoModel
 import clpCore.flip
 import clpCore.solutions
 import clpCore.variablesMap
+import clpqr.search.Configuration
+import clpqr.search.ProblemType
+import clpqr.utils.*
 import clpqr.utils.calculateExpression
 import clpqr.utils.createChocoSolver
 import clpqr.utils.getVectorValue
-import clpqr.search.Configuration
-import clpqr.search.ProblemType
-import clpqr.utils.filterNotConstantVar
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.List
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -52,8 +52,7 @@ object BBInfFive: QuinaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") {
         val varsMap = chocoModel.variablesMap(vars)
         // impose an integer constraint for variables contained in the first argument
         for(variable in vector){
-            // TODO check min and max value
-            val intVar = chocoModel.intVar(-500, 500)
+            val intVar = chocoModel.intVar(-bound, bound)
             chocoModel.eq(varsMap.flip()[variable] as RealVar, intVar).post()
         }
         val config = Configuration(problemType = ProblemType.MINIMIZE, objective = second)

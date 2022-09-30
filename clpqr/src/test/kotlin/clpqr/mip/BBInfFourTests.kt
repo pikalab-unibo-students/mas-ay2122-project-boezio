@@ -18,7 +18,7 @@ class BBInfFourTests: BaseTest() {
     fun testBBInfFourVariable(){
 
         val goal = termParser.parseStruct(
-            "{X >= Y+Z, Y >= 1, Z >= 1}, bb_inf([Y,Z],Y,Inf,Vertex)."
+            "{X >= Y+Z, Y >= 1, Z >= 1}, bb_inf([Y,Z],X,Inf,Vertex)."
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(
