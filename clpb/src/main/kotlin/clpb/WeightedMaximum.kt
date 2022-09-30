@@ -41,10 +41,10 @@ object WeightedMaximum: TernaryRelation.NonBacktrackable<ExecutionContext>("weig
         // check for new variables
         val newVars = (vars.toSet() subtract varsMap.values.toSet()).toList()
         for(variable in newVars){
-            chocoModel.boolVar(variable.completeName)
+            model.boolVar(variable.completeName)
         }
         // updating the map
-        val newVarsMap = chocoModel.variablesMap(newVars)
+        val newVarsMap = model.variablesMap(newVars)
         varsMap.putAll(newVarsMap)
         // creation of integer variables and coefficients to post scalar constraint
         val intVars = varsMap.values.map { model.intVar("${it.completeName}Int",0,1) }.toTypedArray()

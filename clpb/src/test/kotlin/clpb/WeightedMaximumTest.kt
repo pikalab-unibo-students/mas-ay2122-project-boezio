@@ -28,4 +28,27 @@ class WeightedMaximumTest: BaseTest() {
             )
         }
     }
+
+    @Test
+    fun testWeightedMaximumWithoutSat(){
+
+        val goal = termParser.parseStruct(
+            "weighted_maximum([1,2,1], [A,B,C], Maximum)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("A") to intOf(1),
+                varOf("B") to intOf(1),
+                varOf("C") to intOf(1),
+                varOf("Maximum") to intOf(4),
+            )
+        }
+    }
 }
