@@ -1,7 +1,6 @@
 package clpb
 
 import it.unibo.tuprolog.solve.library.Library
-import it.unibo.tuprolog.theory.Theory
 
 object ClpBLibrary: Library by Library.of(
     alias = "prolog.clp.boolean",
@@ -10,6 +9,7 @@ object ClpBLibrary: Library by Library.of(
         Taut,
         Labeling,
         SatCount,
-        WeightedMaximum
+        WeightedMaximum,
+        RandomLabeling
     ).associate { it.descriptionPair }
 )
