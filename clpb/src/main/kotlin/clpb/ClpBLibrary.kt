@@ -8,6 +8,7 @@ object ClpBLibrary: Library by Library.of(
     primitives = listOf(
         Sat,
         Taut,
-        Labeling
+        Labeling,
+        SatCount
     ).associate { it.descriptionPair }
 )
