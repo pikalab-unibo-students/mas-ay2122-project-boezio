@@ -17,3 +17,6 @@ val Solve.Request<ExecutionContext>.tautModel
 fun SideEffectsBuilder.setTautModel(chocoModel: Model) {
     setDurableData(TAUT_MODEL, chocoModel)
 }
+
+internal val bound
+    get() = Int.MAX_VALUE / 2

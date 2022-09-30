@@ -9,6 +9,7 @@ object ClpBLibrary: Library by Library.of(
         Sat,
         Taut,
         Labeling,
-        SatCount
+        SatCount,
+        WeightedMaximum
     ).associate { it.descriptionPair }
 )
