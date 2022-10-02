@@ -49,6 +49,48 @@ class RandomLabelingTest: BaseTest() {
     }
 
     @Test
+    fun testRandomLabelingOrSecondSolution(){
+
+        val goal = termParser.parseStruct(
+            "sat(X+Y),random_labeling(1,[X,Y])"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(0),
+                varOf("Y") to intOf(1)
+            )
+        }
+    }
+
+    @Test
+    fun testRandomLabelingOrThirdSolution(){
+
+        val goal = termParser.parseStruct(
+            "sat(X+Y),random_labeling(2,[X,Y])"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(1),
+                varOf("Y") to intOf(1)
+            )
+        }
+    }
+
+    @Test
     fun testRandomLabelingVarOrBool(){
 
         val goal = termParser.parseStruct(
