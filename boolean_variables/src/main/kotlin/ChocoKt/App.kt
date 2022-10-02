@@ -6,13 +6,12 @@ fun main(){
     val model = Model()
 
     val x = model.boolVar("X")
-    val y = model.boolVar("Y")
 
-    model.addClauses(LogOp.or(model.boolVar(true),x,y))
+    model.addClauses(LogOp.and(x,LogOp.nand(x)))
 
     val solver = model.solver
 
     while(solver.solve()) {
-        println("${x.booleanValue} - ${y.booleanValue}")
+        println("${x.booleanValue}")
     }
 }

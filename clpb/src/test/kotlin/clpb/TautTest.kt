@@ -144,6 +144,22 @@ class TautTest: BaseTest() {
     }
 
     @Test
+    fun testTautExpressionIsSat(){
+
+        val goal = termParser.parseStruct(
+            "taut(X * 1,T)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpBLibrary.toRuntime()
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
+
+    @Test
     fun testTautWithSat(){
 
         val goal = termParser.parseStruct(

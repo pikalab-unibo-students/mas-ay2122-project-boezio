@@ -1,6 +1,7 @@
 package clpb
 
 import clpCore.flip
+import clpCore.solutions
 import clpCore.variablesMap
 import clpb.utils.BoolExprEvaluator
 import clpb.utils.ExpressionParser
@@ -13,6 +14,7 @@ import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 import org.chocosolver.solver.constraints.nary.cnf.LogOp
+import kotlin.math.pow
 
 object Taut: BinaryRelation.NonBacktrackable<ExecutionContext>("taut") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term): Solve.Response {
@@ -38,17 +40,21 @@ object Taut: BinaryRelation.NonBacktrackable<ExecutionContext>("taut") {
                 }
             }
             return if(first is Struct){
-                val tautModel = chocoModel
-                val varsMap = chocoModel.variablesMap(first.variables.distinct().toList())
+                val varsMap = chocoModel.variablesMap(vars)
                 // Imposing constraints
                 val expression = first.accept(ExpressionParser(chocoModel, varsMap.flip())) as LogOp
-                // it is faster to check whether the negated proposition is satisfiable
-                chocoModel.addClauses(LogOp.nand(expression))
+                chocoModel.addClauses(expression)
+                val numPossibleAssignments = 2.0.pow(vars.size).toInt()
                 val solver = chocoModel.solver
-                if(solver.solve())
-                    replyWith(Substitution.of(truthValue to Integer.of(0)))
-                else
+                val solutions = solver.solutions(varsMap).toList()
+                val numSolutions = solutions.size
+                return if(numSolutions == numPossibleAssignments){
                     replyWith(Substitution.of(truthValue to Integer.of(1)))
+                }else if(numSolutions == 1 && solutions[0] is Substitution.Fail){
+                    replyWith(Substitution.of(truthValue to Integer.of(0)))
+                }else{
+                    replyFail()
+                }
             }else{
                 replyFail {  }
             }
