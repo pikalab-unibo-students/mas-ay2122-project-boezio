@@ -42,11 +42,9 @@ object SatCount: BinaryRelation.NonBacktrackable<ExecutionContext>("sat_count") 
         // update map with new variables
         val newVarsMap = chocoModel.variablesMap(newVars)
         varsMap.putAll(newVarsMap)
-        if(first is Struct){
-            // adding new constraints
-            val expression = first.accept(ExpressionParser(chocoModel, varsMap.flip())) as LogOp
-            chocoModel.addClauses(expression)
-        }
+        // adding new constraints
+        val expression = first.accept(ExpressionParser(chocoModel, varsMap.flip())) as LogOp
+        chocoModel.addClauses(expression)
         val solver = chocoModel.solver
         val numSolutions = solver.solutions(varsMap).toList().size
         return replyWith(Substitution.of(count to Integer.of(numSolutions)))
