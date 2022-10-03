@@ -44,8 +44,8 @@ class InfTest: BaseTest() {
         }
     }
 
-    @Test @Ignore
-    fun testSupExpression(){
+    @Test
+    fun testInfExpression(){
 
         val theory = theoryParser.parseTheory(
             """

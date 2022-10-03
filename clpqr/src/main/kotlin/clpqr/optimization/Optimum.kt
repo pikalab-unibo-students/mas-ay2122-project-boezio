@@ -6,6 +6,7 @@ import clpCore.variablesMap
 import clpqr.search.Configuration
 import clpqr.search.ProblemType
 import clpqr.utils.calculateExpression
+import clpqr.utils.convertExpression
 import clpqr.utils.createChocoSolver
 import clpqr.utils.filterNotConstantVar
 import it.unibo.tuprolog.core.*
@@ -21,8 +22,16 @@ abstract class Optimum(operator: String): BinaryRelation.NonBacktrackable<Execut
         val expressionVars = first.variables.distinct().toList()
         ensuringArgumentIsVariable(1)
         val optimum = second.castToVar()
-        val varsMap = chocoModel.variablesMap(expressionVars)
-        val config = Configuration(problemType = problemType, objective = first)
+        val varsMap = chocoModel.variablesMap(expressionVars).toMutableMap()
+        // if first is not a variable, a new variable is created which denotes the expression
+        val expression = convertExpression(first, varsMap)
+        val expressionVar = expression.castToVar()
+        // first term is now expressed with a new variable
+        if(!varsMap.values.contains(expressionVar)) {
+            val newVarsMap = chocoModel.variablesMap(listOf(expressionVar))
+            varsMap.putAll(newVarsMap)
+        }
+        val config = Configuration(problemType = problemType, objective = expression)
         val solver = createChocoSolver(chocoModel, config, varsMap)
         val optimumValue = Real.of(solver.calculateExpression(varsMap, first).last())
         return replyWith(Substitution.of(optimum to optimumValue))

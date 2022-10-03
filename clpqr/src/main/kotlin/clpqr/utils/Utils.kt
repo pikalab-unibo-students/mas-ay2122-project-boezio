@@ -1,5 +1,6 @@
 package clpqr.utils
 
+import clpCore.chocoModel
 import clpCore.flip
 import clpCore.valueAsTerm
 import clpqr.Precision
@@ -62,3 +63,22 @@ fun Map<Variable, Var>.filterNotConstantVar(): Map<Variable, Var> {
 
 internal val Solve.Request<ExecutionContext>.bound
         get() = Int.MAX_VALUE / 2
+
+
+// Ensure the expression to optimize is a variable
+internal fun Solve.Request<ExecutionContext>.convertExpression(expression: Term, varsMap: Map<Variable, Var>): Var{
+    return if(expression is Var)
+        expression
+    else{
+        val precision = ((context.flags[Precision] ?: Precision.defaultValue) as Real).decimalValue.toDouble()
+        val parser = ExpressionParser(chocoModel, varsMap.flip())
+        // convert expression from 2p-kt to Choco data structure
+        val chocoExpr = expression.accept(parser)
+        // introduce new variable which denotes the expression
+        val newExpr = Var.of("Placeholder")
+        val placeholder = chocoModel.realVar(newExpr.completeName, Double.MIN_VALUE, Double.MAX_VALUE, precision)
+        placeholder.eq(chocoExpr).equation().post()
+
+        return newExpr
+    }
+}
