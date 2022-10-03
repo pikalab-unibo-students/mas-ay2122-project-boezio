@@ -47,15 +47,22 @@ object BBInfFive: QuinaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") {
         if(eps != 0.0){
             throw IllegalStateException()
         }
-        val vars = vector.toMutableList()
-        vars.addAll(second.variables)
-        val varsMap = chocoModel.variablesMap(vars)
+        val vars = vector.toSet()
+        val allVars = vars union second.variables.distinct().toSet()
+        val varsMap = chocoModel.variablesMap(allVars).toMutableMap()
         // impose an integer constraint for variables contained in the first argument
         for(variable in vector){
             val intVar = chocoModel.intVar(-bound, bound)
             chocoModel.eq(varsMap.flip()[variable] as RealVar, intVar).post()
         }
-        val config = Configuration(problemType = ProblemType.MINIMIZE, objective = second)
+        val expression = convertExpression(second, varsMap)
+        val expressionVar = expression.castToVar()
+        // first term is now expressed with a new variable
+        if(!varsMap.values.contains(expressionVar)) {
+            val newVarsMap = chocoModel.variablesMap(listOf(expressionVar))
+            varsMap.putAll(newVarsMap)
+        }
+        val config = Configuration(problemType = ProblemType.MINIMIZE, objective = expression)
         val solver = createChocoSolver(chocoModel, config, varsMap)
         // Substitution for Vertex
         val vertexValue = solver.getVectorValue(varsMap, vector).last()

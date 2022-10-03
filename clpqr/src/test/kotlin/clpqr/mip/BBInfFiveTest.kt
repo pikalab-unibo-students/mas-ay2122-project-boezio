@@ -38,4 +38,32 @@ class BBInfFiveTest: BaseTest() {
         }
     }
 
+    @Test
+    fun testBBInfFiveExpression(){
+
+        val goal = termParser.parseStruct(
+            "{2*X+Y >= 16, X+2*Y >= 11,X+3*Y >= 15}, bb_inf([X,Y], 30*X+50*Y, Inf, Vertex, 0.0)."
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpQRLibrary.toRuntime(),
+            flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        val exprExpected = "360.0"
+        val xExpected = Real.of(7.0)
+        val yExpected = Real.of(3.0)
+        val vertexExpected = LogicList.of(xExpected, yExpected)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                precision,
+                varOf("Inf") to realOf(exprExpected),
+                varOf("Vertex") to vertexExpected
+            )
+        }
+    }
+
 }
