@@ -2,8 +2,8 @@ package clpfd
 
 import clpfd.domain.In
 import clpfd.domain.Ins
-import clpfd.globalConstraints.*
-import clpfd.relationalConstraints.*
+import clpfd.global.*
+import clpfd.relational.*
 import clpfd.search.Label
 import clpfd.search.Labeling
 import it.unibo.tuprolog.solve.library.Library
