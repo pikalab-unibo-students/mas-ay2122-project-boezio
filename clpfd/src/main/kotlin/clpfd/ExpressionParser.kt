@@ -31,7 +31,9 @@ class ExpressionParser<T : Variable>(
                 "*" -> return binaryExpression(term, ArExpression::mul)
                 "^" -> return binaryExpression(term, ArExpression::pow)
                 "div" -> return binaryExpression(term, ArExpression::div)
+                "//" -> throw IllegalStateException("// is not supported")
                 "mod" -> return binaryExpression(term, ArExpression::mod)
+                "rem" -> throw IllegalStateException("rem is not supported")
                 "min" -> return binaryExpression(term, ArExpression::min)
                 "max" -> return binaryExpression(term, ArExpression::max)
             }
