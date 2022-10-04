@@ -9,21 +9,11 @@ class ReificationOpTest: BaseTest() {
     @Test
     fun testOr() {
 
-        val theory = theoryParser.parseTheory(
-            """
-            problem(X, Y) :- 
-                in(X, '..'(1, 10)), 
-                in(Y, '..'(1, 10)), 
-                all_distinct([X,Y]).
-            """.trimIndent()
-        )
-
         val goal = termParser.parseStruct(
-            "problem(X,Y),label([X,Y])"
+            "in(X, '..'(1,10)),  #\\/('#<'(X,3), '#>'(X,5)) , label([X])"
         )
 
         val solver = Solver.prolog.solverOf(
-            staticKb = theory,
             libraries = ClpFdLibrary.toRuntime()
         )
 
@@ -31,8 +21,7 @@ class ReificationOpTest: BaseTest() {
 
         termParser.scope.with {
             solution.assertSolutionAssigns(
-                varOf("X") to intOf(1),
-                varOf("Y") to intOf(2)
+                varOf("X") to intOf(1)
             )
         }
     }

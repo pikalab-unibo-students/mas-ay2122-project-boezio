@@ -1,4 +1,4 @@
 package clpfd.reification
 
 
-object InverseImplies: BinaryReificationOperator(" #<==")
+object InverseImplies: BinaryReificationOperator("#<==")

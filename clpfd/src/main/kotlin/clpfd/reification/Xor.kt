@@ -1,4 +1,4 @@
 package clpfd.reification
 
 
-object Xor : BinaryReificationOperator(" #\\")
+object Xor : BinaryReificationOperator("#\\")

@@ -7,6 +7,18 @@ import it.unibo.tuprolog.solve.primitive.Solve
 import org.chocosolver.solver.variables.IntVar
 import org.chocosolver.solver.variables.Variable
 
+val Solve.Request<ExecutionContext>.operatorsMap
+    get(): Map<Atom, String> {
+        return mapOf(
+            Atom.of("#=") to "=",
+            Atom.of("#\\=") to "!=",
+            Atom.of("#>") to ">",
+            Atom.of("#<") to "<",
+            Atom.of("#>=") to ">=",
+            Atom.of("#=<") to "<="
+        )
+    }
+
 fun Solve.Request<ExecutionContext>.getIntAsVars(termList: List<Term>): List<IntVar>{
     val integerAsVars = mutableListOf<IntVar>()
     // Conversion of integers to int values
