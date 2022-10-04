@@ -13,7 +13,6 @@ import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.primitive.TernaryRelation
 import org.chocosolver.solver.Model
 import org.chocosolver.solver.variables.BoolVar
-import it.unibo.tuprolog.core.Substitution as Substitution
 
 object WeightedMaximum: TernaryRelation.NonBacktrackable<ExecutionContext>("weighted_maximum") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term): Solve.Response {
