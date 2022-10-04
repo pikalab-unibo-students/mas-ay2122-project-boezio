@@ -3,6 +3,7 @@ package clpfd
 import clpfd.domain.In
 import clpfd.domain.Ins
 import clpfd.global.*
+import clpfd.reification.*
 import clpfd.relational.*
 import clpfd.search.Label
 import clpfd.search.Labeling
@@ -31,7 +32,14 @@ object ClpFdLibrary: Library by Library.of(
         CumulativeTwo,
         Serialized,
         LexChain,
-        Sum
+        Sum,
+        Not,
+        Or,
+        And,
+        Xor,
+        Iff,
+        Implies,
+        InverseImplies
     ).associate { it.descriptionPair },
     theory = Theory.of(
         listOf(
