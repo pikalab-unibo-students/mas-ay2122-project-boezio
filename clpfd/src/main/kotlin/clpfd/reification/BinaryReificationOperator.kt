@@ -1,26 +1,25 @@
 package clpfd.reification
 
 import clpCore.chocoModel
-import clpfd.getReifiedTerms
+import clpCore.flip
+import clpCore.variablesMap
+import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
-import it.unibo.tuprolog.core.List as LogicList
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
-import org.chocosolver.solver.constraints.nary.cnf.ILogical
 import org.chocosolver.solver.constraints.nary.cnf.LogOp
 
 abstract class BinaryReificationOperator(operator: String): BinaryRelation.NonBacktrackable<ExecutionContext>(operator) {
 
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term): Solve.Response {
 
-        val terms = getReifiedTerms(LogicList.of(first, second))
-        val firstReif = terms[0]
-        val secondReif = terms[1]
-        chocoModel.addClauses(operation(firstReif, secondReif))
+        val chocoModel = chocoModel
+        val logicVars = (first.variables.toSet() union second.variables.toSet())
+        val varsMap = chocoModel.variablesMap(logicVars).flip()
+        val parser = ReificationParser(chocoModel, varsMap)
+        val struct = Struct.of(functor, first, second)
+        chocoModel.addClauses(struct.accept(parser) as LogOp)
         return replySuccess()
     }
-
-    protected abstract val operation: (ILogical, ILogical) -> LogOp
-
 }
