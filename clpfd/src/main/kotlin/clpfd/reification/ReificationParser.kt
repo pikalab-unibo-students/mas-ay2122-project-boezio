@@ -28,22 +28,22 @@ class ReificationParser<T : Variable>(
         when (term.arity) {
             2 -> when (term.functor) {
                 // relational constraints
-                "#=" -> applyRelConstraint(term[0], term[1],ArExpression::eq).boolVar()
-                "#\\=" -> applyRelConstraint(term[0], term[1],ArExpression::ne).boolVar()
-                "#>" -> applyRelConstraint(term[0], term[1],ArExpression::gt).boolVar()
-                "#<" -> applyRelConstraint(term[0], term[1],ArExpression::lt).boolVar()
-                "#>=" -> applyRelConstraint(term[0], term[1],ArExpression::ge).boolVar()
-                "#=<" -> applyRelConstraint(term[0], term[1],ArExpression::le).boolVar()
+                "#=" -> return applyRelConstraint(term[0], term[1],ArExpression::eq).boolVar()
+                "#\\=" -> return applyRelConstraint(term[0], term[1],ArExpression::ne).boolVar()
+                "#>" -> return applyRelConstraint(term[0], term[1],ArExpression::gt).boolVar()
+                "#<" -> return applyRelConstraint(term[0], term[1],ArExpression::lt).boolVar()
+                "#>=" -> return applyRelConstraint(term[0], term[1],ArExpression::ge).boolVar()
+                "#=<" -> return applyRelConstraint(term[0], term[1],ArExpression::le).boolVar()
                 // reification constraints
-                "#\\/" -> LogOp.or(term[0].accept(this), term[1].accept(this))
-                "#/\\" -> LogOp.and(term[0].accept(this), term[1].accept(this))
-                "#\\" -> LogOp.xor(term[0].accept(this), term[1].accept(this))
-                "#<==>" -> LogOp.ifOnlyIf(term[0].accept(this), term[1].accept(this))
-                "#==>" -> LogOp.implies(term[0].accept(this), term[1].accept(this))
-                "#<==" -> LogOp.implies(term[1].accept(this), term[0].accept(this))
+                "#\\/" -> return LogOp.or(term[0].accept(this), term[1].accept(this))
+                "#/\\" -> return LogOp.and(term[0].accept(this), term[1].accept(this))
+                "#\\" -> return LogOp.xor(term[0].accept(this), term[1].accept(this))
+                "#<==>" -> return LogOp.ifOnlyIf(term[0].accept(this), term[1].accept(this))
+                "#==>" -> return LogOp.implies(term[0].accept(this), term[1].accept(this))
+                "#<==" -> return LogOp.implies(term[1].accept(this), term[0].accept(this))
             }
             1 -> when (term.functor) {
-                "#\\" -> LogOp.nand(term[0].accept(this))
+                "#\\" -> return LogOp.nand(term[0].accept(this))
             }
         }
         return super.visitStruct(term) // indirectly calls defaultValue(term)
