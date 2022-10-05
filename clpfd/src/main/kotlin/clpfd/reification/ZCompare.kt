@@ -2,14 +2,15 @@ package clpfd.reification
 
 import clpfd.relational.GreaterThan
 import clpfd.relational.LessThan
-import it.unibo.tuprolog.core.Atom
 import it.unibo.tuprolog.core.Scope
-import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.rule.RuleWrapper
 
 abstract class ZCompare: RuleWrapper<ExecutionContext>("zcompare", 3) {
+
+    val A by variables
+    val B by variables
 
     object Greater: ZCompare(){
 
@@ -17,15 +18,12 @@ abstract class ZCompare: RuleWrapper<ExecutionContext>("zcompare", 3) {
         zcompare(>,A,B) :- #>(A,B).
          */
 
-        val A by variables
-        val B by variables
-
         override val Scope.head: List<Term>
-            get() = ktListOf(Atom.of(">"), A, B)
+            get() = ktListOf(atomOf(">"), A, B)
 
 
         override val Scope.body: Term
-            get() = Struct.of(GreaterThan.functor, A, B)
+            get() = structOf(GreaterThan.functor, A, B)
 
     }
 
@@ -35,15 +33,12 @@ abstract class ZCompare: RuleWrapper<ExecutionContext>("zcompare", 3) {
         zcompare(<,A,B) :- #<(A,B).
          */
 
-        val A by variables
-        val B by variables
-
         override val Scope.head: List<Term>
-            get() = ktListOf(Atom.of("<"), A, B)
+            get() = ktListOf(atomOf("<"), A, B)
 
 
         override val Scope.body: Term
-            get() = Struct.of(LessThan.functor, A, B)
+            get() = structOf(LessThan.functor, A, B)
 
     }
 
@@ -53,15 +48,12 @@ abstract class ZCompare: RuleWrapper<ExecutionContext>("zcompare", 3) {
         zcompare(=,A,B) :- #=(A,B).
          */
 
-        val A by variables
-        val B by variables
-
         override val Scope.head: List<Term>
-            get() = ktListOf(Atom.of("="), A, B)
+            get() = ktListOf(atomOf("="), A, B)
 
 
         override val Scope.body: Term
-            get() = Struct.of(clpfd.relational.Equals.functor, A, B)
+            get() = structOf(clpfd.relational.Equals.functor, A, B)
 
     }
 }

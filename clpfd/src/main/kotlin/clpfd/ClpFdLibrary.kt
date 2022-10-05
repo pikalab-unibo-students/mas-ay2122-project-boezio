@@ -51,7 +51,10 @@ object ClpFdLibrary: Library by Library.of(
             LexChainN.Base,
             LexChainN.Recursive,
             TuplesInN.Base,
-            TuplesInN.Recursive
+            TuplesInN.Recursive,
+            ZCompare.Greater,
+            ZCompare.Less,
+            ZCompare.Equals
         ).map { it.implementation }
     )
 )
