@@ -24,10 +24,23 @@ abstract class BinaryClpOperator(operator: String) : BinaryRelation.NonBacktrack
     private fun Solve.Request<ExecutionContext>.applyRelConstraint(first: Term, second: Term) {
         val chocoModel = chocoModel
         val logicalVars = (first.variables + second.variables).toSet()
-        val varMap = chocoModel.variablesMap(logicalVars).flip()
-        val parser = ExpressionParser(chocoModel, varMap)
-        val firstExpression = first.accept(parser)
-        val secondExpression = second.accept(parser)
+        var varMap = chocoModel.variablesMap(logicalVars).flip()
+        var firstExpression: ArExpression
+        var secondExpression: ArExpression
+        // variables of Choco model are used as keys for a substitution in the current context
+        if(varMap.isEmpty()){
+            val inverseSubstitution = context.substitution.filter { (_,v) -> logicalVars.contains(v) }
+                .entries.associate { (k,v) -> v to k }
+            varMap = chocoModel.variablesMap(logicalVars.map { inverseSubstitution[it]!! }).flip()
+            val parser = ExpressionParser(chocoModel, varMap)
+            firstExpression = inverseSubstitution[first]!!.accept(parser)
+            secondExpression = inverseSubstitution[second]!!.accept(parser)
+
+        }else{
+            val parser = ExpressionParser(chocoModel, varMap)
+            firstExpression = first.accept(parser)
+            secondExpression = second.accept(parser)
+        }
         operation(firstExpression, secondExpression).decompose().post()
     }
 }

@@ -7,18 +7,21 @@ import org.chocosolver.solver.Solver
 fun main() {
 
     val model = Model()
+    val lb = 1
+    val ub = 10
 
-    val X = model.intVar(0,2)
-    val Y = model.intVar(0,2)
-    val Z = model.intVar(0,2)
+    val x = model.intVar("X",lb, ub)
+    val y = model.intVar("Y", lb, ub)
+    val z = model.intVar("Z", lb, ub)
 
-    model.circuit(listOf(X,Y,Z).toTypedArray()).post()
+    x.gt(y).decompose().post()
+    y.gt(z).decompose().post()
 
     // searching for a feasible solution
     val solver: Solver = model.solver
 
     if(solver.solve()) {
-        println("${X.value} ${Y.value} ${Z.value}")
+        println("${x.value} ${y.value} ${z.value}")
     }
 
 }

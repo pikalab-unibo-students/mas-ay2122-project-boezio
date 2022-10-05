@@ -40,4 +40,26 @@ class ChainTest: BaseTest() {
             )
         }
     }
+
+    @Test @Ignore
+    fun testChainGoal() {
+
+        val goal = termParser.parseStruct(
+            "ins([X,Y,Z], '..'(1, 10)),chain([X,Y,Z], '#>'),label([X,Y,Z])"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpFdLibrary.toRuntime(),
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(3),
+                varOf("Y") to intOf(2),
+                varOf("Z") to intOf(1)
+            )
+        }
+    }
 }
