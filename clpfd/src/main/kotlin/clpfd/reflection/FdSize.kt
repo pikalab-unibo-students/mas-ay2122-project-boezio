@@ -24,6 +24,7 @@ object FdSize: BinaryRelation.NonBacktrackable<ExecutionContext>("fd_size") {
         return if(varsMap.let { it.isEmpty() || it[first] !is IntVar})
             replyFail()
         else{
+            chocoModel.solver.propagate()
             val size = (varsMap[first] as IntVar).domainSize
             when(second){
                 is Var -> replyWith(Substitution.of(second to Integer.of(size)))

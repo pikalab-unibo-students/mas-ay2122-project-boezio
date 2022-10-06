@@ -24,6 +24,7 @@ object FdDegree: BinaryRelation.NonBacktrackable<ExecutionContext>("fd_degree") 
         return if(varsMap.let { it.isEmpty() || it[first] !is IntVar})
             replyFail()
         else{
+            chocoModel.solver.propagate()
             val numConstraints = (varsMap[first] as IntVar).nbProps
             when(second){
                 is Var -> replyWith(Substitution.of(second to Integer.of(numConstraints)))

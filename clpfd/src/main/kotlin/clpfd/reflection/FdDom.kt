@@ -22,13 +22,14 @@ object FdDom : BinaryRelation.NonBacktrackable<ExecutionContext>("fd_dom") {
         return if(varsMap.let { it.isEmpty() || it[first] !is IntVar })
             replyFail()
         else{
+            chocoModel.solver.propagate()
             val chocoVar = (varsMap[first] as IntVar)
             val lb = chocoVar.lb
             val ub = chocoVar.ub
             val domainStruct = Struct.of(domFunctor, Integer.of(lb), Integer.of(ub))
             when(second){
                 is Var -> replyWith(Substitution.of(second to domainStruct))
-                is Integer -> {
+                is Struct -> {
                     val struct = second.castToStruct()
                     val queryDom = Struct.of(domFunctor, struct[0].castToInteger(), struct[1].castToInteger())
                     if( queryDom == domainStruct)

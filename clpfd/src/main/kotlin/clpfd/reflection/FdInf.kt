@@ -24,6 +24,7 @@ object FdInf: BinaryRelation.NonBacktrackable<ExecutionContext>("fd_inf") {
         return if(varsMap.let { it.isEmpty() || it[first] !is IntVar})
             replyFail()
         else{
+            chocoModel.solver.propagate()
             val lb = (varsMap[first] as IntVar).lb
             when(second){
                 is Var -> replyWith(Substitution.of(second to Integer.of(lb)))

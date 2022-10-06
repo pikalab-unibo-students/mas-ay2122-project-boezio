@@ -12,17 +12,18 @@ fun main() {
 
     val x = model.intVar("X",lb, ub)
 
-
     x.gt(1).decompose().post()
-    println("${x.lb}")
+
+    model.solver.propagate()
+
+    println("num_constraints: ${x.nbProps}")
 
 
     // searching for a feasible solution
     val solver: Solver = model.solver
 
     if(solver.solve()) {
-        println("${x.value}")
-        print("${x.lb}")
+        print("${x.value}")
     }
 
 }
