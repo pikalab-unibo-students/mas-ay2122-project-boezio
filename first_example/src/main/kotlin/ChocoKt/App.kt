@@ -11,17 +11,18 @@ fun main() {
     val ub = 10
 
     val x = model.intVar("X",lb, ub)
-    val y = model.intVar("Y", lb, ub)
-    val z = model.intVar("Z", lb, ub)
 
-    x.gt(y).decompose().post()
-    y.gt(z).decompose().post()
+
+    x.gt(1).decompose().post()
+    println("${x.lb}")
+
 
     // searching for a feasible solution
     val solver: Solver = model.solver
 
     if(solver.solve()) {
-        println("${x.value} ${y.value} ${z.value}")
+        println("${x.value}")
+        print("${x.lb}")
     }
 
 }

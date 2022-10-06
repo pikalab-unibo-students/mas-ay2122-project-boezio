@@ -3,6 +3,7 @@ package clpfd
 import clpfd.domain.In
 import clpfd.domain.Ins
 import clpfd.global.*
+import clpfd.reflection.*
 import clpfd.reification.*
 import clpfd.relational.*
 import clpfd.search.Label
@@ -39,7 +40,13 @@ object ClpFdLibrary: Library by Library.of(
         Xor,
         Iff,
         Implies,
-        InverseImplies
+        InverseImplies,
+        FdVar,
+        FdInf,
+        FdSup,
+        FdSize,
+        FdDom,
+        FdDegree
     ).associate { it.descriptionPair },
     theory = Theory.of(
         listOf(

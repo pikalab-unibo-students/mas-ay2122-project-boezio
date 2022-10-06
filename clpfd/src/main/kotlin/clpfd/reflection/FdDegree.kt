@@ -12,7 +12,7 @@ import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 import org.chocosolver.solver.variables.IntVar
 
-object FdSup: BinaryRelation.NonBacktrackable<ExecutionContext>("fd_sup") {
+object FdDegree: BinaryRelation.NonBacktrackable<ExecutionContext>("fd_degree") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term): Solve.Response {
         ensuringArgumentIsVariable(0)
         val variable = first.castToVar()
@@ -24,10 +24,10 @@ object FdSup: BinaryRelation.NonBacktrackable<ExecutionContext>("fd_sup") {
         return if(varsMap.let { it.isEmpty() || it[first] !is IntVar})
             replyFail()
         else{
-            val ub = (varsMap[first] as IntVar).ub
+            val numConstraints = (varsMap[first] as IntVar).nbProps
             when(second){
-                is Var -> replyWith(Substitution.of(second to Integer.of(ub)))
-                is Integer -> if(second.value.toInt() == ub)
+                is Var -> replyWith(Substitution.of(second to Integer.of(numConstraints)))
+                is Integer -> if(second.value.toInt() == numConstraints)
                     replySuccess()
                 else
                     replyFail()
