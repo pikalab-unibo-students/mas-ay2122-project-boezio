@@ -25,8 +25,8 @@ abstract class BinaryClpOperator(operator: String) : BinaryRelation.NonBacktrack
         val chocoModel = chocoModel
         val logicalVars = (first.variables + second.variables).toSet()
         var varMap = chocoModel.variablesMap(logicalVars).flip()
-        var firstExpression: ArExpression
-        var secondExpression: ArExpression
+        val firstExpression: ArExpression
+        val secondExpression: ArExpression
         // variables of Choco model are used as keys for a substitution in the current context
         if(varMap.isEmpty()){
             val inverseSubstitution = context.substitution.filter { (_,v) -> logicalVars.contains(v) }
