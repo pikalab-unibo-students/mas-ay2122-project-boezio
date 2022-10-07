@@ -21,7 +21,7 @@ object CumulativeTwo : BinaryRelation.NonBacktrackable<ExecutionContext>("cumula
         val firstVars = first.variables.toSet()
         val secondVars = second.variables.toSet()
         val logicVars = firstVars.union(secondVars)
-        val varsMap = chocoModel.variablesMap(logicVars).flip()
+        val varsMap = chocoModel.variablesMap(logicVars, context.substitution).flip()
         val tasks = mutableListOf<Task>()
         val heights = mutableListOf<IntVar>()
         val elementsList = first.castToList().toList()

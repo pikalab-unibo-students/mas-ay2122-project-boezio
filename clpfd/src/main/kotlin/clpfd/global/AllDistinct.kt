@@ -18,7 +18,7 @@ object AllDistinct : UnaryPredicate.NonBacktrackable<ExecutionContext>("all_dist
         val logicVars = listTerm.filterIsInstance<Var>().distinct().toList()
         val chocoModel = chocoModel
         val integerAsVars = getIntAsVars(listTerm)
-        val chocoVars = chocoModel.variablesMap(logicVars).keys.map { it as IntVar }.toMutableList()
+        val chocoVars = chocoModel.variablesMap(logicVars, context.substitution).keys.map { it as IntVar }.toMutableList()
         chocoVars.addAll(integerAsVars)
         val allVars = chocoVars.toList().toTypedArray()
         chocoModel.allDifferent(*allVars).post()

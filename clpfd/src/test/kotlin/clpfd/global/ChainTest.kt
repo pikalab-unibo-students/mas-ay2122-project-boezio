@@ -10,7 +10,7 @@ import kotlin.test.Ignore
 
 class ChainTest: BaseTest() {
 
-    @Test @Ignore
+    @Test
     fun testChain() {
 
         val theory = theoryParser.parseTheory(
@@ -22,7 +22,7 @@ class ChainTest: BaseTest() {
         )
 
         val goal = termParser.parseStruct(
-            "problem(X,Y,Z),label([X,Y,Z])"
+            "problem(X,Y,Z), label([X,Y,Z])"
         )
 
         val solver = Solver.prolog.solverWithDefaultBuiltins(

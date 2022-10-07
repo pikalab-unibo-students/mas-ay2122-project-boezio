@@ -23,7 +23,7 @@ object GlobalCardinalityTwo : BinaryRelation.NonBacktrackable<ExecutionContext>(
         val chocoModel = chocoModel
         val occVars = second.variables.toSet()
         val logicVars = firstVars.union(occVars)
-        val varsMap = chocoModel.variablesMap(logicVars).flip()
+        val varsMap = chocoModel.variablesMap(logicVars, context.substitution).flip()
         val values = mutableListOf<Int>()
         val occurrences = mutableListOf<IntVar>()
         for (pair in pairs) {

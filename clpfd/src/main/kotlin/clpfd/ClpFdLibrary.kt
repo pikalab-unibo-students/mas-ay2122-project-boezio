@@ -52,7 +52,8 @@ object ClpFdLibrary: Library by Library.of(
         listOf(
             In,
             Label,
-            Chain.Base,
+            Chain.Empty,
+            Chain.Singleton,
             Chain.Recursive,
             CumulativeOne,
             LexChainN.Base,

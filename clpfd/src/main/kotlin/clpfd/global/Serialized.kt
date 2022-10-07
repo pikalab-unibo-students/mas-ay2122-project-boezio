@@ -29,7 +29,7 @@ object Serialized : BinaryRelation.NonBacktrackable<ExecutionContext>("serialize
         }
         val logicVars = firstVars.toSet().union(secondVars.toSet())
         val chocoModel = chocoModel
-        val varsMap = chocoModel.variablesMap(logicVars).flip()
+        val varsMap = chocoModel.variablesMap(logicVars, context.substitution).flip()
         val chocoStarts = mutableListOf<IntVar>()
         val chocoDurations = mutableListOf<IntVar>()
         for(elem in firstList){

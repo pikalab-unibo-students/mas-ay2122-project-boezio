@@ -7,20 +7,26 @@ import it.unibo.tuprolog.solve.classic.stdlib.rule.Call
 import it.unibo.tuprolog.solve.rule.RuleWrapper
 import it.unibo.tuprolog.solve.stdlib.primitive.Univ
 
-/**
+/*
  * chain([], _).
+ * chain([_], _).
  * chain([X, Y | Z], Op) :-
  *   Constraint =.. [Op, X, Y],
  *   call(Constraint),
  *   chain([Y | Z], Op).
  */
-
 abstract class Chain : RuleWrapper<ExecutionContext>("chain", 2) {
 
     // chain([], _).
-    object Base : Chain() {
+    object Empty : Chain() {
         override val Scope.head: List<Term>
             get() = ktListOf(emptyList, anonymous())
+    }
+
+    // chain([_], _).
+    object Singleton : Chain() {
+        override val Scope.head: List<Term>
+            get() = ktListOf(listOf(anonymous()), anonymous())
     }
 
     // chain([X, Y | Z], Op) :-

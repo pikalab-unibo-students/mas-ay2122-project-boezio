@@ -27,7 +27,7 @@ object ScalarProduct : QuaternaryRelation.NonBacktrackable<ExecutionContext>("sc
         val exprVars = fourth.variables.toSet()
         val logicVars = listVars.union(exprVars)
         val chocoModel = chocoModel
-        val varsMap = chocoModel.variablesMap(logicVars).flip()
+        val varsMap = chocoModel.variablesMap(logicVars, context.substitution).flip()
         val Vs = mutableListOf<IntVar>()
         for(elem in secondTerms){
             require(elem.let { it is Var || it is LogicInteger }){
@@ -35,7 +35,7 @@ object ScalarProduct : QuaternaryRelation.NonBacktrackable<ExecutionContext>("sc
             }
             Vs.add(getAsIntVar(elem, varsMap))
         }
-        val expParser = ExpressionParser(chocoModel, varsMap)
+        val expParser = ExpressionParser(chocoModel, varsMap, context.substitution)
         val expression = fourth.accept(expParser).intVar()
         chocoModel.scalar(Vs.toTypedArray(), coeffs, operatorsMap[operator], expression).post()
         return replySuccess {

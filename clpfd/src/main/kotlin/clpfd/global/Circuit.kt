@@ -19,7 +19,7 @@ object Circuit: UnaryPredicate.NonBacktrackable<ExecutionContext>("circuit") {
         val circuit = first.castToList().toList()
         val circuitVars = circuit.filterIsInstance<Var>().distinct()
         val chocoModel = chocoModel
-        val varsMap = chocoModel.variablesMap(circuitVars).flip()
+        val varsMap = chocoModel.variablesMap(circuitVars, context.substitution).flip()
         val intAsVars = getIntAsVars(circuit)
         val chocoCircuit = circuitVars.map { varsMap[it] as IntVar}.toMutableList()
         chocoCircuit.addAll(intAsVars)

@@ -18,7 +18,7 @@ object FdDom : BinaryRelation.NonBacktrackable<ExecutionContext>("fd_dom") {
             "$second is neither a variable nor a domain interval"
         }
         val chocoModel = chocoModel
-        val varsMap = chocoModel.variablesMap(listOf(variable)).flip()
+        val varsMap = chocoModel.variablesMap(listOf(variable), context.substitution).flip()
         return if(varsMap.let { it.isEmpty() || it[first] !is IntVar })
             replyFail()
         else{

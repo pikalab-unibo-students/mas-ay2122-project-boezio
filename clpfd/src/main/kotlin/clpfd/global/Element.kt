@@ -14,7 +14,7 @@ object Element : TernaryRelation.NonBacktrackable<ExecutionContext>("element") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term): Solve.Response {
         val logicVars = first.variables.toSet().union(second.variables.toSet()).union(third.variables.toSet())
         val chocoModel = chocoModel
-        val varsMap = chocoModel.variablesMap(logicVars).flip()
+        val varsMap = chocoModel.variablesMap(logicVars, context.substitution).flip()
         require(first.let { it is Var || it is LogicInteger }){
             "$first is neither a variable nor an integer"
         }

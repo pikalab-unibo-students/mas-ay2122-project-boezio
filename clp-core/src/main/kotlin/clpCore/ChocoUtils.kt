@@ -28,10 +28,20 @@ fun SideEffectsBuilder.setChocoModel(chocoModel: ChocoModel) {
     setDurableData(CHOCO_MODEL, chocoModel)
 }
 
-fun ChocoModel.variablesMap(logicVariables: Iterable<Var>): Map<Variable, Var> {
-    val logicVariablesByName = logicVariables.groupBy { it.completeName }.mapValues { it.value.single() }
+fun ChocoModel.variablesMap(logicVariables: Iterable<Var>, substitution: Substitution.Unifier): Map<Variable, Var> {
+    val actualVariables = logicVariables.getOuterVariables(substitution)
+    val logicVariablesByName = actualVariables.groupBy { it.completeName }.mapValues { it.value.single() }
     return vars.filter { it.name in logicVariablesByName }.associateWith { logicVariablesByName[it.name]!! }
 }
+
+fun Var.getOuterVariable(substitution: Substitution.Unifier): Var =
+    substitution.getOriginal(this) ?: this
+
+fun Sequence<Var>.getOuterVariables(substitution: Substitution.Unifier): Sequence<Var> =
+    map { it.getOuterVariable(substitution) }
+
+fun Iterable<Var>.getOuterVariables(substitution: Substitution.Unifier): List<Var> =
+    map { it.getOuterVariable(substitution) }
 
 val Variable.valueAsTerm: Term
     get() = when (this) {
@@ -51,13 +61,21 @@ fun <K, V> Map<K, V>.flip(): Map<V, K> = map { (k, v) -> v to k }.toMap()
 
 // why? see https://choco-solver.org/docs/solving/solving/#mono-objective-optimization
 // how? see https://kotlinlang.org/docs/sequences.html#from-chunks
-fun Solver.solutions(chocoToLogic: Map<Variable, Var>): Sequence<Substitution> = sequence {
+fun Solver.solutions(chocoToLogic: Map<Variable, Var>, substitution: Substitution.Unifier): Sequence<Substitution> = sequence {
     var atLeastOne = false
     while (solve()) {
         atLeastOne = true
-        yield(Substitution.of(chocoToLogic.map { (k, v) -> v to k.valueAsTerm }))
+        yield(Substitution.of(chocoToLogic.map { (k, v) -> substitution.getSpecific(v) to k.valueAsTerm }))
     }
     if (!atLeastOne) {
         yield(Substitution.failed())
     }
+}
+
+private fun Substitution.getSpecific(variable: Var): Var {
+    var current = variable
+    while (this[current]?.isVar == true) {
+        current = this[current]?.asVar()!!
+    }
+    return current
 }

@@ -3,6 +3,7 @@ package clpfd.search
 import clpfd.*
 import clpCore.*
 import it.unibo.tuprolog.core.Struct
+import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -22,22 +23,30 @@ object Labeling : BinaryRelation<ExecutionContext>("labeling") {
         ensuringArgumentIsList(0)
         val keys: Set<Struct> = (first as LogicList).toList().filterIsInstance<Struct>().toSet()
         ensuringArgumentIsList(1)
-        val logicVariables: List<Var> = (second as LogicList).toList().filterIsInstance<Var>().distinct().toList()
+        val logicVariables: List<Var> = (second as LogicList)
+            .toSequence()
+            .filterIsInstance<Var>()
+            .distinct()
+            .getOuterVariables(context.substitution)
+            .toList()
         val chocoModel = chocoModel
         val configuration = LabelingConfiguration.fromTerms(keys)
-        val chocoToLogic: Map<Variable, Var> = chocoModel.variablesMap(logicVariables)
-        val solver = createChocoSolver(chocoModel, configuration, chocoToLogic)
+        val chocoToLogic: Map<Variable, Var> = chocoModel.variablesMap(logicVariables, context.substitution)
+        val solver = createChocoSolver(chocoModel, configuration, chocoToLogic, context.substitution)
         return if (configuration.problemType == ProblemType.SATISFY) {
-            solver.solutions(chocoToLogic).map { replyWith(it) }
+            solver.solutions(chocoToLogic, context.substitution).map {
+                replyWith(it)
+            }
         } else {
-            sequenceOf(replyWith(solver.solutions(chocoToLogic).last()))
+            sequenceOf(replyWith(solver.solutions(chocoToLogic, context.substitution).last()))
         }
     }
 
     private fun createChocoSolver(
         model: ChocoModel,
         config: LabelingConfiguration,
-        variables: Map<Variable, Var>
+        variables: Map<Variable, Var>,
+        substitution: Substitution.Unifier
     ): ChocoSolver {
         val variableStrategy: VariableSelector<IntVar> = config.variableSelection.toVariableSelector(model, variables.keys)
         val valueStrategy: IntValueSelector = config.valueOrder.toValueSelector()
@@ -49,7 +58,7 @@ object Labeling : BinaryRelation<ExecutionContext>("labeling") {
         require((config.objective != null) xor (config.problemType == ProblemType.SATISFY))
 
         if (config.problemType != ProblemType.SATISFY) {
-            val parser = ExpressionParser(model, variables.flip())
+            val parser = ExpressionParser(model, variables.flip(), substitution)
             val objectiveExpression = config.objective!!.accept(parser)
             model.setObjective(config.problemType.toChoco()!!, objectiveExpression.intVar())
         }

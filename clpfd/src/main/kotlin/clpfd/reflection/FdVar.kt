@@ -14,7 +14,7 @@ object FdVar: UnaryPredicate.NonBacktrackable<ExecutionContext>("fd_var") {
         ensuringArgumentIsVariable(0)
         val variable = first.castToVar()
         val chocoModel = chocoModel
-        val varsMap = chocoModel.variablesMap(listOf(variable)).flip()
+        val varsMap = chocoModel.variablesMap(listOf(variable), context.substitution).flip()
         return if(varsMap.isEmpty())
             replyFail()
         else{

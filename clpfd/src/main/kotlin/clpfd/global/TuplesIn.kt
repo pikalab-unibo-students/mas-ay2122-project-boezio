@@ -24,7 +24,7 @@ object TuplesIn : BinaryRelation.NonBacktrackable<ExecutionContext>("tuples") {
         val innerList = listVar[0].castToList().toList()
         val logicVars = innerList.filterIsInstance<Var>().distinct()
         val chocoModel = chocoModel
-        val varsMap = chocoModel.variablesMap(logicVars).flip()
+        val varsMap = chocoModel.variablesMap(logicVars, context.substitution).flip()
         val tuple = mutableListOf<IntVar>()
         for(elem in innerList){
             require(elem.let { it is Var || it is Integer }){

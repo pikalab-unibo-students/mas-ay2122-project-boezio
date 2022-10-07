@@ -30,7 +30,7 @@ object LexChain : UnaryPredicate.NonBacktrackable<ExecutionContext>("lex") {
         val firstListVars = firstTermList.filterIsInstance<Var>().distinct().toSet()
         val secondListVars = secondTermList.filterIsInstance<Var>().distinct().toSet()
         val chocoModel = chocoModel
-        val varsMap = chocoModel.variablesMap(firstListVars.union(secondListVars)).flip()
+        val varsMap = chocoModel.variablesMap(firstListVars.union(secondListVars), context.substitution).flip()
         val firstList = mutableListOf<IntVar>()
         val secondList = mutableListOf<IntVar>()
         for(i in 0 until firstSize){

@@ -20,7 +20,7 @@ object Sum : TernaryRelation.NonBacktrackable<ExecutionContext>("sum") {
         val exprVars = third.variables.toSet()
         val logicVars = listVars.union(exprVars)
         val chocoModel = chocoModel
-        val varsMap = chocoModel.variablesMap(logicVars).flip()
+        val varsMap = chocoModel.variablesMap(logicVars, context.substitution).flip()
         val varsFirstTerm = mutableListOf<IntVar>()
         for(elem in listTerms){
             require(elem.let { it is Var || it is Integer }){
@@ -28,7 +28,7 @@ object Sum : TernaryRelation.NonBacktrackable<ExecutionContext>("sum") {
             }
             varsFirstTerm.add(getAsIntVar(elem, varsMap))
         }
-        val expParser = ExpressionParser(chocoModel, varsMap)
+        val expParser = ExpressionParser(chocoModel, varsMap, context.substitution)
         val expression = third.accept(expParser).intVar()
         chocoModel.sum(varsFirstTerm.toTypedArray(), operatorsMap[operator], expression).post()
         return replySuccess {

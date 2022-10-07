@@ -4,6 +4,7 @@ import clpCore.flip
 import clpCore.variablesMap
 import clpfd.ExpressionParser
 import it.unibo.tuprolog.core.Struct
+import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
@@ -16,7 +17,8 @@ import org.chocosolver.solver.variables.Variable
 
 class ReificationParser<T : Variable>(
     private val chocoModel: Model,
-    private val varsMap: Map<Var, T>
+    private val varsMap: Map<Var, T>,
+    private val substitution: Substitution.Unifier
 ) : DefaultTermVisitor<ILogical>() {
     override fun defaultValue(term: Term): ILogical =
         error("Unsupported sub-expression: $term")
@@ -55,8 +57,8 @@ class ReificationParser<T : Variable>(
         operation: (ArExpression, ArExpression) -> ReExpression
     ): ReExpression {
         val logicalVars = (first.variables + second.variables).toSet()
-        val varMap = chocoModel.variablesMap(logicalVars).flip()
-        val parser = ExpressionParser(chocoModel, varMap)
+        val varMap = chocoModel.variablesMap(logicalVars, substitution).flip()
+        val parser = ExpressionParser(chocoModel, varMap, substitution)
         val firstExpression = first.accept(parser)
         val secondExpression = second.accept(parser)
         return operation(firstExpression, secondExpression)
