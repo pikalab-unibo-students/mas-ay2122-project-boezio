@@ -14,7 +14,7 @@ import kotlin.test.Ignore
 
 class BBInfFourTests: BaseTest() {
 
-    @Test @Ignore
+    @Test
     fun testBBInfFourVariable(){
 
         val goal = termParser.parseStruct(

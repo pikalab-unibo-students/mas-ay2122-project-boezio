@@ -3,6 +3,7 @@ package clpqr.utils
 import clpCore.flip
 import clpCore.variablesMap
 import it.unibo.tuprolog.core.Struct
+import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Tuple
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
@@ -10,7 +11,10 @@ import org.chocosolver.solver.Model
 import org.chocosolver.solver.expression.continuous.arithmetic.CArExpression
 import org.chocosolver.solver.expression.continuous.relational.CReExpression
 
-internal class ConstraintImposer(private val chocoModel: Model) : DefaultTermVisitor<Unit>() {
+internal class ConstraintImposer(
+    private val chocoModel: Model,
+    private val substitution: Substitution.Unifier
+) : DefaultTermVisitor<Unit>() {
     override fun defaultValue(term: Term) = throw IllegalStateException("Cannot handle $term as constraint")
 
     override fun visitTuple(term: Tuple) {
@@ -43,8 +47,8 @@ internal class ConstraintImposer(private val chocoModel: Model) : DefaultTermVis
         model: Model
     ){
         val logicalVars = (firstTerm.variables + secondTerm.variables).toSet()
-        val varMap = model.variablesMap(logicalVars).flip()
-        val parser = ExpressionParser(model, varMap)
+        val varMap = model.variablesMap(logicalVars, substitution).flip()
+        val parser = ExpressionParser(model, varMap, substitution)
         val firstExpression = firstTerm.accept(parser)
         val secondExpression = secondTerm.accept(parser)
         operation(firstExpression, secondExpression).equation().post()

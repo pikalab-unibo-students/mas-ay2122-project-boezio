@@ -2,6 +2,7 @@ package clpqr.utils
 
 import clpCore.chocoModel
 import clpCore.flip
+import clpCore.getOuterVariable
 import clpCore.valueAsTerm
 import clpqr.Precision
 import clpqr.search.ProblemType
@@ -21,7 +22,7 @@ internal fun Solve.Request<ExecutionContext>.createChocoSolver(
 ): Solver {
 
     if(config.problemType != ProblemType.SATISFY){
-        val parser = ExpressionParser(chocoModel, variables.flip())
+        val parser = ExpressionParser(chocoModel, variables.flip(), context.substitution)
         val objectiveExpression = config.objective!!.accept(parser)
         val precision = (context.flags[Precision] as Real).decimalValue.toDouble()
         chocoModel.setObjective(config.problemType.toChoco()!!, objectiveExpression.realVar(precision))
@@ -38,8 +39,12 @@ internal fun Solver.getVectorValue(varsMap: Map<Variable, Var>, vector: List<Var
     }
 }
 
-internal fun Solver.calculateExpression(varsMap: Map<Variable, Var>, expression: Term): Sequence<Double> = sequence {
-    val parser = ExpressionEvaluator(varsMap.flip())
+internal fun Solver.calculateExpression(
+    varsMap: Map<Variable, Var>,
+    expression: Term,
+    substitution: Substitution.Unifier
+): Sequence<Double> = sequence {
+    val parser = ExpressionEvaluator(varsMap.flip(), substitution)
     while (solve()) {
         yield(expression.accept(parser))
     }
@@ -66,12 +71,16 @@ internal val Solve.Request<ExecutionContext>.bound
 
 
 // Ensure the expression to optimize is a variable
-internal fun Solve.Request<ExecutionContext>.convertExpression(expression: Term, varsMap: Map<Variable, Var>): Var{
+internal fun Solve.Request<ExecutionContext>.convertExpression(
+    expression: Term,
+    varsMap: Map<Variable, Var>,
+    substitution: Substitution.Unifier
+): Var{
     return if(expression is Var)
-        expression
+        expression.getOuterVariable(substitution)
     else{
         val precision = ((context.flags[Precision] ?: Precision.defaultValue) as Real).decimalValue.toDouble()
-        val parser = ExpressionParser(chocoModel, varsMap.flip())
+        val parser = ExpressionParser(chocoModel, varsMap.flip(), context.substitution)
         // convert expression from 2p-kt to Choco data structure
         val chocoExpr = expression.accept(parser)
         // introduce new variable which denotes the expression

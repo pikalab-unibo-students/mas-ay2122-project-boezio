@@ -1,6 +1,7 @@
 package clpqr
 
 import clpCore.chocoModel
+import clpCore.getOuterVariable
 import clpCore.setChocoModel
 import clpqr.utils.ConstraintImposer
 import clpqr.utils.constraints
@@ -18,9 +19,10 @@ object Constraint: UnaryPredicate.NonBacktrackable<ExecutionContext>("{}") {
             throw TypeError.forArgument(context, signature, TypeError.Expected.COMPOUND, first, 0)
         }
         val chocoModel = chocoModel
+        val subContext = context.substitution
         val modelVarNames = chocoModel.vars.map { it.name }
         // Creation of new variables (simplified version)
-        val vars = first.variables.distinct().toList()
+        val vars = first.variables.distinct().toList().map { it.getOuterVariable(subContext) }
         val precision = ((context.flags[Precision] ?: Precision.defaultValue) as Real).decimalValue.toDouble()
         for (variable in vars) {
             if (modelVarNames.none { it == variable.completeName }) {
@@ -35,7 +37,7 @@ object Constraint: UnaryPredicate.NonBacktrackable<ExecutionContext>("{}") {
             constraints.add(first)
         }
         // Imposing constraints
-        first.accept(ConstraintImposer(chocoModel))
+        first.accept(ConstraintImposer(chocoModel, context.substitution))
 
         return replySuccess {
             setChocoModel(chocoModel)

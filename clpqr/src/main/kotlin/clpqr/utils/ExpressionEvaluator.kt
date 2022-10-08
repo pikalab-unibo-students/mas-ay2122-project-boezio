@@ -1,5 +1,6 @@
 package clpqr.utils
 
+import clpCore.getOuterVariable
 import clpCore.valueAsTerm
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
@@ -8,13 +9,14 @@ import java.lang.IllegalStateException
 import kotlin.math.*
 
 class ExpressionEvaluator<T : Variable>(
-    private val variables: Map<Var, T>
+    private val variables: Map<Var, T>,
+    private val substitution: Substitution.Unifier
 ) : DefaultTermVisitor<Double>() {
     override fun defaultValue(term: Term): Double =
         error("Unsupported sub-expression: $term")
 
     override fun visitVar(term: Var): Double =
-        when(val valueAsTerm = variables[term]?.valueAsTerm){
+        when(val valueAsTerm = variables[term.getOuterVariable(substitution)]?.valueAsTerm){
             is Integer -> valueAsTerm.value.toDouble()
             is Real -> valueAsTerm.value.toDouble()
             else -> throw IllegalStateException()

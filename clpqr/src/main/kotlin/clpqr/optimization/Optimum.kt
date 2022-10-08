@@ -22,18 +22,18 @@ abstract class Optimum(operator: String): BinaryRelation.NonBacktrackable<Execut
         val expressionVars = first.variables.distinct().toList()
         ensuringArgumentIsVariable(1)
         val optimum = second.castToVar()
-        val varsMap = chocoModel.variablesMap(expressionVars).toMutableMap()
+        val varsMap = chocoModel.variablesMap(expressionVars, context.substitution).toMutableMap()
         // if first is not a variable, a new variable is created which denotes the expression
-        val expression = convertExpression(first, varsMap)
+        val expression = convertExpression(first, varsMap, context.substitution)
         val expressionVar = expression.castToVar()
         // first term is now expressed with a new variable
         if(!varsMap.values.contains(expressionVar)) {
-            val newVarsMap = chocoModel.variablesMap(listOf(expressionVar))
+            val newVarsMap = chocoModel.variablesMap(listOf(expressionVar), context.substitution)
             varsMap.putAll(newVarsMap)
         }
         val config = Configuration(problemType = problemType, objective = expression)
         val solver = createChocoSolver(chocoModel, config, varsMap)
-        val optimumValue = Real.of(solver.calculateExpression(varsMap, first).last())
+        val optimumValue = Real.of(solver.calculateExpression(varsMap, first, context.substitution).last())
         return replyWith(Substitution.of(optimum to optimumValue))
     }
 }

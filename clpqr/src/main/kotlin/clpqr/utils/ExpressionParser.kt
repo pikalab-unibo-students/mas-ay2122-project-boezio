@@ -1,5 +1,6 @@
 package clpqr.utils
 
+import clpCore.getOuterVariable
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
 import org.chocosolver.solver.Model
@@ -9,13 +10,17 @@ import org.chocosolver.solver.variables.impl.FixedRealVarImpl
 
 class ExpressionParser<T : Variable>(
     private val chocoModel: Model,
-    private val variables: Map<Var, T>
+    private val variables: Map<Var, T>,
+    private val substitution: Substitution.Unifier
 ) : DefaultTermVisitor<CArExpression>() {
     override fun defaultValue(term: Term): CArExpression =
         error("Unsupported sub-expression: $term")
 
-    override fun visitVar(term: Var): CArExpression =
-        asExpression(variables[term] ?: error("No such a variable: $term"))
+    override fun visitVar(term: Var): CArExpression {
+        val actual = term.getOuterVariable(substitution)
+        return asExpression(variables[actual] ?: error("No such a variable: $term"))
+    }
+
 
     override fun visitInteger(term: Integer): CArExpression {
         val value = term.value.toDouble()

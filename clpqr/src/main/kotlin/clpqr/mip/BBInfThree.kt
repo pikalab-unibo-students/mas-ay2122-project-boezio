@@ -27,7 +27,7 @@ object BBInfThree: TernaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") 
         val inf = third.castToVar()
         val vars = vector.toMutableList()
         vars.addAll(second.variables.distinct())
-        val varsMap = chocoModel.variablesMap(vars)
+        val varsMap = chocoModel.variablesMap(vars, context.substitution)
         // impose an integer constraint for variables contained in the first argument
         for(variable in vector){
             // TODO fix problem with lower and upper bounds
@@ -37,7 +37,7 @@ object BBInfThree: TernaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") 
         val config = Configuration(problemType = ProblemType.MINIMIZE, objective = second)
         val solver = createChocoSolver(chocoModel, config, varsMap)
         // Substitution for optima
-        val infValue = Real.of(solver.calculateExpression(varsMap, second).last())
+        val infValue = Real.of(solver.calculateExpression(varsMap, second, context.substitution).last())
         // Substitution for all variables
         // val allVarsSubstitution = solver.solutions(varsMap).last()
         // overall substitution

@@ -49,17 +49,17 @@ object BBInfFive: QuinaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") {
         }
         val vars = vector.toSet()
         val allVars = vars union second.variables.distinct().toSet()
-        val varsMap = chocoModel.variablesMap(allVars).toMutableMap()
+        val varsMap = chocoModel.variablesMap(allVars, context.substitution).toMutableMap()
         // impose an integer constraint for variables contained in the first argument
         for(variable in vector){
             val intVar = chocoModel.intVar(-bound, bound)
             chocoModel.eq(varsMap.flip()[variable] as RealVar, intVar).post()
         }
-        val expression = convertExpression(second, varsMap)
+        val expression = convertExpression(second, varsMap, context.substitution)
         val expressionVar = expression.castToVar()
         // first term is now expressed with a new variable
         if(!varsMap.values.contains(expressionVar)) {
-            val newVarsMap = chocoModel.variablesMap(listOf(expressionVar))
+            val newVarsMap = chocoModel.variablesMap(listOf(expressionVar), context.substitution)
             varsMap.putAll(newVarsMap)
         }
         val config = Configuration(problemType = ProblemType.MINIMIZE, objective = expression)
@@ -69,7 +69,7 @@ object BBInfFive: QuinaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") {
         val vertexList = List.of(vertexValue)
         // Substitution for optimum
         solver.hardReset()
-        val infValue = Real.of(solver.calculateExpression(varsMap, second).last())
+        val infValue = Real.of(solver.calculateExpression(varsMap, second, context.substitution).last())
         // Substitution for all variables
         // val allVarsSubstitution = solver.solutions(varsMap).last()
         // Overall substitution

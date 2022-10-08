@@ -1,9 +1,6 @@
 package clpqr.utils
 
-import it.unibo.tuprolog.core.Integer
-import it.unibo.tuprolog.core.Real
-import it.unibo.tuprolog.core.Struct
-import it.unibo.tuprolog.core.Var
+import it.unibo.tuprolog.core.*
 import org.chocosolver.solver.Model
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
@@ -14,7 +11,7 @@ class ExpressionEvaluatorTest {
     fun testSumOfNumbers(){
 
         val expression = Struct.of("+",Integer.of(10), Integer.of(5))
-        val parser = ExpressionEvaluator(mapOf())
+        val parser = ExpressionEvaluator(mapOf(), Substitution.empty())
         val value = expression.accept(parser)
 
         assertEquals(value, 15.0)
@@ -28,7 +25,7 @@ class ExpressionEvaluatorTest {
         val chocoVar = model.realVar("x", 8.5)
         val varsMap = mapOf(prologVar to chocoVar)
         val expression = Struct.of("+", prologVar, Real.of(1.5))
-        val parser = ExpressionEvaluator(varsMap)
+        val parser = ExpressionEvaluator(varsMap, Substitution.empty())
         val value = expression.accept(parser)
 
         assertEquals(value, 10.0)
@@ -46,7 +43,7 @@ class ExpressionEvaluatorTest {
             Struct.of("abs", Integer.of(-3)),
             Struct.of("pow", Real.of(2.0))
         )
-        val parser = ExpressionEvaluator(varsMap)
+        val parser = ExpressionEvaluator(varsMap, Substitution.empty())
         val value = expression.accept(parser)
 
         assertEquals(value, 12.0)
