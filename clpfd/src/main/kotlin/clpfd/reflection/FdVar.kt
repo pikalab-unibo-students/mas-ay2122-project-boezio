@@ -2,6 +2,7 @@ package clpfd.reflection
 
 import clpCore.chocoModel
 import clpCore.flip
+import clpCore.getOuterVariable
 import clpCore.variablesMap
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -18,7 +19,7 @@ object FdVar: UnaryPredicate.NonBacktrackable<ExecutionContext>("fd_var") {
         return if(varsMap.isEmpty())
             replyFail()
         else{
-            val chocoVar = varsMap[variable]
+            val chocoVar = varsMap[variable.getOuterVariable(context.substitution)]
             if(chocoVar is IntVar)
                 replySuccess()
             else

@@ -2,6 +2,7 @@ package clpfd.reflection
 
 import clpCore.chocoModel
 import clpCore.flip
+import clpCore.getOuterVariable
 import clpCore.variablesMap
 import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Substitution
@@ -20,14 +21,17 @@ object FdDegree: BinaryRelation.NonBacktrackable<ExecutionContext>("fd_degree") 
             "$second is neither a variable nor an integer value"
         }
         val chocoModel = chocoModel
-        val varsMap = chocoModel.variablesMap(listOf(variable), context.substitution).flip()
-        return if(varsMap.let { it.isEmpty() || it[first] !is IntVar})
+        val subContext = context.substitution
+        val varsMap = chocoModel.variablesMap(listOf(variable), subContext).flip()
+        val firstOriginal = first.castToVar().getOuterVariable(subContext)
+        return if(varsMap.let { it.isEmpty() || it[firstOriginal] !is IntVar})
             replyFail()
         else{
             chocoModel.solver.propagate()
-            val numConstraints = (varsMap[first] as IntVar).nbProps
+            val numConstraints = (varsMap[firstOriginal] as IntVar).nbProps
             when(second){
-                is Var -> replyWith(Substitution.of(second to Integer.of(numConstraints)))
+                is Var ->
+                    replyWith(Substitution.of(second.getOuterVariable(subContext) to Integer.of(numConstraints)))
                 is Integer -> if(second.value.toInt() == numConstraints)
                     replySuccess()
                 else
