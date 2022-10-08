@@ -7,7 +7,7 @@ import kotlin.test.Ignore
 
 class ZCompareTest: BaseTest() {
 
-    @Test @Ignore
+    @Test
     fun testGreater() {
 
         val theory = theoryParser.parseTheory(

@@ -40,7 +40,7 @@ class InsAssignmentTest: BaseTest() {
         }
     }
 
-    @Test @Ignore
+    @Test
     fun testSecondArgumentNotCompliant() {
 
         val theory = theoryParser.parseTheory(
@@ -96,7 +96,7 @@ class InsAssignmentTest: BaseTest() {
         }
     }
 
-    @Test
+    @Test @Ignore
     fun testVarAlreadyDefinedInteger() {
 
         val theory = theoryParser.parseTheory(
