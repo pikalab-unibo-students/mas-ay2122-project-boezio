@@ -42,8 +42,8 @@ object Sat: UnaryPredicate.NonBacktrackable<ExecutionContext>("sat") {
                 }
             }
             if(first is Struct){ // if it is not, e.g. sat(X), it does not make sense to add constraints
-                val varsMap = chocoModel.variablesMap(vars)
-                val tautMap = tautModel.variablesMap(vars)
+                val varsMap = chocoModel.variablesMap(vars, context.substitution)
+                val tautMap = tautModel.variablesMap(vars, context.substitution)
                 // Imposing constraints
                 val expression = first.accept(ExpressionParser(chocoModel, varsMap.flip())) as LogOp
                 val tautExpression = first.accept(ExpressionParser(tautModel, tautMap.flip())) as LogOp

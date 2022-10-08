@@ -19,7 +19,7 @@ object RandomLabeling: BinaryRelation.NonBacktrackable<ExecutionContext>("random
         }
         val chocoModel = chocoModel
         val vars = second.variables.distinct().toList()
-        val varsMap = chocoModel.variablesMap(vars).toMutableMap()
+        val varsMap = chocoModel.variablesMap(vars, context.substitution).toMutableMap()
         // if the labeling is used only with taut, it must fail
         if (varsMap.isEmpty())
             return replyFail()
@@ -28,10 +28,10 @@ object RandomLabeling: BinaryRelation.NonBacktrackable<ExecutionContext>("random
         for(variable in newVars){
             chocoModel.boolVar(variable.completeName)
         }
-        val newVarsMap = chocoModel.variablesMap(newVars)
+        val newVarsMap = chocoModel.variablesMap(newVars, context.substitution)
         varsMap.putAll(newVarsMap)
         val solver = chocoModel.solver
-        val solutions = solver.solutions(varsMap).toList()
+        val solutions = solver.solutions(varsMap, context.substitution).toList()
         val numSolutions = solutions.size
         return replyWith(solutions[seed.mod(numSolutions)])
     }

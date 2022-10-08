@@ -15,7 +15,7 @@ object Labeling: UnaryPredicate.NonBacktrackable<ExecutionContext>("labeling") {
         }
         val chocoModel = chocoModel
         val vars = first.variables.distinct().toList()
-        val varsMap = chocoModel.variablesMap(vars).toMutableMap()
+        val varsMap = chocoModel.variablesMap(vars, context.substitution).toMutableMap()
         // if the labeling is used only with taut, it must fail
         if (varsMap.isEmpty())
             return replyFail()
@@ -24,9 +24,9 @@ object Labeling: UnaryPredicate.NonBacktrackable<ExecutionContext>("labeling") {
         for(variable in newVars){
             chocoModel.boolVar(variable.completeName)
         }
-        val newVarsMap = chocoModel.variablesMap(newVars)
+        val newVarsMap = chocoModel.variablesMap(newVars, context.substitution)
         varsMap.putAll(newVarsMap)
         val solver = chocoModel.solver
-        return replyWith(solver.solutions(varsMap).first())
+        return replyWith(solver.solutions(varsMap, context.substitution).first())
     }
 }

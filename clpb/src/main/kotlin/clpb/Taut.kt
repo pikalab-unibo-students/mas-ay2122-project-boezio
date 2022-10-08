@@ -40,13 +40,13 @@ object Taut: BinaryRelation.NonBacktrackable<ExecutionContext>("taut") {
                 }
             }
             return if(first is Struct){
-                val varsMap = chocoModel.variablesMap(vars)
+                val varsMap = chocoModel.variablesMap(vars, context.substitution)
                 // Imposing constraints
                 val expression = first.accept(ExpressionParser(chocoModel, varsMap.flip())) as LogOp
                 chocoModel.addClauses(expression)
                 val numPossibleAssignments = 2.0.pow(vars.size).toInt()
                 val solver = chocoModel.solver
-                val solutions = solver.solutions(varsMap).toList()
+                val solutions = solver.solutions(varsMap, context.substitution).toList()
                 val numSolutions = solutions.size
                 return if(numSolutions == numPossibleAssignments){
                     replyWith(Substitution.of(truthValue to Integer.of(1)))
