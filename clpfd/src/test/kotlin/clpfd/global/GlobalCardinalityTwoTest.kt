@@ -18,8 +18,8 @@ class GlobalCardinalityTwoTest: BaseTest() {
             """
             problem(X,Y,Z) :- 
                 ins([X,Y,Z], '..'(1, 3)), 
-                in(W, '..'(2, 2)),
-                in(V, '..'(1, 1)),
+                ins([W], 2),
+                ins([V], 1),
                 global_cardinality([X,Y,Z],['-'(1,W), '-'(2,V)]).
             """.trimIndent()
         )
@@ -51,8 +51,8 @@ class GlobalCardinalityTwoTest: BaseTest() {
             """
             problem(X,Y) :- 
                 ins([X,Y], '..'(1, 3)), 
-                in(W, '..'(2, 2)),
-                in(V, '..'(1, 1)),
+                ins([W], 2),
+                ins([V], 1),
                 global_cardinality([X,Y,1],['-'(1,W), '-'(2,V)]).
             """.trimIndent()
         )
@@ -78,8 +78,8 @@ class GlobalCardinalityTwoTest: BaseTest() {
             """
             problem(X,Y,Z) :- 
                 ins([X,Y,Z], '..'(1, 3)), 
-                in(W, '..'(2, 2)),
-                in(V, '..'(1, 1)),
+                ins([W], 2),
+                ins([V], 1),
                 global_cardinality([X,Y,Z],['+'(1,W), '-'(2,V)]).
             """.trimIndent()
         )

@@ -17,10 +17,9 @@ class Disjoint2Test: BaseTest() {
         val theory = theoryParser.parseTheory(
             """
             problem(X1, Y1, X2, Y2) :- 
-                in(X1, '..'(1, 1)),
-                in(X2, '..'(3, 3)),
-                in(W1, '..'(3, 3)),
-                in(W2, '..'(2, 2)),
+                ins([X1], 1),
+                ins([X2, W1], 3),
+                ins([W2], 2),
                 ins([Y1, Y2], '..'(1, 10)),
                 ins([H1,H2], '..'(1, 6)),
                 disjoint2([f(X1,W1,Y1,H1),g(X2,W2,Y2,H2)]).
@@ -54,10 +53,9 @@ class Disjoint2Test: BaseTest() {
         val theory = theoryParser.parseTheory(
             """
             problem(X1, Y1, X2, Y2) :- 
-                in(X1, '..'(1, 1)),
-                in(X2, '..'(3, 3)),
-                in(W1, '..'(3, 3)),
-                in(W2, '..'(2, 2)),
+                ins([X1], 1),
+                ins([X2, W1], 3),
+                ins([W2], 2),
                 ins([Y1, Y2], '..'(1, 10)),
                 ins([H2], '..'(1, 6)),
                 disjoint2([f(X1,W1,Y1),g(X2,W2,Y2,H2)]).
@@ -84,10 +82,9 @@ class Disjoint2Test: BaseTest() {
         val theory = theoryParser.parseTheory(
             """
             problem(X1, Y1, X2, Y2) :- 
-                in(X1, '..'(1, 1)),
-                in(X2, '..'(3, 3)),
-                in(W1, '..'(3, 3)),
-                in(W2, '..'(2, 2)),
+                ins([X1], 1),
+                ins([X2, W1], 3),
+                ins([W2], 2),
                 ins([Y1, Y2], '..'(1, 10)),
                 ins([H2], '..'(1, 6)),
                 disjoint2([f(a,W1,Y1),g(X2,W2,Y2,H2)]).

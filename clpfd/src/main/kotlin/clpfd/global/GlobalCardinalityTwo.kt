@@ -40,9 +40,13 @@ object GlobalCardinalityTwo : BinaryRelation.NonBacktrackable<ExecutionContext>(
             require(occ is Var) {
                 "$occ is not a variable"
             }
-            occurrences.add(varsMap[occ.castToVar()] as IntVar)
+            val originalOcc = occ.castToVar().getOuterVariable(context.substitution)
+            occurrences.add(varsMap[originalOcc] as IntVar)
         }
-        val chocoVars = listTerms.filterIsInstance<Var>().map { varsMap[it] as IntVar }.toTypedArray()
+        val chocoVars = firstVars.map {
+            val originalVar = it.getOuterVariable(context.substitution)
+            varsMap[originalVar] as IntVar
+        }.toTypedArray()
         val chocoValues = values.toIntArray()
         val chocoOccurrences = occurrences.toTypedArray()
         chocoModel.globalCardinality(chocoVars, chocoValues, chocoOccurrences, true).post()
