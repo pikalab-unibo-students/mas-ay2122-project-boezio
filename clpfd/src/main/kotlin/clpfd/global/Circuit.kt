@@ -6,6 +6,7 @@ import clpCore.flip
 import clpCore.setChocoModel
 import clpCore.variablesMap
 import clpfd.getIntAsVars
+import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -16,15 +17,20 @@ import org.chocosolver.solver.variables.IntVar
 object Circuit: UnaryPredicate.NonBacktrackable<ExecutionContext>("circuit") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
         ensuringArgumentIsList(0)
-        val circuit = first.castToList().toList()
-        val circuitVars = circuit.filterIsInstance<Var>().distinct()
         val chocoModel = chocoModel
-        val varsMap = chocoModel.variablesMap(circuitVars, context.substitution).flip()
-        val intAsVars = getIntAsVars(circuit)
-        val chocoCircuit = circuitVars.map { varsMap[it] as IntVar}.toMutableList()
-        chocoCircuit.addAll(intAsVars)
-        val allVars = chocoCircuit.toList().toTypedArray()
-        chocoModel.circuit(allVars).post()
+        val circuit = first.castToList().toList()
+        val constraintVars = mutableListOf<IntVar>()
+        for(term in circuit){
+            when(term){
+                is Var -> {
+                    val chocoVar = chocoModel.variablesMap(listOf(term), context.substitution).keys.toList()[0] as IntVar
+                    constraintVars.add(chocoVar)
+                }
+                is Integer -> constraintVars.add(chocoModel.intVar(term.value.toInt()))
+                else -> throw IllegalStateException("argument is neither a variable nor an integer")
+            }
+        }
+        chocoModel.circuit(constraintVars.toTypedArray()).post()
         return replySuccess {
             setChocoModel(chocoModel)
         }
