@@ -33,7 +33,7 @@ object ScalarProduct : QuaternaryRelation.NonBacktrackable<ExecutionContext>("sc
             require(elem.let { it is Var || it is LogicInteger }){
                 "$elem is neither a variable nor an integer"
             }
-            Vs.add(getAsIntVar(elem, varsMap))
+            Vs.add(getAsIntVar(elem, varsMap, context.substitution))
         }
         val expParser = ExpressionParser(chocoModel, varsMap, context.substitution)
         val expression = fourth.accept(expParser).intVar()

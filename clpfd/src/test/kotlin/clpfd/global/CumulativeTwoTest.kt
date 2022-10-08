@@ -18,9 +18,9 @@ class CumulativeTwoTest: BaseTest() {
             """
             problem(E1, E2) :- 
                 ins([E1, E2, S1, S2], '..'(1, 10)), 
-                in(H1, '..'(1, 1)), 
-                ins([H2, L, D1, D2], '..'(2, 2)),
-                cumulative([task(S1,D1,E1,H1, _), task(S2,D2,E2,H2,_)], [limit(L)]).
+                ins([H1], 1), 
+                ins([H2, L, D1, D2], 2),
+                cumulative([task(S1,D1,E1,H1,_), task(S2,D2,E2,H2,_)], [limit(L)]).
             """.trimIndent()
         )
 
@@ -50,8 +50,8 @@ class CumulativeTwoTest: BaseTest() {
             """
             problem(E1, E2) :- 
                 ins([E1, E2, S1, S2], '..'(1, 10)), 
-                in(H1, '..'(1, 1)), 
-                ins([H2, L], '..'(2, 2)),
+                ins([H1], 1), 
+                ins([H2, L], 2),
                 cumulative([task(S1,2,E1,H1, _), task(S2,2,E2,H2,_)], [limit(L)]).
             """.trimIndent()
         )
@@ -82,8 +82,8 @@ class CumulativeTwoTest: BaseTest() {
             """
             problem(E1, E2) :- 
                 ins([E1, E2, S1, S2], '..'(1, 10)), 
-                in(H1, '..'(1, 1)), 
-                ins([H2, L, D1], '..'(2, 2)),
+                ins([H1], 1), 
+                ins([H2, L, D1], 2),
                 cumulative([task(S1,D1,E1,H1, _), task(S2,2,E2,H2,_)], [limit(L)]).
             """.trimIndent()
         )
@@ -114,8 +114,8 @@ class CumulativeTwoTest: BaseTest() {
             """
             problem(E1, E2) :- 
                 ins([E1, E2, S1, S2], '..'(1, 10)), 
-                in(H1, '..'(1, 1)), 
-                ins([H2, L, D1], '..'(2, 2)),
+                ins([H1], 1), 
+                ins([H2, L, D1], 2),
                 cumulative([invalid(S1,D1,E1,H1, _), task(S2,2,E2,H2,_)], [limit(L)]).
             """.trimIndent()
         )
@@ -141,8 +141,8 @@ class CumulativeTwoTest: BaseTest() {
             """
             problem(E1, E2) :- 
                 ins([E1, E2, S1, S2], '..'(1, 10)), 
-                in(H1, '..'(1, 1)), 
-                ins([H2, L, D1], '..'(2, 2)),
+                ins([H1], 1), 
+                ins([H2, L, D1], 2),
                 cumulative([task(a,D1,E1,H1, _), task(S2,2,E2,H2,_)], [limit(L)]).
             """.trimIndent()
         )
@@ -168,8 +168,8 @@ class CumulativeTwoTest: BaseTest() {
             """
             problem(E1, E2) :- 
                 ins([E1, E2, S1, S2], '..'(1, 10)), 
-                in(H1, '..'(1, 1)), 
-                ins([H2, L, D1], '..'(2, 2)),
+                ins([H1], 1), 
+                ins([H2, L, D1], 2),
                 cumulative([task(S1,D1,E1,H1, _), task(S2,2,E2,H2,_)], [limit(L), invalid(L)]).
             """.trimIndent()
         )
@@ -195,8 +195,8 @@ class CumulativeTwoTest: BaseTest() {
             """
             problem(E1, E2) :- 
                 ins([E1, E2, S1, S2], '..'(1, 10)), 
-                in(H1, '..'(1, 1)), 
-                ins([H2, L, D1], '..'(2, 2)),
+                ins([H1], 1), 
+                ins([H2, L, D1], 2),
                 cumulative([task(S1,D1,E1,H1, _), task(S2,2,E2,H2,_)], [limit(a)]).
             """.trimIndent()
         )

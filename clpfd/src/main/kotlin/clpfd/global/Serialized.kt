@@ -36,13 +36,13 @@ object Serialized : BinaryRelation.NonBacktrackable<ExecutionContext>("serialize
             require(elem.let { it is Var || it is Integer }){
                 "$elem is neither a variable nor an integer"
             }
-            chocoStarts.add(getAsIntVar(elem, varsMap))
+            chocoStarts.add(getAsIntVar(elem, varsMap, context.substitution))
         }
         for(elem in secondList){
             require(elem.let { it is Var || it is Integer }){
                 "$elem is neither a variable nor an integer"
             }
-            chocoDurations.add(getAsIntVar(elem, varsMap))
+            chocoDurations.add(getAsIntVar(elem, varsMap, context.substitution))
         }
         val zeros = chocoModel.intVarArray(sizeFirst, List(sizeFirst){0}.toIntArray())
         val ones = chocoModel.intVarArray(sizeFirst, List(sizeFirst){1}.toIntArray())

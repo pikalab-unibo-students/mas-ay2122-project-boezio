@@ -18,7 +18,7 @@ object Element : TernaryRelation.NonBacktrackable<ExecutionContext>("element") {
         require(first.let { it is Var || it is LogicInteger }){
             "$first is neither a variable nor an integer"
         }
-        val index = getAsIntVar(first, varsMap)
+        val index = getAsIntVar(first, varsMap, context.substitution)
         ensuringArgumentIsList(1)
         val intVarTable = mutableListOf<IntVar>()
         val table = second.castToList().toList()
@@ -32,7 +32,7 @@ object Element : TernaryRelation.NonBacktrackable<ExecutionContext>("element") {
         require(third.let { it is Var || it is LogicInteger }){
             "$first is neither a variable nor an integer"
         }
-        val value = getAsIntVar(third, varsMap)
+        val value = getAsIntVar(third, varsMap, context.substitution)
         chocoModel.element(value, integerList, index).post()
         return replySuccess {
             setChocoModel(chocoModel)

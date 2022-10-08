@@ -1,6 +1,7 @@
 package clpfd
 
 import clpCore.chocoModel
+import clpCore.getOuterVariable
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
@@ -31,9 +32,10 @@ fun Solve.Request<ExecutionContext>.getIntAsVars(termList: List<Term>): List<Int
     return integerAsVars
 }
 
-fun Solve.Request<ExecutionContext>.getAsIntVar(term: Term, map: Map<Var, Variable>): IntVar {
-    return if(term is Var)
-        map[term.castToVar()] as IntVar
-    else
+fun Solve.Request<ExecutionContext>.getAsIntVar(term: Term, map: Map<Var, Variable>, substitution: Substitution.Unifier): IntVar {
+    return if(term is Var) {
+        val originalVar = term.castToVar().getOuterVariable(substitution)
+        map[originalVar] as IntVar
+    }else
         chocoModel.intVar(term.castToInteger().value.toInt())
 }

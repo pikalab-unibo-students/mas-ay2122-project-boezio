@@ -37,19 +37,19 @@ object LexChain : UnaryPredicate.NonBacktrackable<ExecutionContext>("lex") {
             require(firstTermList[i].let { it is Var || it is Integer }){
                 "${firstTermList[i]} is neither a variable nor an integer"
             }
-            val listElem = getAsIntVar(firstTermList[i], varsMap)
+            val listElem = getAsIntVar(firstTermList[i], varsMap, context.substitution)
             firstList.add(listElem)
         }
         for(i in 0 until secondSize){
             require(secondTermList[i].let { it is Var || it is Integer }){
                 "${secondTermList[i]} is neither a variable nor an integer"
             }
-            val listElem = getAsIntVar(secondTermList[i], varsMap)
+            val listElem = getAsIntVar(secondTermList[i], varsMap, context.substitution)
             secondList.add(listElem)
         }
-        val first = firstList.toTypedArray()
-        val second = secondList.toTypedArray()
-        chocoModel.lexLessEq(first, second).post()
+        val firstLexList = firstList.toTypedArray()
+        val secondLexList = secondList.toTypedArray()
+        chocoModel.lexLessEq(firstLexList, secondLexList).post()
         return replySuccess {
             setChocoModel(chocoModel)
         }

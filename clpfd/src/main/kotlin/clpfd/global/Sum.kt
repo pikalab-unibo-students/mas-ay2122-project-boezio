@@ -26,7 +26,7 @@ object Sum : TernaryRelation.NonBacktrackable<ExecutionContext>("sum") {
             require(elem.let { it is Var || it is Integer }){
                 "$elem is neither a variable nor an integer"
             }
-            varsFirstTerm.add(getAsIntVar(elem, varsMap))
+            varsFirstTerm.add(getAsIntVar(elem, varsMap, context.substitution))
         }
         val expParser = ExpressionParser(chocoModel, varsMap, context.substitution)
         val expression = third.accept(expParser).intVar()

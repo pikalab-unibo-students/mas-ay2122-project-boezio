@@ -35,10 +35,10 @@ object CumulativeTwo : BinaryRelation.NonBacktrackable<ExecutionContext>("cumula
                     "${arguments[i]} is neither a variable nor an integer"
                 }
             }
-            val chocoStart = getAsIntVar(arguments[0], varsMap)
-            val chocoDuration = getAsIntVar(arguments[1], varsMap)
-            val chocoEnd = getAsIntVar(arguments[2], varsMap)
-            val chocoHeight = getAsIntVar(arguments[3], varsMap)
+            val chocoStart = getAsIntVar(arguments[0], varsMap, context.substitution)
+            val chocoDuration = getAsIntVar(arguments[1], varsMap, context.substitution)
+            val chocoEnd = getAsIntVar(arguments[2], varsMap, context.substitution)
+            val chocoHeight = getAsIntVar(arguments[3], varsMap, context.substitution)
             tasks.add(Task(chocoStart, chocoDuration, chocoEnd))
             heights.add(chocoHeight)
         }
@@ -50,7 +50,7 @@ object CumulativeTwo : BinaryRelation.NonBacktrackable<ExecutionContext>("cumula
         require(limitTerm.let { it is Var || it is LogicInteger }) {
             "$limitTerm is not declared neither as a variable nor an integer"
         }
-        val chocoLimit = getAsIntVar(limitTerm, varsMap)
+        val chocoLimit = getAsIntVar(limitTerm, varsMap, context.substitution)
         val chocoTasks = tasks.toTypedArray()
         val chocoHeights = heights.toTypedArray()
         chocoModel.cumulative(chocoTasks, chocoHeights, chocoLimit).post()

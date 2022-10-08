@@ -30,7 +30,7 @@ object TuplesIn : BinaryRelation.NonBacktrackable<ExecutionContext>("tuples") {
             require(elem.let { it is Var || it is Integer }){
                 "$elem is neither a variable nor an integer"
             }
-            tuple.add(getAsIntVar(elem, varsMap))
+            tuple.add(getAsIntVar(elem, varsMap, context.substitution))
         }
         val relation = Tuples(true)
         val tuples = second.castToList().toList()

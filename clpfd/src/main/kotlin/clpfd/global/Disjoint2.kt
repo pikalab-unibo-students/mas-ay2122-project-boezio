@@ -32,10 +32,10 @@ object Disjoint2 : UnaryPredicate.NonBacktrackable<ExecutionContext>("disjoint2"
                     "${rectStructArguments[i]} is neither a variable nor an integer"
                 }
             }
-            xCoordinates.add(getAsIntVar(rectStructArguments[0], varsMap))
-            width.add(getAsIntVar(rectStructArguments[1], varsMap))
-            yCoordinates.add(getAsIntVar(rectStructArguments[2], varsMap))
-            height.add(getAsIntVar(rectStructArguments[3], varsMap))
+            xCoordinates.add(getAsIntVar(rectStructArguments[0], varsMap, context.substitution))
+            width.add(getAsIntVar(rectStructArguments[1], varsMap, context.substitution))
+            yCoordinates.add(getAsIntVar(rectStructArguments[2], varsMap, context.substitution))
+            height.add(getAsIntVar(rectStructArguments[3], varsMap, context.substitution))
         }
         val chocoX = xCoordinates.toTypedArray()
         val chocoY = yCoordinates.toTypedArray()
