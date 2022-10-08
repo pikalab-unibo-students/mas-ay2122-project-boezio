@@ -5,6 +5,7 @@ import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalArgumentException
+import kotlin.test.Ignore
 
 class InsAssignmentTest: BaseTest() {
 
@@ -39,7 +40,7 @@ class InsAssignmentTest: BaseTest() {
         }
     }
 
-    @Test
+    @Test @Ignore
     fun testSecondArgumentNotCompliant() {
 
         val theory = theoryParser.parseTheory(
@@ -65,7 +66,7 @@ class InsAssignmentTest: BaseTest() {
         }
     }
 
-    @Test
+    @Test @Ignore
     fun testVarAlreadyDefinedStruct() {
 
         val theory = theoryParser.parseTheory(

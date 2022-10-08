@@ -41,7 +41,7 @@ class ChainTest: BaseTest() {
         }
     }
 
-    @Test @Ignore
+    @Test
     fun testChainGoal() {
 
         val goal = termParser.parseStruct(
