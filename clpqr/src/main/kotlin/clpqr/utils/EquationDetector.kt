@@ -27,7 +27,7 @@ internal class EquationDetector(
         val struct = term.castToStruct()
         val firstTerm = struct.args[0]
         val secondTerm = struct.args[1]
-        return if(struct.functor.let { it == "==" || it == "=:=" } && firstTerm is Var){
+        return if(struct.functor.let { it == "=" || it == "=:=" } && firstTerm is Var){
             val firstOuter = firstTerm.getOuterVariable(substitution)
             val otherVars = secondTerm.variables.map { it.getOuterVariable(substitution) }.toList()
             mutableMapOf(firstOuter to otherVars)
