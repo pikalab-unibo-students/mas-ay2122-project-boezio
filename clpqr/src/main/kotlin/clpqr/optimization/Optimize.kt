@@ -36,7 +36,7 @@ abstract class Optimize(operator: String): UnaryPredicate.NonBacktrackable<Execu
             val newVarsMap = chocoModel.variablesMap(otherVars, context.substitution)
             varsMap.putAll(newVarsMap)
         }
-        val config = Configuration(problemType = problemType, objective = first)
+        val config = Configuration(problemType = problemType, objective = expressionVar)
         val solver = createChocoSolver(chocoModel, config, varsMap)
         return replyWith(solver.solutions(varsMap, context.substitution).last())
     }

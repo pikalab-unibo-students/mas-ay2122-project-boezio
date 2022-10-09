@@ -48,7 +48,7 @@ class MaximizeTest: BaseTest() {
         }
     }
 
-    @Test @Ignore
+    @Test
     fun testMaximizeVariableGoal(){
 
         val goal = termParser.parseStruct(
@@ -72,6 +72,33 @@ class MaximizeTest: BaseTest() {
                 varOf("X") to realOf(xExpected),
                 varOf("Y") to realOf(yExpected),
                 varOf("Z") to realOf(zExpected)
+            )
+        }
+    }
+
+    @Test
+    fun testMaximizeExpressionGoal(){
+
+        val goal = termParser.parseStruct(
+            "{ 2*X+Y =< 16, X+2*Y =< 11, X+3*Y =< 15 }, maximize(30*X+50*Y)"
+        )
+
+        val solver = Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries = ClpQRLibrary.toRuntime(),
+            flags = FlagStore.DEFAULT + (Precision to Real.of(precision))
+        )
+
+        val solution = solver.solveOnce(goal)
+
+        val xExpected = "7.0001079596553750"
+        val yExpected = "2.0007557175876030"
+        val zExpected = "309.9924428241242000"
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                precision,
+                varOf("X") to realOf(xExpected),
+                varOf("Y") to realOf(yExpected)
             )
         }
     }
