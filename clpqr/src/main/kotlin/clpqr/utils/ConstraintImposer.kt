@@ -2,18 +2,16 @@ package clpqr.utils
 
 import clpCore.flip
 import clpCore.variablesMap
-import it.unibo.tuprolog.core.Struct
-import it.unibo.tuprolog.core.Substitution
-import it.unibo.tuprolog.core.Term
-import it.unibo.tuprolog.core.Tuple
+import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
+import it.unibo.tuprolog.solve.ExecutionContext
 import org.chocosolver.solver.Model
 import org.chocosolver.solver.expression.continuous.arithmetic.CArExpression
 import org.chocosolver.solver.expression.continuous.relational.CReExpression
 
 internal class ConstraintImposer(
     private val chocoModel: Model,
-    private val substitution: Substitution.Unifier
+    private val context: ExecutionContext
 ) : DefaultTermVisitor<Unit>() {
     override fun defaultValue(term: Term) = throw IllegalStateException("Cannot handle $term as constraint")
 
@@ -34,8 +32,7 @@ internal class ConstraintImposer(
             "=<" -> applyRelOperator(firstTerm, secondTerm, CArExpression::le, chocoModel)
             "<=" -> applyRelOperator(firstTerm, secondTerm, CArExpression::le, chocoModel)
             ">=" -> applyRelOperator(firstTerm, secondTerm, CArExpression::ge, chocoModel)
-            "=:=" -> applyRelOperator(firstTerm, secondTerm, CArExpression::eq, chocoModel)
-            "=" -> applyRelOperator(firstTerm, secondTerm, CArExpression::eq, chocoModel)
+            "=:=", "="-> applyRelOperator(firstTerm, secondTerm, CArExpression::eq, chocoModel)
             else -> throw IllegalStateException("Cannot handle constraint ${struct.functor}")
         }
     }
@@ -47,8 +44,8 @@ internal class ConstraintImposer(
         model: Model
     ){
         val logicalVars = (firstTerm.variables + secondTerm.variables).toSet()
-        val varMap = model.variablesMap(logicalVars, substitution).flip()
-        val parser = ExpressionParser(model, varMap, substitution)
+        val varMap = model.variablesMap(logicalVars, context.substitution).flip()
+        val parser = ExpressionParser(model, varMap, context.substitution)
         val firstExpression = firstTerm.accept(parser)
         val secondExpression = secondTerm.accept(parser)
         operation(firstExpression, secondExpression).equation().post()

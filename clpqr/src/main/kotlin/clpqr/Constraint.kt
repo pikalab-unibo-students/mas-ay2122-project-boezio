@@ -3,9 +3,8 @@ package clpqr
 import clpCore.chocoModel
 import clpCore.getOuterVariable
 import clpCore.setChocoModel
+import clpqr.utils.*
 import clpqr.utils.ConstraintImposer
-import clpqr.utils.constraints
-import clpqr.utils.setConstraints
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.exception.error.TypeError
@@ -19,6 +18,7 @@ object Constraint: UnaryPredicate.NonBacktrackable<ExecutionContext>("{}") {
             throw TypeError.forArgument(context, signature, TypeError.Expected.COMPOUND, first, 0)
         }
         val chocoModel = chocoModel
+        val equations = equations
         val subContext = context.substitution
         val modelVarNames = chocoModel.vars.map { it.name }
         // Creation of new variables (simplified version)
@@ -37,11 +37,14 @@ object Constraint: UnaryPredicate.NonBacktrackable<ExecutionContext>("{}") {
             constraints.add(first)
         }
         // Imposing constraints
-        first.accept(ConstraintImposer(chocoModel, context.substitution))
-
+        first.accept(ConstraintImposer(chocoModel, context))
+        // checking equality constraints
+        val eqDetector = EquationDetector(context.substitution, equations)
+        val updatedEquations = first.accept(eqDetector)
         return replySuccess {
             setChocoModel(chocoModel)
             setConstraints(constraints)
+            setEquations(updatedEquations)
         }
     }
 }

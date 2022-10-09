@@ -91,3 +91,16 @@ internal fun Solve.Request<ExecutionContext>.convertExpression(
         return newExpr
     }
 }
+
+internal const val EQUATIONS = "equations"
+
+val Solve.Request<ExecutionContext>.equations
+    get() = if (EQUATIONS !in context.customData.durable) {
+        mutableMapOf<Var,List<Var>>()
+    } else {
+        context.customData.durable[EQUATIONS] as MutableMap<Var, List<Var>>
+    }
+
+fun SideEffectsBuilder.setEquations(equations: MutableMap<Var,List<Var>>) {
+    setDurableData(EQUATIONS, equations)
+}
