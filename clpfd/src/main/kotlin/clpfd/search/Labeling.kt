@@ -34,11 +34,11 @@ object Labeling : BinaryRelation<ExecutionContext>("labeling") {
         val chocoToLogic: Map<Variable, Var> = chocoModel.variablesMap(logicVariables, context.substitution)
         val solver = createChocoSolver(chocoModel, configuration, chocoToLogic, context.substitution)
         return if (configuration.problemType == ProblemType.SATISFY) {
-            solver.solutions(chocoToLogic, context.substitution).map {
+            solver.solutions(chocoToLogic).map {
                 replyWith(it)
             }
         } else {
-            sequenceOf(replyWith(solver.solutions(chocoToLogic, context.substitution).last()))
+            sequenceOf(replyWith(solver.solutions(chocoToLogic).last()))
         }
     }
 

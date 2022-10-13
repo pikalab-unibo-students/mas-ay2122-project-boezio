@@ -59,6 +59,6 @@ object WeightedMaximum: TernaryRelation.NonBacktrackable<ExecutionContext>("weig
         // generate solution
         model.setObjective(Model.MAXIMIZE, varsMap.flip()[maximum])
         val solver = model.solver
-        return replyWith(solver.solutions(varsMap, context.substitution).last())
+        return replyWith(solver.solutions(varsMap).last())
     }
 }

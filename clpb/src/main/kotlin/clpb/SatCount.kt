@@ -46,7 +46,7 @@ object SatCount: BinaryRelation.NonBacktrackable<ExecutionContext>("sat_count") 
         val expression = first.accept(ExpressionParser(chocoModel, varsMap.flip())) as LogOp
         chocoModel.addClauses(expression)
         val solver = chocoModel.solver
-        val numSolutions = solver.solutions(varsMap, context.substitution).toList().size
+        val numSolutions = solver.solutions(varsMap).toList().size
         return replyWith(Substitution.of(count to Integer.of(numSolutions)))
     }
 }

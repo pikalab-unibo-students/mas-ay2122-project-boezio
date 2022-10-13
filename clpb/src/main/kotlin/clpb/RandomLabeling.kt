@@ -31,7 +31,7 @@ object RandomLabeling: BinaryRelation.NonBacktrackable<ExecutionContext>("random
         val newVarsMap = chocoModel.variablesMap(newVars, context.substitution)
         varsMap.putAll(newVarsMap)
         val solver = chocoModel.solver
-        val solutions = solver.solutions(varsMap, context.substitution).toList()
+        val solutions = solver.solutions(varsMap).toList()
         val numSolutions = solutions.size
         return replyWith(solutions[seed.mod(numSolutions)])
     }

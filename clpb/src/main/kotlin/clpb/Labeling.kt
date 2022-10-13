@@ -27,6 +27,6 @@ object Labeling: UnaryPredicate.NonBacktrackable<ExecutionContext>("labeling") {
         val newVarsMap = chocoModel.variablesMap(newVars, context.substitution)
         varsMap.putAll(newVarsMap)
         val solver = chocoModel.solver
-        return replyWith(solver.solutions(varsMap, context.substitution).first())
+        return replyWith(solver.solutions(varsMap).first())
     }
 }

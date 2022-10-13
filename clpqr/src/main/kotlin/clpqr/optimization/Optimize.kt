@@ -9,7 +9,6 @@ import clpqr.search.ProblemType
 import clpqr.utils.convertExpression
 import clpqr.utils.createChocoSolver
 import clpqr.utils.equations
-import clpqr.utils.filterNotConstantVar
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
@@ -38,6 +37,6 @@ abstract class Optimize(operator: String): UnaryPredicate.NonBacktrackable<Execu
         }
         val config = Configuration(problemType = problemType, objective = expressionVar)
         val solver = createChocoSolver(chocoModel, config, varsMap)
-        return replyWith(solver.solutions(varsMap, context.substitution).last())
+        return replyWith(solver.solutions(varsMap).last())
     }
 }

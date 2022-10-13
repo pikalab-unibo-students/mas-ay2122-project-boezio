@@ -61,21 +61,13 @@ fun <K, V> Map<K, V>.flip(): Map<V, K> = map { (k, v) -> v to k }.toMap()
 
 // why? see https://choco-solver.org/docs/solving/solving/#mono-objective-optimization
 // how? see https://kotlinlang.org/docs/sequences.html#from-chunks
-fun Solver.solutions(chocoToLogic: Map<Variable, Var>, substitution: Substitution.Unifier): Sequence<Substitution> = sequence {
+fun Solver.solutions(chocoToLogic: Map<Variable, Var>): Sequence<Substitution> = sequence {
     var atLeastOne = false
     while (solve()) {
         atLeastOne = true
-        yield(Substitution.of(chocoToLogic.map { (k, v) -> substitution.getSpecific(v) to k.valueAsTerm }))
+        yield(Substitution.of(chocoToLogic.map { (k, v) -> v to k.valueAsTerm }))
     }
     if (!atLeastOne) {
         yield(Substitution.failed())
     }
-}
-
-private fun Substitution.getSpecific(variable: Var): Var {
-    var current = variable
-    while (this[current]?.isVar == true) {
-        current = this[current]?.asVar()!!
-    }
-    return current
 }

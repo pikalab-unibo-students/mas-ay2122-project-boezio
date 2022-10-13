@@ -46,7 +46,7 @@ object Taut: BinaryRelation.NonBacktrackable<ExecutionContext>("taut") {
                 chocoModel.addClauses(expression)
                 val numPossibleAssignments = 2.0.pow(vars.size).toInt()
                 val solver = chocoModel.solver
-                val solutions = solver.solutions(varsMap, context.substitution).toList()
+                val solutions = solver.solutions(varsMap).toList()
                 val numSolutions = solutions.size
                 return if(numSolutions == numPossibleAssignments){
                     replyWith(Substitution.of(truthValue to Integer.of(1)))
