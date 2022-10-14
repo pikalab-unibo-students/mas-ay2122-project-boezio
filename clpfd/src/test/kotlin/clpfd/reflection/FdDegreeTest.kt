@@ -14,7 +14,7 @@ class FdDegreeTest: BaseTest() {
             "in(X,'..'(1,10)), fd_degree(X,Degree)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -32,7 +32,7 @@ class FdDegreeTest: BaseTest() {
             "in(X,'..'(1,10)), fd_degree(X,0)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -46,7 +46,7 @@ class FdDegreeTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), fd_degree(X,Degree)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -64,7 +64,7 @@ class FdDegreeTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_degree(X,Degree)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -82,7 +82,7 @@ class FdDegreeTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_degree(X,3)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

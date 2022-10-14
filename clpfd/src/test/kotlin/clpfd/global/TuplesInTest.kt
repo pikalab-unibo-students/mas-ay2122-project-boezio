@@ -24,7 +24,7 @@ class TuplesInTest: BaseTest() {
             "problem(X,Y),label([X,Y])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -51,7 +51,7 @@ class TuplesInTest: BaseTest() {
             "problem(Y),label([Y])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -77,7 +77,7 @@ class TuplesInTest: BaseTest() {
             "problem(X,Y,Z,W),label([X,Y,Z,W])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -104,7 +104,7 @@ class TuplesInTest: BaseTest() {
             "problem(X,Y,Z,W),label([X,Y,Z,W])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -126,7 +126,7 @@ class TuplesInTest: BaseTest() {
             "problem(X,Y,Z,W),label([X,Y,Z,W])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)

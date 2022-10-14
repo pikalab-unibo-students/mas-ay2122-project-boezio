@@ -23,7 +23,7 @@ class CumulativeOneTest: BaseTest() {
             "problem(E1,E2),label([E1,E2])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 

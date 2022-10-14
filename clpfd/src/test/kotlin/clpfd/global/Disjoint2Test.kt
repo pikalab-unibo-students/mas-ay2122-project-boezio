@@ -27,7 +27,7 @@ class Disjoint2Test: BaseTest() {
             "problem(X1, Y1, X2, Y2),label([X1,Y1, X2, Y2])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -60,7 +60,7 @@ class Disjoint2Test: BaseTest() {
             "problem(X1, Y1, X2, Y2),label([X1,Y1, X2, Y2])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -86,7 +86,7 @@ class Disjoint2Test: BaseTest() {
             "problem(X1, Y1, X2, Y2),label([X1,Y1, X2, Y2])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)

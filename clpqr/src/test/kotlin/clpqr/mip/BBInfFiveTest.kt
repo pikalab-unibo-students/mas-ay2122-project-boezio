@@ -14,7 +14,7 @@ class BBInfFiveTest: BaseTest() {
             "{X >= Y+Z, Y >= 1, Z >= 1}, bb_inf([Y,Z],X,Inf,Vertex,0.0)."
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -38,7 +38,7 @@ class BBInfFiveTest: BaseTest() {
             "{2*X+Y >= 16, X+2*Y >= 11,X+3*Y >= 15}, bb_inf([X,Y], 30*X+50*Y, Inf, Vertex, 0.0)."
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

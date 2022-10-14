@@ -24,7 +24,7 @@ class ScalarProductTest: BaseTest() {
             "problem(X,Y),label([X,Y])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -53,7 +53,7 @@ class ScalarProductTest: BaseTest() {
             "problem(X,Y,Z),label([X,Y,Z])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -83,7 +83,7 @@ class ScalarProductTest: BaseTest() {
             "problem(X,Y,Z),label([X,Y,Z])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -111,7 +111,7 @@ class ScalarProductTest: BaseTest() {
             "problem(X),label([X])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -137,7 +137,7 @@ class ScalarProductTest: BaseTest() {
             "problem(X),label([X])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -159,7 +159,7 @@ class ScalarProductTest: BaseTest() {
             "problem(X),label([X])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)

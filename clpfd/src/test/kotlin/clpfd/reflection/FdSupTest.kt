@@ -14,7 +14,7 @@ class FdSupTest: BaseTest() {
             "in(X,'..'(1,10)), fd_sup(X,Sup)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -32,7 +32,7 @@ class FdSupTest: BaseTest() {
             "in(X,'..'(1,10)), fd_sup(X,10)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -46,7 +46,7 @@ class FdSupTest: BaseTest() {
             "in(X,'..'(1,10)), '#<'(X,10), fd_sup(X,Sup)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -64,7 +64,7 @@ class FdSupTest: BaseTest() {
             "in(X,'..'(1,10)), #<(X,10), fd_sup(X,9)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

@@ -15,7 +15,7 @@ class BBInfFourTests: BaseTest() {
             "{X >= Y+Z, Y >= 1, Z >= 1}, bb_inf([Y,Z],X,Inf,Vertex)."
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

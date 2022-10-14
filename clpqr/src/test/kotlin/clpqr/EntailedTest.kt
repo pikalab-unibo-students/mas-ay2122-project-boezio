@@ -13,7 +13,7 @@ class EntailedTest: BaseTest() {
             "{ X > 10.0 }, entailed(X > 0.0), satisfy([X,Y])"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -30,7 +30,7 @@ class EntailedTest: BaseTest() {
             "{ X > Y, Y > Z }, entailed(Z > X), satisfy([X,Y,Z])"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -44,7 +44,7 @@ class EntailedTest: BaseTest() {
             "{ X > 10.0 }, entailed(X < 5.0), satisfy([X,Y])"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

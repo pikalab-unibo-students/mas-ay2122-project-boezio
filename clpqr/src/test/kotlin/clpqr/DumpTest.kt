@@ -15,7 +15,7 @@ class DumpTest: BaseTest() {
             "{}('='('+'(X,Y), 10.0)), dump([X,Y],[a,b],Cons)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -40,7 +40,7 @@ class DumpTest: BaseTest() {
             "{}('='('+'(X,Y), 10.0)), dump([X,Y],[a,f(a)],Cons)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

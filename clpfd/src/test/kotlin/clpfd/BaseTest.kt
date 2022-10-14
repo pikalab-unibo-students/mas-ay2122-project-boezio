@@ -13,7 +13,7 @@ abstract class BaseTest {
     protected val theoryParser = ClausesParser.withDefaultOperators()
 
     // returns a solver for clpfd problems
-    protected fun get_solver(theory: Theory = Theory.empty()): Solver =
+    protected fun getSolver(theory: Theory = Theory.empty()): Solver =
         Solver.prolog.solverWithDefaultBuiltins(
             staticKb = theory,
             otherLibraries =  ClpFdLibrary.toRuntime()

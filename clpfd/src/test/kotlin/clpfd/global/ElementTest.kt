@@ -24,7 +24,7 @@ class ElementTest: BaseTest() {
             "problem(X,Y),label([X,Y])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -51,7 +51,7 @@ class ElementTest: BaseTest() {
             "problem(X),label([X])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -73,7 +73,7 @@ class ElementTest: BaseTest() {
             "problem(X),label([X])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -95,7 +95,7 @@ class ElementTest: BaseTest() {
             "problem(X),label([X])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)

@@ -13,7 +13,7 @@ class FdVarTest: BaseTest() {
             "in(X,'..'(1,10)), fd_var(X)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -27,7 +27,7 @@ class FdVarTest: BaseTest() {
             "in(X,'..'(1,10)), fd_var(Y)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -41,7 +41,7 @@ class FdVarTest: BaseTest() {
             "in(X,'..'(1,10)), fd_var(1)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

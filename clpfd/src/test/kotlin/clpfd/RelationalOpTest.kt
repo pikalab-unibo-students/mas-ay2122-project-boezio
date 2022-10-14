@@ -24,7 +24,7 @@ class RelationalOpTest: BaseTest() {
             """.trimIndent()
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -48,7 +48,7 @@ class RelationalOpTest: BaseTest() {
             """.trimIndent()
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -73,7 +73,7 @@ class RelationalOpTest: BaseTest() {
             """.trimIndent()
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -97,7 +97,7 @@ class RelationalOpTest: BaseTest() {
             """.trimIndent()
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -121,7 +121,7 @@ class RelationalOpTest: BaseTest() {
             """.trimIndent()
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -145,7 +145,7 @@ class RelationalOpTest: BaseTest() {
             """.trimIndent()
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 

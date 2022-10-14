@@ -11,7 +11,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #\\(#>(X,3)) , label([X])"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -29,7 +29,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #\\/(#<(X,3), #>(X,5)) , label([X])"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -47,7 +47,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #/\\(#<(X,6), #>(X,2)) , label([X])"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -65,7 +65,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #\\(#<(X,6), #>(X,2)) , label([X])"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -83,7 +83,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #<==>(#<(X,6), #>(X,2)) , label([X])"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -101,7 +101,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #==>(#<(X,6), #>(X,2)) , label([X])"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -119,7 +119,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #<==(#<(X,6), #>(X,2)) , label([X])"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -137,7 +137,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #\\/(#=(X,1),#/\\(#<(X,6), #>(X,2))) , label([X])"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

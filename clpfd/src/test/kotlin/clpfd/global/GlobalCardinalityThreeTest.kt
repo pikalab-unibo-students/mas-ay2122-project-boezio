@@ -24,7 +24,7 @@ class GlobalCardinalityThreeTest: BaseTest() {
             "problem(X,Y,Z),label([X,Y,Z])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalStateException> {
             solver.solveOnce(goal)

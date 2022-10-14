@@ -14,7 +14,7 @@ class FdInfTest: BaseTest() {
             "in(X,'..'(1,10)), fd_inf(X,Inf)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -32,7 +32,7 @@ class FdInfTest: BaseTest() {
             "in(X,'..'(1,10)), fd_inf(X,1)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -46,7 +46,7 @@ class FdInfTest: BaseTest() {
             "in(X,'..'(1,10)), '#>'(X,1), fd_inf(X,Inf)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -64,7 +64,7 @@ class FdInfTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), fd_inf(X,2)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

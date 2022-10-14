@@ -19,7 +19,7 @@ class SatisfyTest: BaseTest() {
             "problem(X, Y),satisfy([X, Y])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -39,7 +39,7 @@ class SatisfyTest: BaseTest() {
             "{ X + Y = 10.0 }, satisfy([X, Y])",
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

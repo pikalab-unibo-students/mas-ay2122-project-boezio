@@ -21,7 +21,7 @@ class InfTest: BaseTest() {
             "problem(X,Y,Z),inf(Z,Inf)"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -51,7 +51,7 @@ class InfTest: BaseTest() {
             "problem(X,Y,Z),sup(30*X+50*Y,Sup)"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 

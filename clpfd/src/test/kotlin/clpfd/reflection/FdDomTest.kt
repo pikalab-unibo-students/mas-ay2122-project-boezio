@@ -17,7 +17,7 @@ class FdDomTest: BaseTest() {
             "in(X,'..'(1,10)), fd_dom(X,Dom)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -35,7 +35,7 @@ class FdDomTest: BaseTest() {
             "in(X,'..'(1,10)), fd_dom(X,'..'(1,10))"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -49,7 +49,7 @@ class FdDomTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), fd_dom(X,Dom)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -67,7 +67,7 @@ class FdDomTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_dom(X,'..'(2,9))"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -81,7 +81,7 @@ class FdDomTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_dom(X,5)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -95,7 +95,7 @@ class FdDomTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_dom(X,'..'(1,10))"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

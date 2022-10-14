@@ -24,7 +24,7 @@ class SerializedTest: BaseTest() {
             "problem(S1,S2,S3,S4),label([S1,S2,S3,S4])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -54,7 +54,7 @@ class SerializedTest: BaseTest() {
             "problem(S1,S3,S4),label([S1,S3,S4])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -83,7 +83,7 @@ class SerializedTest: BaseTest() {
             "problem(S1,S3),label([S1,S3])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -106,7 +106,7 @@ class SerializedTest: BaseTest() {
             "problem(S1,S2,S3,S4),label([S1,S2,S3,S4])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -129,7 +129,7 @@ class SerializedTest: BaseTest() {
             "problem(S1,S2,S3,S4),label([S1,S2,S3,S4])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)

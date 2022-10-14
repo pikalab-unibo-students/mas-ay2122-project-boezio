@@ -20,7 +20,7 @@ class ZCompareTest: BaseTest() {
             "problem(X,Y),label([X,Y])"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 

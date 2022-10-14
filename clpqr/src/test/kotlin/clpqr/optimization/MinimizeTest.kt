@@ -25,7 +25,7 @@ class MinimizeTest: BaseTest() {
             "problem(X,Y,Z),minimize(Z)"
         )
 
-        val solver = get_solver(theory)
+        val solver = getSolver(theory)
 
         val solution = solver.solveOnce(goal)
 

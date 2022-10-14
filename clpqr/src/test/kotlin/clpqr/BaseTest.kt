@@ -14,7 +14,7 @@ abstract class BaseTest {
     protected val theoryParser = ClausesParser.withDefaultOperators()
     protected val precision = 0.1
 
-    protected fun get_solver(theory: Theory = Theory.empty()): Solver =
+    protected fun getSolver(theory: Theory = Theory.empty()): Solver =
         Solver.prolog.solverWithDefaultBuiltins(
             otherLibraries = ClpQRLibrary.toRuntime(),
             flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),

@@ -14,7 +14,7 @@ class FdSizeTest: BaseTest() {
             "in(X,'..'(1,10)), fd_size(X,Size)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -32,7 +32,7 @@ class FdSizeTest: BaseTest() {
             "in(X,'..'(1,10)), fd_size(X,10)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -46,7 +46,7 @@ class FdSizeTest: BaseTest() {
             "in(X,'..'(1,10)), '#>'(X,1), fd_size(X,Size)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -64,7 +64,7 @@ class FdSizeTest: BaseTest() {
             "in(X,'..'(1,10)), '#>'(X,1), fd_size(X,9)"
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

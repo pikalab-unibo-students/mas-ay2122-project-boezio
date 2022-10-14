@@ -13,7 +13,7 @@ class BBInfThreeTest: BaseTest() {
             "{X >= Y+Z, Y >= 1, Z >= 1}, bb_inf([Y,Z],X,Inf)."
         )
 
-        val solver = get_solver()
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
