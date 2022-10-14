@@ -1,10 +1,6 @@
 package clpqr.optimization
 
 import clpqr.*
-import it.unibo.tuprolog.core.Real
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.flags.FlagStore
-import  it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 
 class MaximizeTest: BaseTest() {
@@ -50,10 +46,7 @@ class MaximizeTest: BaseTest() {
             "{ 2*X+Y =< 16, X+2*Y =< 11, X+3*Y =< 15, Z = 30*X+50*Y }, maximize(Z)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpQRLibrary.toRuntime(),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision))
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -78,10 +71,7 @@ class MaximizeTest: BaseTest() {
             "{ 2*X+Y =< 16, X+2*Y =< 11, X+3*Y =< 15 }, maximize(30*X+50*Y)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpQRLibrary.toRuntime(),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision))
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

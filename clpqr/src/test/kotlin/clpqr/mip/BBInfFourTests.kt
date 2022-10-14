@@ -2,8 +2,6 @@ package clpqr.mip
 
 import clpqr.BaseTest
 import clpqr.assertSolutionAssigns
-import it.unibo.tuprolog.core.List
-import it.unibo.tuprolog.core.Real
 import org.junit.jupiter.api.Test
 
 class BBInfFourTests: BaseTest() {
@@ -20,8 +18,9 @@ class BBInfFourTests: BaseTest() {
         val solution = solver.solveOnce(goal)
 
         val xExpected = "2.0"
-        val elem = Real.of(1.0)
-        val vertexExpected = List.of(elem, elem)
+        val vertexExpected = termParser.parseStruct(
+            "[1.0, 1.0]"
+        )
 
         termParser.scope.with {
             solution.assertSolutionAssigns(

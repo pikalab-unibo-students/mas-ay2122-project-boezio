@@ -1,8 +1,6 @@
 package clpqr.mip
 
 import clpqr.*
-import it.unibo.tuprolog.core.Real
-import it.unibo.tuprolog.core.List as LogicList
 import org.junit.jupiter.api.Test
 
 class BBInfFiveTest: BaseTest() {
@@ -19,8 +17,9 @@ class BBInfFiveTest: BaseTest() {
         val solution = solver.solveOnce(goal)
 
         val xExpected = "2.0"
-        val elem = Real.of(1.0)
-        val vertexExpected = LogicList.of(elem, elem)
+        val vertexExpected = termParser.parseStruct(
+            "[1.0, 1.0]"
+        )
 
         termParser.scope.with {
             solution.assertSolutionAssigns(
@@ -43,9 +42,9 @@ class BBInfFiveTest: BaseTest() {
         val solution = solver.solveOnce(goal)
 
         val exprExpected = "360.0"
-        val xExpected = Real.of(7.0)
-        val yExpected = Real.of(3.0)
-        val vertexExpected = LogicList.of(xExpected, yExpected)
+        val vertexExpected = termParser.parseStruct(
+            "[7.0, 3.0]"
+        )
 
         termParser.scope.with {
             solution.assertSolutionAssigns(
