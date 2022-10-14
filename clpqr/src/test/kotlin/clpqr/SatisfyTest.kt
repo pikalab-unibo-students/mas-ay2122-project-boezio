@@ -1,15 +1,8 @@
 package clpqr
 
-import it.unibo.tuprolog.core.Real
-import it.unibo.tuprolog.core.Var
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.flags.FlagStore
-import  it.unibo.tuprolog.solve.library.toRuntime
-import org.junit.jupiter.api.Assertions.assertTrue
+
 import org.junit.jupiter.api.Test
-import kotlin.math.abs
-import kotlin.test.Ignore
-import kotlin.test.assertNotNull
+
 
 class SatisfyTest: BaseTest() {
 
@@ -26,11 +19,7 @@ class SatisfyTest: BaseTest() {
             "problem(X, Y),satisfy([X, Y])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpQRLibrary.toRuntime(),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
-            staticKb = theory
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -50,10 +39,7 @@ class SatisfyTest: BaseTest() {
             "{ X + Y = 10.0 }, satisfy([X, Y])",
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpQRLibrary.toRuntime(),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision))
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 

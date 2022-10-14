@@ -6,7 +6,6 @@ import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.flags.FlagStore
 import  it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
 class MaximizeTest: BaseTest() {
 
@@ -26,11 +25,7 @@ class MaximizeTest: BaseTest() {
             "problem(X,Y,Z),maximize(Z)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpQRLibrary.toRuntime(),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
-            staticKb = theory
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -92,7 +87,6 @@ class MaximizeTest: BaseTest() {
 
         val xExpected = "7.0001079596553750"
         val yExpected = "2.0007557175876030"
-        val zExpected = "309.9924428241242000"
 
         termParser.scope.with {
             solution.assertSolutionAssigns(

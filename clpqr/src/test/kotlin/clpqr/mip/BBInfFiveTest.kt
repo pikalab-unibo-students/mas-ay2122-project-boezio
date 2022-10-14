@@ -1,12 +1,8 @@
 package clpqr.mip
 
 import clpqr.*
-import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Real
 import it.unibo.tuprolog.core.List as LogicList
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.flags.FlagStore
-import  it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 
 class BBInfFiveTest: BaseTest() {
@@ -18,10 +14,7 @@ class BBInfFiveTest: BaseTest() {
             "{X >= Y+Z, Y >= 1, Z >= 1}, bb_inf([Y,Z],X,Inf,Vertex,0.0)."
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpQRLibrary.toRuntime(),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -45,10 +38,7 @@ class BBInfFiveTest: BaseTest() {
             "{2*X+Y >= 16, X+2*Y >= 11,X+3*Y >= 15}, bb_inf([X,Y], 30*X+50*Y, Inf, Vertex, 0.0)."
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpQRLibrary.toRuntime(),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 

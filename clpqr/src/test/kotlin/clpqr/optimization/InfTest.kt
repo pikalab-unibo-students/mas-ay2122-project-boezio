@@ -1,12 +1,7 @@
 package clpqr.optimization
 
 import clpqr.*
-import it.unibo.tuprolog.core.Real
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.flags.FlagStore
-import  it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
 class InfTest: BaseTest() {
 
@@ -26,11 +21,7 @@ class InfTest: BaseTest() {
             "problem(X,Y,Z),inf(Z,Inf)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpQRLibrary.toRuntime(),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
-            staticKb = theory
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -60,11 +51,7 @@ class InfTest: BaseTest() {
             "problem(X,Y,Z),sup(30*X+50*Y,Sup)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpQRLibrary.toRuntime(),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
-            staticKb = theory
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 

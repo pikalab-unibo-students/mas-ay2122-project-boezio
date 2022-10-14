@@ -25,11 +25,7 @@ class MinimizeTest: BaseTest() {
             "problem(X,Y,Z),minimize(Z)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpQRLibrary.toRuntime(),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
-            staticKb = theory
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -93,7 +89,6 @@ class MinimizeTest: BaseTest() {
 
         val xExpected = "6.6000961909180020"
         val yExpected = "2.8000366441592393"
-        val zExpected = "338.0012825455731300"
 
         termParser.scope.with {
             solution.assertSolutionAssigns(
