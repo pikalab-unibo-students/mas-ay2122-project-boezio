@@ -1,10 +1,7 @@
 package clpfd.global
 
 import clpfd.BaseTest
-import clpfd.ClpFdLibrary
 import clpfd.assertSolutionAssigns
-import it.unibo.tuprolog.solve.Solver
-import  it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalArgumentException
@@ -27,10 +24,7 @@ class ElementTest: BaseTest() {
             "problem(X,Y),label([X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -57,10 +51,7 @@ class ElementTest: BaseTest() {
             "problem(X),label([X])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -82,10 +73,7 @@ class ElementTest: BaseTest() {
             "problem(X),label([X])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -107,10 +95,7 @@ class ElementTest: BaseTest() {
             "problem(X),label([X])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)

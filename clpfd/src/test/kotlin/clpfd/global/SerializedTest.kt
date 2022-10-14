@@ -1,10 +1,7 @@
 package clpfd.global
 
 import clpfd.BaseTest
-import clpfd.ClpFdLibrary
 import clpfd.assertSolutionAssigns
-import it.unibo.tuprolog.solve.Solver
-import  it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalArgumentException
@@ -27,10 +24,7 @@ class SerializedTest: BaseTest() {
             "problem(S1,S2,S3,S4),label([S1,S2,S3,S4])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -60,10 +54,7 @@ class SerializedTest: BaseTest() {
             "problem(S1,S3,S4),label([S1,S3,S4])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -92,10 +83,7 @@ class SerializedTest: BaseTest() {
             "problem(S1,S3),label([S1,S3])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -118,10 +106,7 @@ class SerializedTest: BaseTest() {
             "problem(S1,S2,S3,S4),label([S1,S2,S3,S4])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -144,10 +129,7 @@ class SerializedTest: BaseTest() {
             "problem(S1,S2,S3,S4),label([S1,S2,S3,S4])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)

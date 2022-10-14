@@ -1,12 +1,10 @@
 package clpfd
 
 import it.unibo.tuprolog.core.parsing.TermParser
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
 
-class RelationalOpTest {
+class RelationalOpTest: BaseTest() {
 
     private val parser = TermParser.withDefaultOperators()
 
@@ -26,10 +24,7 @@ class RelationalOpTest {
             """.trimIndent()
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -53,10 +48,7 @@ class RelationalOpTest {
             """.trimIndent()
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -81,10 +73,7 @@ class RelationalOpTest {
             """.trimIndent()
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -108,10 +97,7 @@ class RelationalOpTest {
             """.trimIndent()
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -135,10 +121,7 @@ class RelationalOpTest {
             """.trimIndent()
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -162,10 +145,7 @@ class RelationalOpTest {
             """.trimIndent()
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 

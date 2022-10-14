@@ -6,7 +6,6 @@ import clpfd.assertSolutionAssigns
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
 class ChainTest: BaseTest() {
 
@@ -25,10 +24,7 @@ class ChainTest: BaseTest() {
             "problem(X,Y,Z), label([X,Y,Z])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpFdLibrary.toRuntime(),
-            staticKb = theory
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 

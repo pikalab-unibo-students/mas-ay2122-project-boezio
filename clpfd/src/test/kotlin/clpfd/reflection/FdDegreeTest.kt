@@ -1,10 +1,7 @@
 package clpfd.reflection
 
 import clpfd.BaseTest
-import clpfd.ClpFdLibrary
 import clpfd.assertSolutionAssigns
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
@@ -17,9 +14,7 @@ class FdDegreeTest: BaseTest() {
             "in(X,'..'(1,10)), fd_degree(X,Degree)"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -37,9 +32,7 @@ class FdDegreeTest: BaseTest() {
             "in(X,'..'(1,10)), fd_degree(X,0)"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -53,9 +46,7 @@ class FdDegreeTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), fd_degree(X,Degree)"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -73,9 +64,7 @@ class FdDegreeTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_degree(X,Degree)"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -93,9 +82,7 @@ class FdDegreeTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_degree(X,3)"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 

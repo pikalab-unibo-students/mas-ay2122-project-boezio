@@ -1,8 +1,6 @@
 package clpfd
 
 import it.unibo.tuprolog.core.parsing.TermParser
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -29,10 +27,7 @@ internal class LabelingTest: BaseTest() {
             "problem(X,Y),labeling([leftmost],[X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -51,10 +46,7 @@ internal class LabelingTest: BaseTest() {
             "problem(X,Y),labeling([ff],[X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -73,10 +65,7 @@ internal class LabelingTest: BaseTest() {
             "problem(X,Y),labeling([ffc],[X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -94,10 +83,7 @@ internal class LabelingTest: BaseTest() {
             "problem(X,Y),labeling([min],[X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -115,10 +101,7 @@ internal class LabelingTest: BaseTest() {
             "problem(X,Y),labeling([max],[X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -139,10 +122,7 @@ internal class LabelingTest: BaseTest() {
             "problem(X,Y),labeling([up],[X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -161,10 +141,7 @@ internal class LabelingTest: BaseTest() {
             "problem(X,Y),labeling([down],[X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -194,10 +171,7 @@ internal class LabelingTest: BaseTest() {
             "problem(X,Y),labeling([min(X)],[X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -227,10 +201,7 @@ internal class LabelingTest: BaseTest() {
             "problem(X, Y), labeling([max('-'(X, Y))],[X, Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -260,10 +231,8 @@ internal class LabelingTest: BaseTest() {
             "problem(X, Y), labeling([max('-'(X, Y), bisect)],[X, Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
+
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -288,10 +257,7 @@ internal class LabelingTest: BaseTest() {
             "problem(X, Y), labeling([max('-'(X, Y), enum)],[X, Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)

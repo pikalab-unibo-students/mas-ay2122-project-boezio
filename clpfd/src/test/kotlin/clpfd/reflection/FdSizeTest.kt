@@ -1,10 +1,7 @@
 package clpfd.reflection
 
 import clpfd.BaseTest
-import clpfd.ClpFdLibrary
 import clpfd.assertSolutionAssigns
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
@@ -17,9 +14,7 @@ class FdSizeTest: BaseTest() {
             "in(X,'..'(1,10)), fd_size(X,Size)"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -37,9 +32,7 @@ class FdSizeTest: BaseTest() {
             "in(X,'..'(1,10)), fd_size(X,10)"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -53,9 +46,7 @@ class FdSizeTest: BaseTest() {
             "in(X,'..'(1,10)), '#>'(X,1), fd_size(X,Size)"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -73,9 +64,7 @@ class FdSizeTest: BaseTest() {
             "in(X,'..'(1,10)), '#>'(X,1), fd_size(X,9)"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 

@@ -25,10 +25,7 @@ class InsAssignmentTest: BaseTest() {
             "problem(X,Y),label([X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -56,10 +53,7 @@ class InsAssignmentTest: BaseTest() {
             "problem(X,Y),label([X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)

@@ -1,9 +1,7 @@
 package clpfd
 
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
+
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
 class ZCompareTest: BaseTest() {
 
@@ -22,10 +20,7 @@ class ZCompareTest: BaseTest() {
             "problem(X,Y),label([X,Y])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 

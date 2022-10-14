@@ -1,10 +1,7 @@
 package clpfd.global
 
 import clpfd.BaseTest
-import clpfd.ClpFdLibrary
 import clpfd.assertSolutionAssigns
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalArgumentException
@@ -30,10 +27,7 @@ class Disjoint2Test: BaseTest() {
             "problem(X1, Y1, X2, Y2),label([X1,Y1, X2, Y2])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -66,10 +60,7 @@ class Disjoint2Test: BaseTest() {
             "problem(X1, Y1, X2, Y2),label([X1,Y1, X2, Y2])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -95,10 +86,7 @@ class Disjoint2Test: BaseTest() {
             "problem(X1, Y1, X2, Y2),label([X1,Y1, X2, Y2])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)

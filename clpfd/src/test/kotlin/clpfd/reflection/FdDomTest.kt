@@ -1,10 +1,7 @@
 package clpfd.reflection
 
 import clpfd.BaseTest
-import clpfd.ClpFdLibrary
 import clpfd.assertSolutionAssigns
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import kotlin.test.assertTrue
@@ -20,9 +17,7 @@ class FdDomTest: BaseTest() {
             "in(X,'..'(1,10)), fd_dom(X,Dom)"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -40,9 +35,7 @@ class FdDomTest: BaseTest() {
             "in(X,'..'(1,10)), fd_dom(X,'..'(1,10))"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -56,9 +49,7 @@ class FdDomTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), fd_dom(X,Dom)"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -76,9 +67,7 @@ class FdDomTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_dom(X,'..'(2,9))"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -92,9 +81,7 @@ class FdDomTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_dom(X,5)"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         assertThrows<IllegalArgumentException> {
             solver.solveOnce(goal)
@@ -108,9 +95,7 @@ class FdDomTest: BaseTest() {
             "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_dom(X,'..'(1,10))"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 

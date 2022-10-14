@@ -1,7 +1,5 @@
 package clpfd
 
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 
 class ReificationOpTest: BaseTest() {
@@ -13,9 +11,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #\\(#>(X,3)) , label([X])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -33,9 +29,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #\\/(#<(X,3), #>(X,5)) , label([X])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -53,9 +47,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #/\\(#<(X,6), #>(X,2)) , label([X])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -73,9 +65,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #\\(#<(X,6), #>(X,2)) , label([X])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -93,9 +83,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #<==>(#<(X,6), #>(X,2)) , label([X])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -113,9 +101,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #==>(#<(X,6), #>(X,2)) , label([X])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -133,9 +119,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #<==(#<(X,6), #>(X,2)) , label([X])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 
@@ -153,9 +137,7 @@ class ReificationOpTest: BaseTest() {
             "in(X, '..'(1,10)),  #\\/(#=(X,1),#/\\(#<(X,6), #>(X,2))) , label([X])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver()
 
         val solution = solver.solveOnce(goal)
 

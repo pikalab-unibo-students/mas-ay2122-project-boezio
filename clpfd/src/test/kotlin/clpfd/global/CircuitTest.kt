@@ -1,10 +1,7 @@
 package clpfd.global
 
 import clpfd.BaseTest
-import clpfd.ClpFdLibrary
 import clpfd.assertSolutionAssigns
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 
 class CircuitTest: BaseTest() {
@@ -24,10 +21,7 @@ class CircuitTest: BaseTest() {
             "problem(X,Y,Z),label([X,Y,Z])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
@@ -55,10 +49,7 @@ class CircuitTest: BaseTest() {
             "problem(X,Z),label([X,Z])"
         )
 
-        val solver = Solver.prolog.solverOf(
-            staticKb = theory,
-            libraries = ClpFdLibrary.toRuntime()
-        )
+        val solver = get_solver(theory)
 
         val solution = solver.solveOnce(goal)
 
