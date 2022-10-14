@@ -1,7 +1,5 @@
 package clpb
 
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
@@ -14,9 +12,7 @@ class TautTest: BaseTest() {
             "taut(1,T)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -34,9 +30,7 @@ class TautTest: BaseTest() {
             "taut(0,T)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -54,9 +48,7 @@ class TautTest: BaseTest() {
             "taut(1*1,T)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -74,9 +66,7 @@ class TautTest: BaseTest() {
             "taut(1*0,T)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -94,9 +84,7 @@ class TautTest: BaseTest() {
             "taut(X,T)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -110,9 +98,7 @@ class TautTest: BaseTest() {
             "taut('+'(X,'~'(X)),T)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -130,9 +116,7 @@ class TautTest: BaseTest() {
             "taut('*'(X,'~'(X)),T)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -150,9 +134,7 @@ class TautTest: BaseTest() {
             "taut(X * 1,T)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -166,9 +148,7 @@ class TautTest: BaseTest() {
             "sat(X),taut('+'(X,'~'(X)),T)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -186,9 +166,7 @@ class TautTest: BaseTest() {
             "taut('+'(X,'~'(X)),T),sat(X)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -206,9 +184,7 @@ class TautTest: BaseTest() {
             "sat(X =< Y), sat(Y =< Z), taut(X =< Z, T)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

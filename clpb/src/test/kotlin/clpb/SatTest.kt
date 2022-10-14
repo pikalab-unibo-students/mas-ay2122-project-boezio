@@ -1,7 +1,5 @@
 package clpb
 
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
@@ -14,9 +12,7 @@ class SatTest: BaseTest() {
             "sat(X * Y)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -31,9 +27,7 @@ class SatTest: BaseTest() {
             "sat(*(X,~(X)))"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -47,9 +41,7 @@ class SatTest: BaseTest() {
             "sat(X + 1)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -63,9 +55,7 @@ class SatTest: BaseTest() {
             "sat(X + 0)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -79,9 +69,7 @@ class SatTest: BaseTest() {
             "sat(X * 0)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -95,9 +83,7 @@ class SatTest: BaseTest() {
             "sat(X < Y)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -111,9 +97,7 @@ class SatTest: BaseTest() {
             "sat(1 < Y)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -127,9 +111,7 @@ class SatTest: BaseTest() {
             "sat(X > Y)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -143,9 +125,8 @@ class SatTest: BaseTest() {
             "sat(0 > Y)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
+
 
         val solution = solver.solveOnce(goal)
 
@@ -159,9 +140,7 @@ class SatTest: BaseTest() {
             "sat(#(X,Y))"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -175,9 +154,7 @@ class SatTest: BaseTest() {
             "sat(X =:= Y)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -191,9 +168,7 @@ class SatTest: BaseTest() {
             "sat(X =\\= Y)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -207,9 +182,7 @@ class SatTest: BaseTest() {
             "sat(X =< Y)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -223,9 +196,7 @@ class SatTest: BaseTest() {
             "sat(X >= Y)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -239,9 +210,7 @@ class SatTest: BaseTest() {
             "sat(~(X))"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -255,9 +224,7 @@ class SatTest: BaseTest() {
             "sat(*([X,Y,Z]))"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -271,9 +238,7 @@ class SatTest: BaseTest() {
             "sat(*([0,Y,Z]))"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -287,9 +252,7 @@ class SatTest: BaseTest() {
             "sat(+([X,Y,Z]))"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -303,9 +266,7 @@ class SatTest: BaseTest() {
             "sat(+([*([X,~(W),1]),Y,>(Z,0)]))"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -319,9 +280,7 @@ class SatTest: BaseTest() {
             "sat(X)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -335,9 +294,7 @@ class SatTest: BaseTest() {
             "sat(1 + 0)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -351,9 +308,7 @@ class SatTest: BaseTest() {
             "sat(+([1,*(1,1)]))"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -367,9 +322,7 @@ class SatTest: BaseTest() {
             "sat(*([1,*(1,0)]))"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -383,9 +336,7 @@ class SatTest: BaseTest() {
             "sat(X*1),sat(X =\\= 1)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -399,9 +350,7 @@ class SatTest: BaseTest() {
             "sat(X =< Y), sat(Y =< Z)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

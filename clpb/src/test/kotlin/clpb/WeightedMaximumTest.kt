@@ -1,7 +1,5 @@
 package clpb
 
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import kotlin.test.Ignore
 
@@ -14,9 +12,7 @@ class WeightedMaximumTest: BaseTest() {
             "sat('#'(A,B)), weighted_maximum([1,2,1], [A,B,C], Maximum)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -37,9 +33,7 @@ class WeightedMaximumTest: BaseTest() {
             "weighted_maximum([1,2,1], [A,B,C], Maximum)"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -60,9 +54,7 @@ class WeightedMaximumTest: BaseTest() {
             "weighted_maximum([1,2,1], [A,B,C], Maximum), labeling([A,B,C])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

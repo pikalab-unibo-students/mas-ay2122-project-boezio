@@ -1,7 +1,5 @@
 package clpb
 
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
@@ -14,9 +12,7 @@ class RandomLabelingTest: BaseTest() {
             "sat(X),random_labeling(0,[X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -34,9 +30,7 @@ class RandomLabelingTest: BaseTest() {
             "sat(X+Y),random_labeling(0,[X,Y])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -55,9 +49,7 @@ class RandomLabelingTest: BaseTest() {
             "sat(X+Y),random_labeling(1,[X,Y])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -76,9 +68,7 @@ class RandomLabelingTest: BaseTest() {
             "sat(X+Y),random_labeling(2,[X,Y])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -97,9 +87,7 @@ class RandomLabelingTest: BaseTest() {
             "sat(X+1),random_labeling(0,[X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -117,9 +105,7 @@ class RandomLabelingTest: BaseTest() {
             "sat(X*0),random_labeling(0,[X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -133,9 +119,7 @@ class RandomLabelingTest: BaseTest() {
             "sat(X),random_labeling(0,[X,Y])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -154,9 +138,7 @@ class RandomLabelingTest: BaseTest() {
             "sat(X*1), sat(X), random_labeling(0,[X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -174,9 +156,7 @@ class RandomLabelingTest: BaseTest() {
             "sat(X =< Y), sat(Y =< Z), taut(X =< Z, T), random_labeling(0,[X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -195,9 +175,7 @@ class RandomLabelingTest: BaseTest() {
             "sat(X =< Y), sat(Y =< Z), taut(X > Z, T), random_labeling(0,[X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -216,9 +194,7 @@ class RandomLabelingTest: BaseTest() {
             "taut('+'(X,'~'(X)), T), random_labeling(0,[X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 

@@ -1,7 +1,5 @@
 package clpb
 
-import it.unibo.tuprolog.solve.Solver
-import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
@@ -14,9 +12,7 @@ class LabelingTest: BaseTest() {
             "sat(X),labeling([X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -34,9 +30,7 @@ class LabelingTest: BaseTest() {
             "sat(X+Y),labeling([X,Y])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -55,9 +49,7 @@ class LabelingTest: BaseTest() {
             "sat(X+1),labeling([X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -75,9 +67,7 @@ class LabelingTest: BaseTest() {
             "sat(X*0),labeling([X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -91,9 +81,7 @@ class LabelingTest: BaseTest() {
             "sat(X),labeling([X,Y])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -112,9 +100,7 @@ class LabelingTest: BaseTest() {
             "sat(X*1), sat(X), labeling([X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -132,9 +118,7 @@ class LabelingTest: BaseTest() {
             "sat(X =< Y), sat(Y =< Z), taut(X =< Z, T), labeling([X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -153,9 +137,7 @@ class LabelingTest: BaseTest() {
             "sat(X =< Y), sat(Y =< Z), taut(X > Z, T), labeling([X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
@@ -174,9 +156,7 @@ class LabelingTest: BaseTest() {
             "taut('+'(X,'~'(X)), T), labeling([X])"
         )
 
-        val solver = Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpBLibrary.toRuntime()
-        )
+        val solver = getSolver()
 
         val solution = solver.solveOnce(goal)
 
