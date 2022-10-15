@@ -1,6 +1,7 @@
 package clpb
 
 import org.junit.jupiter.api.Test
+import kotlin.test.Ignore
 import kotlin.test.assertTrue
 
 class SatTest: BaseTest() {
@@ -292,6 +293,76 @@ class SatTest: BaseTest() {
 
         val goal = termParser.parseStruct(
             "sat(1 + 0)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatNoVariablesXor(){
+
+        val goal = termParser.parseStruct(
+            "sat('#'(0,1))"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatNoVariablesEquals(){
+
+        val goal = termParser.parseStruct(
+            "sat(1 =:= 1)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatNoVariablesNotEquals(){
+
+        val goal = termParser.parseStruct(
+            "sat(1 =\\= 0)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test @Ignore
+    fun testSatNoVariablesLessEquals(){
+
+        val goal = termParser.parseStruct(
+            "sat(1 =< 0)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
+
+    @Test @Ignore
+    fun testSatNoVariablesLessThan(){
+
+        val goal = termParser.parseStruct(
+            "sat(0 < 1)"
         )
 
         val solver = getSolver()

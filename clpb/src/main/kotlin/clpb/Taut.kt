@@ -56,7 +56,7 @@ object Taut: BinaryRelation.NonBacktrackable<ExecutionContext>("taut") {
                     replyFail()
                 }
             }else{
-                replyFail {  }
+                replyFail()
             }
         }
     }
