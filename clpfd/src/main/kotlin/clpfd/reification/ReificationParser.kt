@@ -23,9 +23,6 @@ class ReificationParser<T : Variable>(
     override fun defaultValue(term: Term): ILogical =
         error("Unsupported sub-expression: $term")
 
-    override fun visitVar(term: Var): ILogical =
-        (varsMap[term] ?: chocoModel.boolVar(term.completeName)) as ILogical
-
     override fun visitStruct(term: Struct): ILogical {
         when (term.arity) {
             2 -> when (term.functor) {

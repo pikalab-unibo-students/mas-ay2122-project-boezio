@@ -147,4 +147,58 @@ class ReificationOpTest: BaseTest() {
             )
         }
     }
+
+    @Test
+    fun testNestedOperatorsWithNotEqual() {
+
+        val goal = termParser.parseStruct(
+            "in(X, '..'(1,10)),  #/\\(#\\=(X,1),#\\=(X,3)) , label([X])"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(2)
+            )
+        }
+    }
+
+    @Test
+    fun testNestedOperatorsWithGreaterEquals() {
+
+        val goal = termParser.parseStruct(
+            "in(X, '..'(1,10)),  #/\\(#\\=(X,1),#>=(X,3)) , label([X])"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(3)
+            )
+        }
+    }
+
+    @Test
+    fun testNestedOperatorsWithLessEquals() {
+
+        val goal = termParser.parseStruct(
+            "in(X, '..'(1,10)),  #/\\(#\\=(X,1),#=<(X,3)) , label([X])"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(2)
+            )
+        }
+    }
 }
