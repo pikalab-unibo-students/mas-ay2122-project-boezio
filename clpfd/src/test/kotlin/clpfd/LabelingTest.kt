@@ -214,6 +214,37 @@ internal class LabelingTest: BaseTest() {
     }
 
     @Test
+    fun testMaximizeWithStep() {
+
+        val theory = ClausesParser.withDefaultOperators().parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                '#>'(X, Y).
+            """.trimIndent()
+        )
+
+        val parser = TermParser.withDefaultOperators()
+
+        val goal = parser.parseStruct(
+            "problem(X, Y), labeling([max('-'(X, Y)), step],[X, Y])"
+        )
+
+        val solver = getSolver(theory)
+
+        val solution = solver.solveOnce(goal)
+
+        parser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(10),
+                varOf("Y") to intOf(1)
+            )
+        }
+    }
+
+
+    @Test
     fun testNotImplementedBisect() {
 
         val theory = ClausesParser.withDefaultOperators().parseTheory(
@@ -228,13 +259,13 @@ internal class LabelingTest: BaseTest() {
         val parser = TermParser.withDefaultOperators()
 
         val goal = parser.parseStruct(
-            "problem(X, Y), labeling([max('-'(X, Y), bisect)],[X, Y])"
+            "problem(X, Y), labeling([max('-'(X, Y)), bisect],[X, Y])"
         )
 
         val solver = getSolver(theory)
 
 
-        assertThrows<IllegalArgumentException> {
+        assertThrows<NotImplementedError> {
             solver.solveOnce(goal)
         }
     }
@@ -254,12 +285,12 @@ internal class LabelingTest: BaseTest() {
         val parser = TermParser.withDefaultOperators()
 
         val goal = parser.parseStruct(
-            "problem(X, Y), labeling([max('-'(X, Y), enum)],[X, Y])"
+            "problem(X, Y), labeling([max('-'(X, Y)), enum],[X, Y])"
         )
 
         val solver = getSolver(theory)
 
-        assertThrows<IllegalArgumentException> {
+        assertThrows<NotImplementedError> {
             solver.solveOnce(goal)
         }
     }
