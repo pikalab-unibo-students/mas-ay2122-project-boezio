@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalArgumentException
 import kotlin.test.Ignore
+import kotlin.test.assertTrue
 
 class InsAssignmentTest: BaseTest() {
 
@@ -118,6 +119,29 @@ class InsAssignmentTest: BaseTest() {
                 varOf("X") to intOf(2)
             )
         }
+    }
+
+    @Test
+    fun testInsAssignmentLowerGreaterThanUpperBound() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, 3),
+                in(Y, '..'(5,1)),
+                '#<'(X,Y).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
     }
 
 }

@@ -88,4 +88,32 @@ class FdDegreeTest: BaseTest() {
 
         assertTrue(solution.isNo)
     }
+
+    @Test
+    fun testFdDegreeInvalidVar() {
+
+        val goal = termParser.parseStruct(
+            "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_degree(Y,3)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
+
+    @Test
+    fun testFdDegreeNotIntVar() {
+
+        val goal = termParser.parseStruct(
+            "in(X,'..'(1,10)), #>(X,1), #<(X,10), { Y > 3 }, fd_degree(Y,3)"
+        )
+
+        val solver = getFdQRSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
 }

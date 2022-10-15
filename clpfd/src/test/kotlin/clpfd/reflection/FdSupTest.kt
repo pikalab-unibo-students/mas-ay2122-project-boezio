@@ -71,4 +71,46 @@ class FdSupTest: BaseTest() {
         assertTrue(solution.isYes)
     }
 
+    @Test
+    fun testFdSupWithIncorrectUb() {
+
+        val goal = termParser.parseStruct(
+            "in(X,'..'(1,10)), #<(X,10), fd_sup(X,10)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
+
+    @Test
+    fun testFdSupInvalidVar() {
+
+        val goal = termParser.parseStruct(
+            "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_sup(Y,9)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
+
+    @Test
+    fun testFdSupNotIntVar() {
+
+        val goal = termParser.parseStruct(
+            "in(X,'..'(1,10)), #>(X,1), #<(X,10), { Y =< 3 }, fd_sup(Y,3)"
+        )
+
+        val solver = getFdQRSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
+
 }

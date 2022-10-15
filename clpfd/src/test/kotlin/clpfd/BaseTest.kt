@@ -1,5 +1,6 @@
 package clpfd
 
+import clpqr.ClpQRLibrary
 import it.unibo.tuprolog.core.parsing.TermParser
 import it.unibo.tuprolog.solve.Solver
 import it.unibo.tuprolog.solve.library.toRuntime
@@ -17,6 +18,11 @@ abstract class BaseTest {
         Solver.prolog.solverWithDefaultBuiltins(
             staticKb = theory,
             otherLibraries =  ClpFdLibrary.toRuntime()
+        )
+
+    protected fun getFdQRSolver(theory: Theory = Theory.empty()): Solver =
+        Solver.prolog.solverWithDefaultBuiltins(
+            otherLibraries =  ClpFdLibrary.toRuntime() + ClpQRLibrary.toRuntime()
         )
 
 }

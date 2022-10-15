@@ -47,4 +47,18 @@ class FdVarTest: BaseTest() {
 
         assertTrue(solution.isHalt)
     }
+
+    @Test
+    fun testFdVarNotIntVar() {
+
+        val goal = termParser.parseStruct(
+            "{X > 1 }, fd_var(X)"
+        )
+
+        val solver = getFdQRSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
 }

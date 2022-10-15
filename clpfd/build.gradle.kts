@@ -30,6 +30,7 @@ dependencies {
     implementation(project(":clp-core"))
 
     testImplementation(kotlin("test"))
+    testImplementation(project(":clpqr"))
 }
 
 tasks.test {

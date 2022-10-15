@@ -70,4 +70,46 @@ class FdInfTest: BaseTest() {
 
         assertTrue(solution.isYes)
     }
+
+    @Test
+    fun testFdInfWithIncorrectLb() {
+
+        val goal = termParser.parseStruct(
+            "in(X,'..'(1,10)), #>(X,1), fd_inf(X,1)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
+
+    @Test
+    fun testFdInfInvalidVar() {
+
+        val goal = termParser.parseStruct(
+            "in(X,'..'(1,10)), #>(X,1), #<(X,10), fd_inf(Y,2)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
+
+    @Test
+    fun testFdInfNotIntVar() {
+
+        val goal = termParser.parseStruct(
+            "in(X,'..'(1,10)), #>(X,1), #<(X,10), { Y > 3 }, fd_inf(Y,2)"
+        )
+
+        val solver = getFdQRSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isNo)
+    }
 }
