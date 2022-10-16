@@ -5,8 +5,39 @@ import clpfd.assertSolutionAssigns
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.lang.IllegalArgumentException
+import kotlin.test.Ignore
 
 class GlobalCardinalityTwoTest: BaseTest() {
+
+    @Test @Ignore
+    fun testGlobalCardinalityWithIn() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X,Y,Z) :- 
+                ins([X,Y,Z], '..'(1, 3)), 
+                in(W, 2),
+                in(V, 1),
+                global_cardinality([X,Y,Z],['-'(1,W), '-'(2,V)]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y,Z),label([X,Y,Z])"
+        )
+
+        val solver = getSolver(theory)
+
+        val solution = solver.solveOnce(goal)
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                varOf("X") to intOf(1),
+                varOf("Y") to intOf(1),
+                varOf("Z") to intOf(2)
+            )
+        }
+    }
 
     @Test
     fun testGlobalCardinality() {
