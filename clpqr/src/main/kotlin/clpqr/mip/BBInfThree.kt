@@ -2,13 +2,12 @@ package clpqr.mip
 
 import clpCore.chocoModel
 import clpCore.flip
-import clpCore.solutions
 import clpCore.variablesMap
 import clpqr.utils.calculateExpression
 import clpqr.utils.createChocoSolver
 import clpqr.search.Configuration
 import clpqr.search.ProblemType
-import clpqr.utils.filterNotConstantVar
+import clpqr.utils.bound
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
@@ -30,17 +29,13 @@ object BBInfThree: TernaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") 
         val varsMap = chocoModel.variablesMap(vars, context.substitution)
         // impose an integer constraint for variables contained in the first argument
         for(variable in vector){
-            // TODO fix problem with lower and upper bounds
-            val intVar = chocoModel.intVar(-500, 500)
+            val intVar = chocoModel.intVar(-bound, bound)
             chocoModel.eq(varsMap.flip()[variable] as RealVar, intVar).post()
         }
         val config = Configuration(problemType = ProblemType.MINIMIZE, objective = second)
         val solver = createChocoSolver(chocoModel, config, varsMap)
         // Substitution for optima
         val infValue = Real.of(solver.calculateExpression(varsMap, second, context.substitution).last())
-        // Substitution for all variables
-        // val allVarsSubstitution = solver.solutions(varsMap).last()
-        // overall substitution
         val substitution = mapOf(inf to infValue)
         return replyWith(Substitution.of(substitution))
     }

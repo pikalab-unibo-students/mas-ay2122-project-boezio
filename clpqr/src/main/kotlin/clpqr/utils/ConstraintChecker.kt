@@ -5,7 +5,6 @@ import clpCore.variablesMap
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.Term
-import it.unibo.tuprolog.core.Tuple
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
 import org.chocosolver.solver.Model
 import org.chocosolver.solver.expression.continuous.arithmetic.CArExpression
@@ -16,10 +15,6 @@ class ConstraintChecker(
     private val chocoModel: Model,
     private val substitution: Substitution.Unifier) : DefaultTermVisitor<Boolean>() {
     override fun defaultValue(term: Term) = throw IllegalStateException("Cannot handle $term as constraint")
-
-    override fun visitTuple(term: Tuple): Boolean {
-        return term.unfoldedSequence.all { it.accept(this) }
-    }
 
     override fun visitStruct(term: Struct): Boolean {
         require(term.arity == 2){

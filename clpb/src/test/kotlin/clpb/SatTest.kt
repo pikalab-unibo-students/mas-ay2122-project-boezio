@@ -373,6 +373,20 @@ class SatTest: BaseTest() {
     }
 
     @Test
+    fun testSatNotVariable(){
+
+        val goal = termParser.parseStruct(
+            "sat('~'(X))"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
     fun testSatNoVariablesNestedTrue(){
 
         val goal = termParser.parseStruct(

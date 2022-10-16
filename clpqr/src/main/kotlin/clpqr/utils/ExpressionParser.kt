@@ -38,7 +38,7 @@ class ExpressionParser<T : Variable>(
                 "+" -> return binaryExpression(term, CArExpression::add)
                 "-" -> return binaryExpression(term, CArExpression::sub)
                 "*" -> return binaryExpression(term, CArExpression::mul)
-                "^" -> return binaryExpression(term, CArExpression::pow)
+                "^" -> throw NotImplementedError("This operator must still be implemented")
                 "/" -> return binaryExpression(term, CArExpression::div)
                 "min" -> return binaryExpression(term, CArExpression::min)
                 "max" -> return binaryExpression(term, CArExpression::max)
@@ -49,9 +49,9 @@ class ExpressionParser<T : Variable>(
                 "-" -> return unaryExpression(term, CArExpression::neg)
                 "sin" -> return unaryExpression(term, CArExpression::sin)
                 "cos" -> return unaryExpression(term, CArExpression::cos)
-                "tan" -> return unaryExpression(term, CArExpression::tan)
-                "exp" -> return unaryExpression(term, CArExpression::exp)
-                "pow" -> return term[0].accept(this).pow(2.0)
+                "tan" -> throw NotImplementedError("This operator must still be implemented")
+                "exp" -> throw NotImplementedError("This operator must still be implemented")
+                "pow" -> throw NotImplementedError("This operator must still be implemented")
             }
         }
         return super.visitStruct(term) // indirectly calls defaultValue(term)

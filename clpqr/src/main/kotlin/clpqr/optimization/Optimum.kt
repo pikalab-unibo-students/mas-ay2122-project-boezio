@@ -1,14 +1,12 @@
 package clpqr.optimization
 
 import clpCore.chocoModel
-import clpCore.solutions
 import clpCore.variablesMap
 import clpqr.search.Configuration
 import clpqr.search.ProblemType
 import clpqr.utils.calculateExpression
 import clpqr.utils.convertExpression
 import clpqr.utils.createChocoSolver
-import clpqr.utils.filterNotConstantVar
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.BinaryRelation

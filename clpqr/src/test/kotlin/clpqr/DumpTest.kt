@@ -48,6 +48,51 @@ class DumpTest: BaseTest() {
                 varOf("Cons") to codedAnswer
             )
         }
+    }
 
+    @Test
+    fun testDumpNotReplaceVariable(){
+
+        val goal = termParser.parseStruct(
+            "{ X + Y = 10.0 }, dump([X],[a],Cons)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        val codedAnswer = termParser.parseStruct(
+            "[a + Y = 10.0]"
+        )
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                0.0,
+                varOf("Cons") to codedAnswer
+            )
+        }
+    }
+
+    @Test
+    fun testDumpIntegerValue(){
+
+        val goal = termParser.parseStruct(
+            "{ X + Y = 10 }, dump([X],[a],Cons)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        val codedAnswer = termParser.parseStruct(
+            "[a + Y = 10]"
+        )
+
+        termParser.scope.with {
+            solution.assertSolutionAssigns(
+                0.0,
+                varOf("Cons") to codedAnswer
+            )
+        }
     }
 }

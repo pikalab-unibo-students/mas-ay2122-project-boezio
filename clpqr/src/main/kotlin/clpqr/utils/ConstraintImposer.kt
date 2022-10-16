@@ -29,8 +29,7 @@ internal class ConstraintImposer(
         when(struct.functor){
             "<" -> applyRelOperator(firstTerm, secondTerm, CArExpression::lt, chocoModel)
             ">" -> applyRelOperator(firstTerm, secondTerm, CArExpression::gt, chocoModel)
-            "=<" -> applyRelOperator(firstTerm, secondTerm, CArExpression::le, chocoModel)
-            "<=" -> applyRelOperator(firstTerm, secondTerm, CArExpression::le, chocoModel)
+            "=<", "<=" -> applyRelOperator(firstTerm, secondTerm, CArExpression::le, chocoModel)
             ">=" -> applyRelOperator(firstTerm, secondTerm, CArExpression::ge, chocoModel)
             "=:=", "="-> applyRelOperator(firstTerm, secondTerm, CArExpression::eq, chocoModel)
             else -> throw IllegalStateException("Cannot handle constraint ${struct.functor}")

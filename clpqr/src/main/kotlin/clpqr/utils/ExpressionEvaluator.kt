@@ -53,11 +53,6 @@ class ExpressionEvaluator<T : Variable>(
         return super.visitStruct(term) // indirectly calls defaultValue(term)
     }
 
-    private fun unaryExpression(struct: Struct, operator: (Double) -> Double): Double {
-        val first = struct[0].accept(this)
-        return operator(first)
-    }
-
     private fun binaryExpression(struct: Struct, operator: (Double, Double) -> Double): Double {
         val first = struct[0].accept(this)
         val second = struct[1].accept(this)

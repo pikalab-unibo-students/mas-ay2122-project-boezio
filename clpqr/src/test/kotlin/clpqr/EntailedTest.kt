@@ -50,4 +50,90 @@ class EntailedTest: BaseTest() {
 
         assertTrue(solution.isNo)
     }
+
+    @Test @Ignore
+    fun testEntailedEquals(){
+
+        val goal = termParser.parseStruct(
+            "{ X = 10.0 }, entailed(X = 10.0), satisfy([X])"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testEntailedEqualsFirstVersion(){
+
+        val goal = termParser.parseStruct(
+            "{ X = 10.0 }, entailed(X = 10.0)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testEntailedEqualsSecondVersion(){
+
+        val goal = termParser.parseStruct(
+            "{ X =:= 10.0 }, entailed(X =:= 10.0)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testEntailedLessEqualsFirstVersion(){
+
+        val goal = termParser.parseStruct(
+            "{ '<='(X,Y), '<='(Y,10.0) }, entailed('<='(Y,10.0)), satisfy([X])"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testEntailedLessEqualsSecondVersion(){
+
+        val goal = termParser.parseStruct(
+            "{ '=<'(X,Y), '=<'(Y,10.0) }, entailed('=<'(Y,10.0)), satisfy([X])"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testEntailedGreaterEquals(){
+
+        val goal = termParser.parseStruct(
+            "{ '>='(X,Y), '>='(Y,10.0) }, entailed('>='(Y,10.0))"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+
 }
