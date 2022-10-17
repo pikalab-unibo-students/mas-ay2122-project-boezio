@@ -1,10 +1,10 @@
 package clpfd
 
 import it.unibo.tuprolog.core.parsing.TermParser
+import it.unibo.tuprolog.solve.exception.error.ExistenceError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.theory.parsing.ClausesParser
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-
 
 
 internal class LabelingTest: BaseTest() {
@@ -245,6 +245,52 @@ internal class LabelingTest: BaseTest() {
 
 
     @Test
+    fun testLabelingInvalidFirstArgument() {
+
+        val theory = ClausesParser.withDefaultOperators().parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                '#>'(X, Y).
+            """.trimIndent()
+        )
+
+        val parser = TermParser.withDefaultOperators()
+
+        val goal = parser.parseStruct(
+            "problem(X, Y), labeling(a,[X, Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
+    fun testLabelingInvalidSecondArgument() {
+
+        val theory = ClausesParser.withDefaultOperators().parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                '#>'(X, Y).
+            """.trimIndent()
+        )
+
+        val parser = TermParser.withDefaultOperators()
+
+        val goal = parser.parseStruct(
+            "problem(X, Y), labeling([],a)"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
     fun testNotImplementedBisect() {
 
         val theory = ClausesParser.withDefaultOperators().parseTheory(
@@ -263,11 +309,8 @@ internal class LabelingTest: BaseTest() {
         )
 
         val solver = getSolver(theory)
-
-
-        assertThrows<NotImplementedError> {
-            solver.solveOnce(goal)
-        }
+        val solution = solver.solveOnce(goal)
+        assertException<ExistenceError>(solution, ExistenceError.ObjectType.RESOURCE)
     }
 
     @Test
@@ -289,9 +332,7 @@ internal class LabelingTest: BaseTest() {
         )
 
         val solver = getSolver(theory)
-
-        assertThrows<NotImplementedError> {
-            solver.solveOnce(goal)
-        }
+        val solution = solver.solveOnce(goal)
+        assertException<ExistenceError>(solution, ExistenceError.ObjectType.RESOURCE)
     }
 }

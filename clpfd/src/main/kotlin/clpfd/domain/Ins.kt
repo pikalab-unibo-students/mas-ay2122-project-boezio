@@ -3,11 +3,10 @@ package clpfd.domain
 import clpCore.chocoModel
 import clpCore.getOuterVariables
 import clpCore.setChocoModel
+import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.Integer
-import it.unibo.tuprolog.core.Struct
-import it.unibo.tuprolog.core.Term
-import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.DomainError
 import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
@@ -23,13 +22,13 @@ object Ins : BinaryRelation.NonBacktrackable<ExecutionContext>("ins") {
         when(second) {
             is Struct -> {
                 val domainStruct = second.castToStruct()
-                require(domainStruct.let { it.arity == 2 && it.functor == ".." && it[0] is Integer && it[1] is Integer }) {
-                    "Argument 2 should be a compound term of the type '..'(int, int)"
+                if(!(domainStruct.let { it.arity == 2 && it.functor == ".." && it[0] is Integer && it[1] is Integer })) {
+                    throw DomainError.forArgument(context,signature,DomainError.Expected.PREDICATE_PROPERTY,domainStruct)
                 }
                 val lb = (domainStruct[0] as Integer).intValue.toInt()
                 val ub = (domainStruct[1] as Integer).intValue.toInt()
                 if (lb > ub) {
-                    return replyFail()
+                    throw DomainError.forArgument(context,signature,DomainError.Expected.ATOM_PROPERTY, Atom.of(lb.toString()))
                 }
                 for (name in varNames) {
                     chocoModel.intVar(name, lb, ub)
@@ -41,7 +40,7 @@ object Ins : BinaryRelation.NonBacktrackable<ExecutionContext>("ins") {
                     chocoModel.intVar(name, domainInt)
                 }
             }
-            else -> throw IllegalStateException()
+            else -> throw TypeError.forArgument(context, signature, TypeError.Expected.COMPOUND, second)
         }
 
         return replySuccess {

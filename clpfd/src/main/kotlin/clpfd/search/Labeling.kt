@@ -2,11 +2,9 @@ package clpfd.search
 
 import clpfd.*
 import clpCore.*
-import it.unibo.tuprolog.core.Struct
-import it.unibo.tuprolog.core.Substitution
-import it.unibo.tuprolog.core.Term
-import it.unibo.tuprolog.core.Var
+import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.ExistenceError
 import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 import org.chocosolver.solver.Model as ChocoModel
@@ -32,7 +30,7 @@ object Labeling : BinaryRelation<ExecutionContext>("labeling") {
         val chocoModel = chocoModel
         val configuration = LabelingConfiguration.fromTerms(keys)
         val chocoToLogic: Map<Variable, Var> = chocoModel.variablesMap(logicVariables, context.substitution)
-        val solver = createChocoSolver(chocoModel, configuration, chocoToLogic, context.substitution)
+        val solver = createChocoSolver(chocoModel, configuration, chocoToLogic, context.substitution, context)
         return if (configuration.problemType == ProblemType.SATISFY) {
             solver.solutions(chocoToLogic).map {
                 replyWith(it)
@@ -46,16 +44,20 @@ object Labeling : BinaryRelation<ExecutionContext>("labeling") {
         model: ChocoModel,
         config: LabelingConfiguration,
         variables: Map<Variable, Var>,
-        substitution: Substitution.Unifier
+        substitution: Substitution.Unifier,
+        context: ExecutionContext
     ): ChocoSolver {
         val variableStrategy: VariableSelector<IntVar> = config.variableSelection.toVariableSelector(model, variables.keys)
         val valueStrategy: IntValueSelector = config.valueOrder.toValueSelector()
 
         if (config.branchingStrategy != BranchingStrategy.STEP) {
-            throw NotImplementedError("Branching strategy not yet supported: ${config.branchingStrategy.name.lowercase()}")
+            throw ExistenceError.of(
+                context,
+                ExistenceError.ObjectType.RESOURCE,
+                Atom.of(config.branchingStrategy.toString()),
+                message = "Branching strategy not yet supported: ${config.branchingStrategy.name.lowercase()}"
+            )
         }
-
-        require((config.objective != null) xor (config.problemType == ProblemType.SATISFY))
 
         if (config.problemType != ProblemType.SATISFY) {
             val parser = ExpressionParser(model, variables.flip(), substitution)

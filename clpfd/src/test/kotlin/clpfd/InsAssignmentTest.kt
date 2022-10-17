@@ -1,14 +1,13 @@
 package clpfd
 
 import it.unibo.tuprolog.solve.Solver
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import java.lang.IllegalArgumentException
 import kotlin.test.Ignore
-import kotlin.test.assertTrue
 
-class InsAssignmentTest: BaseTest() {
+internal class InsAssignmentTest: BaseTest() {
 
     @Test
     fun testInsAssignment() {
@@ -55,10 +54,50 @@ class InsAssignmentTest: BaseTest() {
         )
 
         val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.PREDICATE_PROPERTY)
+    }
 
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+    @Test
+    fun testInsLBGreaterThanUB() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(5,2)),
+                in(Y, '..'(1,5)),
+                '#<'(X,Y).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.ATOM_PROPERTY)
+    }
+
+    @Test
+    fun testInsInvalidSecondArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, 3.0),
+                in(Y, '..'(1,5)),
+                '#<'(X,Y).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.COMPOUND)
     }
 
     @Test @Ignore
@@ -119,29 +158,6 @@ class InsAssignmentTest: BaseTest() {
                 varOf("X") to intOf(2)
             )
         }
-    }
-
-    @Test
-    fun testInsAssignmentLowerGreaterThanUpperBound() {
-
-        val theory = theoryParser.parseTheory(
-            """
-            problem(X, Y) :- 
-                in(X, 3),
-                in(Y, '..'(5,1)),
-                '#<'(X,Y).
-            """.trimIndent()
-        )
-
-        val goal = termParser.parseStruct(
-            "problem(X,Y),label([X,Y])"
-        )
-
-        val solver = getSolver(theory)
-
-        val solution = solver.solveOnce(goal)
-
-        assertTrue(solution.isNo)
     }
 
 }
