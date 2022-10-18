@@ -6,6 +6,7 @@ import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.primitive.UnaryPredicate
 import it.unibo.tuprolog.core.List as LogicList
@@ -15,13 +16,9 @@ object LexChain : UnaryPredicate.NonBacktrackable<ExecutionContext>("lex") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
         ensuringArgumentIsList(0)
         val outerList = first.castToList().toList()
-        require(outerList.size == 2) {
-            "List has an invalid length"
-        }
         for (elem in outerList) {
-            require(elem is LogicList) {
-                "$elem is not a list"
-            }
+            if(elem !is LogicList)
+                throw TypeError.forArgument(context, signature, TypeError.Expected.LIST, elem)
         }
         val firstTermList = outerList[0].castToList().toList()
         val firstSize = firstTermList.size
@@ -34,16 +31,15 @@ object LexChain : UnaryPredicate.NonBacktrackable<ExecutionContext>("lex") {
         val firstList = mutableListOf<IntVar>()
         val secondList = mutableListOf<IntVar>()
         for(i in 0 until firstSize){
-            require(firstTermList[i].let { it is Var || it is Integer }){
-                "${firstTermList[i]} is neither a variable nor an integer"
-            }
+            if(!(firstTermList[i].let { it is Var || it is Integer }))
+                throw TypeError.forArgument(context, signature, TypeError.Expected.INTEGER, outerList[0].castToList(), i)
             val listElem = getAsIntVar(firstTermList[i], varsMap, context.substitution)
             firstList.add(listElem)
         }
         for(i in 0 until secondSize){
-            require(secondTermList[i].let { it is Var || it is Integer }){
-                "${secondTermList[i]} is neither a variable nor an integer"
-            }
+            if(!(secondTermList[i].let { it is Var || it is Integer }))
+                throw TypeError.forArgument(context, signature, TypeError.Expected.INTEGER, outerList[1].castToList(), i)
+
             val listElem = getAsIntVar(secondTermList[i], varsMap, context.substitution)
             secondList.add(listElem)
         }

@@ -2,6 +2,7 @@ package clpfd.global
 
 import clpfd.BaseTest
 import clpfd.assertSolutionAssigns
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
 
 class AllDistinctTest: BaseTest() {
@@ -58,5 +59,45 @@ class AllDistinctTest: BaseTest() {
                 varOf("X") to intOf(1)
             )
         }
+    }
+
+    @Test
+    fun testAllDistinctInvalidArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X) :- 
+                in(X, '..'(1, 2)), 
+                all_distinct(a).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X),label([X])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
+    fun testAllDistinctInvalidListArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X) :- 
+                in(X, '..'(1, 2)), 
+                all_distinct([X,1,a]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X),label([X])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
     }
 }

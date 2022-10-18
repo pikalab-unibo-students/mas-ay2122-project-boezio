@@ -8,6 +8,8 @@ import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 import org.chocosolver.solver.variables.IntVar
@@ -26,13 +28,13 @@ object CumulativeTwo : BinaryRelation.NonBacktrackable<ExecutionContext>("cumula
         val heights = mutableListOf<IntVar>()
         val elementsList = first.castToList().toList()
         for (element in elementsList) {
-            require(element.let { it is Struct && it.functor == "task" && it.arity == 5 }) {
-                "$element is not a valid task"
+            if(!(element.let { it is Struct && it.functor == "task" && it.arity == 5 })) {
+                throw DomainError.forArgument(context, signature, DomainError.Expected.PREDICATE_PROPERTY, element)
             }
             val arguments = element.castToStruct().args
             for (i in 0 until 4) {
-                require(arguments[i].let { it is Var || it is LogicInteger }) {
-                    "${arguments[i]} is neither a variable nor an integer"
+                if(!(arguments[i].let { it is Var || it is LogicInteger })) {
+                    throw TypeError.forArgument(context, signature, TypeError.Expected.INTEGER, element, i)
                 }
             }
             val chocoStart = getAsIntVar(arguments[0], varsMap, context.substitution)
@@ -43,12 +45,12 @@ object CumulativeTwo : BinaryRelation.NonBacktrackable<ExecutionContext>("cumula
             heights.add(chocoHeight)
         }
         val options = second.castToList().toList()
-        require(options.let { it.size == 1 && it[0].let { it is Struct && it.arity == 1 && it.functor == "limit" }}) {
-            "$options are invalid options"
+        if(!(options.let { terms -> terms.size == 1 && terms[0].let { it is Struct && it.arity == 1 && it.functor == "limit" }})) {
+            throw DomainError.forArgument(context, signature, DomainError.Expected.PREDICATE_PROPERTY, second)
         }
         val limitTerm = options[0].castToStruct().args[0]
-        require(limitTerm.let { it is Var || it is LogicInteger }) {
-            "$limitTerm is not declared neither as a variable nor an integer"
+        if(!(limitTerm.let { it is Var || it is LogicInteger })) {
+            throw TypeError.forArgument(context, signature, TypeError.Expected.INTEGER, options[0].castToStruct())
         }
         val chocoLimit = getAsIntVar(limitTerm, varsMap, context.substitution)
         val chocoTasks = tasks.toTypedArray()

@@ -2,9 +2,9 @@ package clpfd.global
 
 import clpfd.BaseTest
 import clpfd.assertSolutionAssigns
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import java.lang.IllegalArgumentException
+import kotlin.test.Ignore
 
 class LexChainTest: BaseTest() {
 
@@ -92,25 +92,83 @@ class LexChainTest: BaseTest() {
         }
     }
 
-    @Test
-    fun testLexChainInvalidArgument() {
+    @Test @Ignore
+    fun testInvalidArgument() {
 
         val theory = theoryParser.parseTheory(
             """
-            problem(X,Y) :- 
-                ins([X,Y], '..'(1, 10)), 
-                lex_chain([[a],[X],[Y]]).
+            problem(X,Y,Z,W) :- 
+                ins([X,Y,Z,W], '..'(1, 10)), 
+                lex_chain(a).
             """.trimIndent()
         )
 
         val goal = termParser.parseStruct(
-            "problem(X,Y),label([X,Y])"
+            "problem(X,Y,Z,W),label([X,Y,Z,W])"
         )
 
         val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
 
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+    @Test
+    fun testInvalidInnerList() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X,Y,Z,W) :- 
+                ins([X,Y,Z,W], '..'(1, 10)), 
+                lex_chain([a,[Z,W]]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y,Z,W),label([X,Y,Z,W])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
+    fun testInvalidElemFirstList() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X,Y,Z,W) :- 
+                ins([X,Y,Z,W], '..'(1, 10)), 
+                lex_chain([[a,Y],[Z,W]]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y,Z,W),label([X,Y,Z,W])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
+    }
+
+    @Test
+    fun testInvalidElemSecondList() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X,Y,Z,W) :- 
+                ins([X,Y,Z,W], '..'(1, 10)), 
+                lex_chain([[X,Y],[a,W]]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y,Z,W),label([X,Y,Z,W])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
     }
 }

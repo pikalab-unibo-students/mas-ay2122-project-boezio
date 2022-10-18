@@ -2,9 +2,11 @@ package clpfd.global
 
 import clpfd.BaseTest
 import clpfd.assertSolutionAssigns
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.ExistenceError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import java.lang.IllegalArgumentException
+import kotlin.test.Ignore
 
 class TuplesInTest: BaseTest() {
 
@@ -89,6 +91,48 @@ class TuplesInTest: BaseTest() {
         }
     }
 
+    @Test @Ignore
+    fun testTuplesInvalidFirstArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, 4), 
+                in(Y, '..'(1, 10)), 
+                tuples_in(a, [[1,2],[1,5],[4,0],[4,3]]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
+    fun testInvalidSecondArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, 4), 
+                in(Y, '..'(1, 10)), 
+                tuples_in([[X,Y]], a).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
     @Test
     fun testInvalidTuples() {
 
@@ -105,10 +149,8 @@ class TuplesInTest: BaseTest() {
         )
 
         val solver = getSolver(theory)
-
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
     }
 
     @Test
@@ -116,20 +158,82 @@ class TuplesInTest: BaseTest() {
 
         val theory = theoryParser.parseTheory(
             """
-            problem(X, Y, Z, W) :- 
-                ins([X,Y,Z,W], '..'(1,10)), 
-                tuples_in([[a,Y],[Z,W]], [[X,2],[1,5],[4,0],[4,3]]).
+            problem(X, Y) :- 
+                in(X, 4), 
+                in(Y, '..'(1, 10)), 
+                tuples_in([[X,Y]], [a]).
             """.trimIndent()
         )
 
         val goal = termParser.parseStruct(
-            "problem(X,Y,Z,W),label([X,Y,Z,W])"
+            "problem(X,Y),label([X,Y])"
         )
 
         val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
 
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+    @Test
+    fun testInvalidTupleLength() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, 4), 
+                in(Y, '..'(1, 10)), 
+                tuples_in([[X,Y]], [[1,2,3]]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.ATOM_PROPERTY)
+    }
+
+    @Test
+    fun testTupleWithVar() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, 4), 
+                in(Y, '..'(1, 10)), 
+                tuples_in([[X,Y]], [[X,2]]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<ExistenceError>(solution, ExistenceError.ObjectType.RESOURCE)
+    }
+
+    @Test
+    fun testInvalidTupleElem() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, 4), 
+                in(Y, '..'(1, 10)), 
+                tuples_in([[X,Y]], [[a,2]]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
     }
 }

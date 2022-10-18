@@ -2,9 +2,9 @@ package clpfd.global
 
 import clpfd.BaseTest
 import clpfd.assertSolutionAssigns
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import java.lang.IllegalArgumentException
 
 class SumTest: BaseTest() {
 
@@ -237,6 +237,48 @@ class SumTest: BaseTest() {
     }
 
     @Test
+    fun testSumInvalidFirstArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                sum(a, #=, 10).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
+    fun testSumInvalidSecondArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                sum([X,Y], 3, 10).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.ATOM)
+    }
+
+    @Test
     fun testSumInvalidVs() {
 
         val theory = theoryParser.parseTheory(
@@ -253,9 +295,49 @@ class SumTest: BaseTest() {
         )
 
         val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
+    }
 
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+    @Test
+    fun testInvalidOperator() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                sum([X,Y], a, 10).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.ATOM_PROPERTY)
+    }
+
+    @Test
+    fun testInvalidExpression() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                sum([X,Y], #=, a).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.EVALUABLE)
     }
 }

@@ -1,9 +1,8 @@
 package clpfd.global
 
 import clpfd.BaseTest
+import it.unibo.tuprolog.solve.exception.error.ExistenceError
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import java.lang.IllegalStateException
 
 class GlobalCardinalityThreeTest: BaseTest() {
 
@@ -25,9 +24,7 @@ class GlobalCardinalityThreeTest: BaseTest() {
         )
 
         val solver = getSolver(theory)
-
-        assertThrows<IllegalStateException> {
-            solver.solveOnce(goal)
-        }
+        val solution = solver.solveOnce(goal)
+        assertException<ExistenceError>(solution, ExistenceError.ObjectType.RESOURCE)
     }
 }

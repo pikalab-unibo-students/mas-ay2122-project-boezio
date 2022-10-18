@@ -2,8 +2,9 @@ package clpfd.global
 
 import clpfd.BaseTest
 import clpfd.assertSolutionAssigns
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 
 class CumulativeTwoTest: BaseTest() {
@@ -96,6 +97,50 @@ class CumulativeTwoTest: BaseTest() {
     }
 
     @Test
+    fun testCumulativeInvalidFirstArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(E1, E2) :- 
+                ins([E1, E2, S1, S2], '..'(1, 10)), 
+                ins([H1], 1), 
+                ins([H2, L, D1], 2),
+                cumulative(a, [limit(L)]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(E1,E2),label([E1,E2])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
+    fun testCumulativeInvalidSecondArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(E1, E2) :- 
+                ins([E1, E2, S1, S2], '..'(1, 10)), 
+                ins([H1], 1), 
+                ins([H2, L, D1], 2),
+                cumulative([task(S1,D1,E1,H1, _), task(S2,2,E2,H2,_)], a).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(E1,E2),label([E1,E2])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
     fun testCumulativeInvalidFunctorTask() {
 
         val theory = theoryParser.parseTheory(
@@ -113,10 +158,8 @@ class CumulativeTwoTest: BaseTest() {
         )
 
         val solver = getSolver(theory)
-
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.PREDICATE_PROPERTY)
     }
 
     @Test
@@ -137,10 +180,8 @@ class CumulativeTwoTest: BaseTest() {
         )
 
         val solver = getSolver(theory)
-
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
     }
 
     @Test
@@ -161,10 +202,8 @@ class CumulativeTwoTest: BaseTest() {
         )
 
         val solver = getSolver(theory)
-
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.PREDICATE_PROPERTY)
     }
 
     @Test
@@ -185,9 +224,7 @@ class CumulativeTwoTest: BaseTest() {
         )
 
         val solver = getSolver(theory)
-
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
     }
 }

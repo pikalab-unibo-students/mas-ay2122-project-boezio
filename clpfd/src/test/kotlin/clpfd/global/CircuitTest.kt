@@ -2,6 +2,7 @@ package clpfd.global
 
 import clpfd.BaseTest
 import clpfd.assertSolutionAssigns
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
 
 class CircuitTest: BaseTest() {
@@ -60,4 +61,45 @@ class CircuitTest: BaseTest() {
             )
         }
     }
+
+    @Test
+    fun testCircuitInvalidArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X,Z) :- 
+                ins([X,Z], '..'(0, 2)), 
+                circuit(a).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Z),label([X,Z])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
+    fun testCircuitInvalidCircuitElement() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X,Z) :- 
+                ins([X,Z], '..'(0, 2)), 
+                circuit([X,a,Z]).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Z),label([X,Z])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
+    }
+
 }

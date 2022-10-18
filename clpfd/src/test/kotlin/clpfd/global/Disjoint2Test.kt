@@ -2,9 +2,9 @@ package clpfd.global
 
 import clpfd.BaseTest
 import clpfd.assertSolutionAssigns
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import java.lang.IllegalArgumentException
 
 class Disjoint2Test: BaseTest() {
 
@@ -42,6 +42,30 @@ class Disjoint2Test: BaseTest() {
     }
 
     @Test
+    fun testInvalidArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X1, Y1, X2, Y2) :- 
+                ins([X1], 1),
+                ins([X2, W1], 3),
+                ins([W2], 2),
+                ins([Y1, Y2], '..'(1, 10)),
+                ins([H1,H2], '..'(1, 6)),
+                disjoint2(a).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X1, Y1, X2, Y2),label([X1,Y1, X2, Y2])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
     fun testInvalidRectangleStruct() {
 
         val theory = theoryParser.parseTheory(
@@ -61,10 +85,8 @@ class Disjoint2Test: BaseTest() {
         )
 
         val solver = getSolver(theory)
-
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.PREDICATE_PROPERTY)
     }
 
     @Test
@@ -77,8 +99,8 @@ class Disjoint2Test: BaseTest() {
                 ins([X2, W1], 3),
                 ins([W2], 2),
                 ins([Y1, Y2], '..'(1, 10)),
-                ins([H2], '..'(1, 6)),
-                disjoint2([f(a,W1,Y1),g(X2,W2,Y2,H2)]).
+                ins([H1,H2], '..'(1, 6)),
+                disjoint2([f(a,W1,Y1,H1),g(X2,W2,Y2,H2)]).
             """.trimIndent()
         )
 
@@ -87,9 +109,7 @@ class Disjoint2Test: BaseTest() {
         )
 
         val solver = getSolver(theory)
-
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
     }
 }

@@ -6,6 +6,8 @@ import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.primitive.UnaryPredicate
 import org.chocosolver.solver.variables.IntVar
@@ -23,13 +25,13 @@ object Disjoint2 : UnaryPredicate.NonBacktrackable<ExecutionContext>("disjoint2"
         val logicVars = first.variables.toSet()
         val varsMap = chocoModel.variablesMap(logicVars, context.substitution).flip()
         for (rectangle in rectangles) {
-            require(rectangle.let { it is Struct && it.arity == 4 }) {
-                "$rectangle has an invalid structure"
+            if(!(rectangle.let { it is Struct && it.arity == 4 })) {
+                throw DomainError.forArgument(context, signature, DomainError.Expected.PREDICATE_PROPERTY, rectangle)
             }
             val rectStructArguments = rectangle.castToStruct().args
             for (i in 0 until 4) {
-                require(rectStructArguments[i].let { it is Var || it is LogicInteger }) {
-                    "${rectStructArguments[i]} is neither a variable nor an integer"
+                if(!(rectStructArguments[i].let { it is Var || it is LogicInteger })) {
+                    throw TypeError.forArgument(context, signature, TypeError.Expected.INTEGER, rectangle.castToStruct(), i)
                 }
             }
             xCoordinates.add(getAsIntVar(rectStructArguments[0], varsMap, context.substitution))

@@ -1,9 +1,13 @@
 package clpfd.global
 
 import clpCore.*
+import clpfd.getAsIntVar
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.Integer as LogicInteger
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.ExistenceError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 import org.chocosolver.solver.variables.IntVar
@@ -13,8 +17,8 @@ object GlobalCardinalityTwo : BinaryRelation.NonBacktrackable<ExecutionContext>(
         ensuringArgumentIsList(0)
         val listTerms = first.castToList().toList()
         for (elem in listTerms) {
-            require(elem is Var) {
-                "$elem is not a variable"
+            if(!(elem.let { it is Var || it is LogicInteger })) {
+                throw TypeError.forArgument(context, signature, TypeError.Expected.INTEGER, elem)
             }
         }
         val firstVars = listTerms.filterIsInstance<Var>().toSet()
@@ -27,26 +31,25 @@ object GlobalCardinalityTwo : BinaryRelation.NonBacktrackable<ExecutionContext>(
         val values = mutableListOf<Int>()
         val occurrences = mutableListOf<IntVar>()
         for (pair in pairs) {
-            require(pair.let { it is Struct && it.arity == 2 && it.functor == "-" }) {
-                "$pair is not a pair"
+            if(!(pair.let { it is Struct && it.arity == 2 && it.functor == "-" })) {
+                throw DomainError.forArgument(context, signature, DomainError.Expected.PREDICATE_PROPERTY, pair)
             }
             val arguments = pair.castToStruct().args
             val value = arguments[0]
-            require(value is LogicInteger) {
-                "$value is not an integer"
-            }
+
+            if(value is Var) {
+                throw ExistenceError.of(context,ExistenceError.ObjectType.RESOURCE,value,"Value as variable has not been supported yet")
+            } else if(value !is LogicInteger)
+                throw TypeError.forArgument(context, signature, TypeError.Expected.INTEGER, value)
+
             values.add(value.castToInteger().value.toInt())
             val occ = arguments[1]
-            require(occ is Var) {
-                "$occ is not a variable"
+            if(!(occ.let { it is Var || it is LogicInteger })) {
+                throw TypeError.forArgument(context, signature, TypeError.Expected.INTEGER, occ)
             }
-            val originalOcc = occ.castToVar().getOuterVariable(context.substitution)
-            occurrences.add(varsMap[originalOcc] as IntVar)
+            occurrences.add(getAsIntVar(occ,varsMap, context.substitution))
         }
-        val chocoVars = firstVars.map {
-            val originalVar = it.getOuterVariable(context.substitution)
-            varsMap[originalVar] as IntVar
-        }.toTypedArray()
+        val chocoVars = listTerms.map { getAsIntVar(it, varsMap, context.substitution) }.toTypedArray()
         val chocoValues = values.toIntArray()
         val chocoOccurrences = occurrences.toTypedArray()
         chocoModel.globalCardinality(chocoVars, chocoValues, chocoOccurrences, true).post()

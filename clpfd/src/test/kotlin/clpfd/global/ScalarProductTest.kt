@@ -2,9 +2,10 @@ package clpfd.global
 
 import clpfd.BaseTest
 import clpfd.assertSolutionAssigns
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.ExistenceError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import java.lang.IllegalArgumentException
 
 class ScalarProductTest: BaseTest() {
 
@@ -123,13 +124,13 @@ class ScalarProductTest: BaseTest() {
     }
 
     @Test
-    fun testInvalidCs() {
+    fun testInvalidFirstArgument() {
 
         val theory = theoryParser.parseTheory(
             """
             problem(X) :- 
                 in(X, '..'(1, 10)),
-                scalar_product([a,2], [X,5], #=, 11).
+                scalar_product(a, [X,5], #=, 11).
             """.trimIndent()
         )
 
@@ -138,20 +139,18 @@ class ScalarProductTest: BaseTest() {
         )
 
         val solver = getSolver(theory)
-
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
     }
 
     @Test
-    fun testInvalidVs() {
+    fun testInvalidSecondArgument() {
 
         val theory = theoryParser.parseTheory(
             """
             problem(X) :- 
                 in(X, '..'(1, 10)),
-                scalar_product([1,2], [a,5], #=, 11).
+                scalar_product([1,2], a, #=, 11).
             """.trimIndent()
         )
 
@@ -160,10 +159,134 @@ class ScalarProductTest: BaseTest() {
         )
 
         val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
 
-        assertThrows<IllegalArgumentException> {
-            solver.solveOnce(goal)
-        }
+    @Test
+    fun testInvalidThirdArgument() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                scalar_product([1, 2], [X,Y], 1, 11).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.ATOM)
+    }
+
+    @Test
+    fun testVariableAsCoefficient() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                scalar_product([X, 2], [X,Y], #=, 11).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<ExistenceError>(solution, ExistenceError.ObjectType.RESOURCE)
+    }
+
+    @Test
+    fun testInvalidCoefficient() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                scalar_product([a, 2], [X,Y], #=, 11).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
+    }
+
+    @Test
+    fun testInvalidVariables() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                scalar_product([1, 2], [a,Y], #=, 11).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
+    }
+
+    @Test
+    fun testInvalidOperator() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                scalar_product([1, 2], [X,Y], a, 11).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.ATOM_PROPERTY)
+    }
+
+    @Test
+    fun testInvalidExpression() {
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- 
+                in(X, '..'(1, 10)), 
+                in(Y, '..'(1, 10)), 
+                scalar_product([1, 2], [X,Y], #=, a).
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X,Y),label([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.EVALUABLE)
     }
 
 }

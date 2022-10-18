@@ -2,14 +2,13 @@ package clpfd.global
 
 
 import clpCore.chocoModel
-import clpCore.flip
 import clpCore.setChocoModel
 import clpCore.variablesMap
-import clpfd.getIntAsVars
 import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.primitive.UnaryPredicate
 import org.chocosolver.solver.variables.IntVar
@@ -27,7 +26,7 @@ object Circuit: UnaryPredicate.NonBacktrackable<ExecutionContext>("circuit") {
                     constraintVars.add(chocoVar)
                 }
                 is Integer -> constraintVars.add(chocoModel.intVar(term.value.toInt()))
-                else -> throw IllegalStateException("argument is neither a variable nor an integer")
+                else -> throw TypeError.forArgument(context, signature, TypeError.Expected.INTEGER, term)
             }
         }
         chocoModel.circuit(constraintVars.toTypedArray()).post()
