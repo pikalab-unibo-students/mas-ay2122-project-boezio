@@ -1,6 +1,7 @@
 package clpfd.reflection
 
 import clpfd.BaseTest
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
@@ -60,5 +61,17 @@ class FdVarTest: BaseTest() {
         val solution = solver.solveOnce(goal)
 
         assertTrue(solution.isNo)
+    }
+
+    @Test
+    fun testInvalidArgument() {
+
+        val goal = termParser.parseStruct(
+            "in(X,'..'(1,10)), fd_var(1)"
+        )
+
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.VARIABLE)
     }
 }

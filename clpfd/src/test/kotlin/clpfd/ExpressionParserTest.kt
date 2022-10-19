@@ -13,10 +13,9 @@ internal class ExpressionParserTest {
     private val UPPER_BOUND = 10
     private val varNames = listOf("X", "Y", "Z")
 
-    private val model = Model().let {
-        val chocoModel = it
-        varNames.map { chocoModel.intVar(it, LOWER_BOUND, UPPER_BOUND) }
-        chocoModel
+    private val model = Model().let { model1 ->
+        varNames.map { model1.intVar(it, LOWER_BOUND, UPPER_BOUND) }
+        model1
     }
     private val chocoVars = model.vars
     private val tuPrologVars = varNames.map { Var.of(it) }

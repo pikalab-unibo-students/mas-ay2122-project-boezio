@@ -6,6 +6,7 @@ import clpCore.getOuterVariable
 import clpCore.variablesMap
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 import org.chocosolver.solver.variables.IntVar
@@ -15,8 +16,14 @@ object FdDom : BinaryRelation.NonBacktrackable<ExecutionContext>("fd_dom") {
         val domFunctor = ".."
         ensuringArgumentIsVariable(0)
         val variable = first.castToVar()
-        require(second.let { it is Var || (it is Struct && it.functor == domFunctor && it.arity == 2 ) }){
-            "$second is neither a variable nor a domain interval"
+        if(!second.let { (it is Struct && it.functor == ".." && it.arity == 2) || it is Var })
+            throw TypeError.forArgument(context, signature, TypeError.Expected.COMPOUND, second)
+        if(second is Struct){
+            val args = second.castToStruct().args
+            for(arg in args){
+                if(arg !is Integer)
+                    throw TypeError.forArgument(context, signature, TypeError.Expected.INTEGER, arg)
+            }
         }
         val chocoModel = chocoModel
         val subContext = context.substitution
@@ -30,18 +37,16 @@ object FdDom : BinaryRelation.NonBacktrackable<ExecutionContext>("fd_dom") {
             val lb = chocoVar.lb
             val ub = chocoVar.ub
             val domainStruct = Struct.of(domFunctor, Integer.of(lb), Integer.of(ub))
-            when(second){
-                is Var -> replyWith(Substitution.of(second.getOuterVariable(subContext) to domainStruct))
-                is Struct -> {
-                    val struct = second.castToStruct()
-                    val queryDom = Struct.of(domFunctor, struct[0].castToInteger(), struct[1].castToInteger())
-                    if( queryDom == domainStruct)
+            if(second is Var)
+                return replyWith(Substitution.of(second.getOuterVariable(subContext) to domainStruct))
+            else {
+                val struct = second.castToStruct()
+                val queryDom = Struct.of(domFunctor, struct[0].castToInteger(), struct[1].castToInteger())
+                if( queryDom == domainStruct)
                         replySuccess()
-                    else
-                        replyFail()
+                else
+                    replyFail()
                 }
-                else -> throw IllegalStateException()
-            }
         }
     }
 }

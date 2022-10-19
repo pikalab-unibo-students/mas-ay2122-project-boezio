@@ -61,4 +61,3 @@ class ExpressionParser<T : Variable>(
         return operator(first, second)
     }
 }
-
