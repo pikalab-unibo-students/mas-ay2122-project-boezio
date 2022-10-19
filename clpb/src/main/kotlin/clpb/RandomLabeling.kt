@@ -6,6 +6,7 @@ import clpCore.variablesMap
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.BinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 
@@ -14,8 +15,10 @@ object RandomLabeling: BinaryRelation.NonBacktrackable<ExecutionContext>("random
         ensuringArgumentIsInteger(0)
         val seed = first.castToInteger().value.toInt()
         ensuringArgumentIsList(1)
-        require(second.castToList().toList().all { it is Var }){
-            "First argument does not contain only variables"
+        val listElements = second.castToList().toList()
+        for(elem in listElements){
+            if(elem !is Var)
+                throw TypeError.forArgument(context, signature, TypeError.Expected.VARIABLE, elem)
         }
         val chocoModel = chocoModel
         val vars = second.variables.distinct().toList()

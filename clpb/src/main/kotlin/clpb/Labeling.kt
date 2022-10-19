@@ -4,14 +4,17 @@ import clpCore.*
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.primitive.UnaryPredicate
 
 object Labeling: UnaryPredicate.NonBacktrackable<ExecutionContext>("labeling") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
         ensuringArgumentIsList(0)
-        require(first.castToList().toList().all { it is Var }){
-            "First argument does not contain only variables"
+        val listElements = first.castToList().toList()
+        for(elem in listElements){
+            if(elem !is Var)
+                throw TypeError.forArgument(context, signature, TypeError.Expected.VARIABLE, elem)
         }
         val chocoModel = chocoModel
         val vars = first.variables.distinct().toList()

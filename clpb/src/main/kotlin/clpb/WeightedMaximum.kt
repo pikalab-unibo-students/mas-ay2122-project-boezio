@@ -9,6 +9,8 @@ import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.primitive.TernaryRelation
 import org.chocosolver.solver.Model
@@ -18,20 +20,21 @@ object WeightedMaximum: TernaryRelation.NonBacktrackable<ExecutionContext>("weig
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term): Solve.Response {
         ensuringArgumentIsList(0)
         val weights = first.castToList().toList()
-        require(weights.all{ it is Integer}){
-            "$weights is not a list of integers"
+        for(weight in weights){
+            if (weight !is Integer)
+                throw TypeError.forArgument(context, signature, TypeError.Expected.INTEGER, weight)
         }
         ensuringArgumentIsList(1)
         var vars = second.castToList().toList()
-        require(vars.all { it is Var }){
-            "$vars is not a list of variables"
+        for(variable in vars){
+            if(variable !is Var)
+                throw TypeError.forArgument(context, signature, TypeError.Expected.VARIABLE, variable)
         }
         vars = vars.map { it.castToVar() }.toMutableList()
         val weightsSize = weights.size
         val varsSize = vars.size
-        require(weightsSize == varsSize){
-            "length of weights and length of variables are different: $weightsSize != $varsSize"
-        }
+        if(weightsSize != varsSize)
+            throw DomainError.forArgument(context, signature, DomainError.Expected.ATOM_PROPERTY, Integer.of(varsSize))
         ensuringArgumentIsVariable(2)
         val maximum = third.castToVar()
 

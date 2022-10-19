@@ -1,5 +1,6 @@
 package clpb
 
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
@@ -193,6 +194,18 @@ class TautTest: BaseTest() {
                 varOf("T") to intOf(1)
             )
         }
+    }
+
+    @Test
+    fun testInvalidSecondArgument(){
+
+        val goal = termParser.parseStruct(
+            "taut(X + 1, a)"
+        )
+
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.VARIABLE)
     }
 
 }

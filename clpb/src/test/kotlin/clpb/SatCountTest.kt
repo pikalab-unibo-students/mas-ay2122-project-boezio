@@ -81,7 +81,7 @@ class SatCountTest: BaseTest() {
     fun testSatCountWithSat(){
 
         val goal = termParser.parseStruct(
-            "sat(A =< B), sat_count(+[1,A,B], Count)"
+            "sat(A =< B), sat_count(+([1,A,B]), Count)"
         )
 
         val solver = getSolver()

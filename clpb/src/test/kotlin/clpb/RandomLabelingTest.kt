@@ -1,5 +1,6 @@
 package clpb
 
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
@@ -199,5 +200,38 @@ class RandomLabelingTest: BaseTest() {
         val solution = solver.solveOnce(goal)
 
         assertTrue(solution.isNo)
+    }
+
+    @Test
+    fun testInvalidFirstArgument(){
+
+        val goal = termParser.parseStruct(
+            "sat(X), random_labeling(a,[X])"
+        )
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.INTEGER)
+    }
+
+    @Test
+    fun testInvalidSecondArgument(){
+
+        val goal = termParser.parseStruct(
+            "sat(X), random_labeling(0,a)"
+        )
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
+    fun testInvalidListElement(){
+
+        val goal = termParser.parseStruct(
+            "sat(X), random_labeling(0,[a])"
+        )
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.VARIABLE)
     }
 }

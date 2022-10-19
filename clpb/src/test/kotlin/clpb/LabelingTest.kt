@@ -1,5 +1,6 @@
 package clpb
 
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
@@ -161,5 +162,27 @@ class LabelingTest: BaseTest() {
         val solution = solver.solveOnce(goal)
 
         assertTrue(solution.isNo)
+    }
+
+    @Test
+    fun testInvalidFirstArgument(){
+
+        val goal = termParser.parseStruct(
+            "sat(X), labeling(a)"
+        )
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
+    fun testInvalidListElement(){
+
+        val goal = termParser.parseStruct(
+            "sat(X), labeling([X,1])"
+        )
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.VARIABLE)
     }
 }

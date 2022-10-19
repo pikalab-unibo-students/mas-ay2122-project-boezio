@@ -10,7 +10,6 @@ import clpb.utils.setTautModel
 import clpb.utils.tautModel
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Term
-import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.primitive.UnaryPredicate
@@ -61,7 +60,7 @@ object Sat: UnaryPredicate.NonBacktrackable<ExecutionContext>("sat") {
                     solver.hardReset()
                 }
             }else{
-                replyFail {  }
+                replyFail()
             }
         }
     }
