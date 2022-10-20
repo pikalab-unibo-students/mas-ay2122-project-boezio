@@ -2,7 +2,6 @@ package clpqr.mip
 
 import clpCore.chocoModel
 import clpCore.flip
-import clpCore.solutions
 import clpCore.variablesMap
 import clpqr.search.Configuration
 import clpqr.search.ProblemType
@@ -13,11 +12,12 @@ import clpqr.utils.getVectorValue
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.List
 import it.unibo.tuprolog.solve.ExecutionContext
-import it.unibo.tuprolog.solve.primitive.PrimitiveWrapper.Companion.ensuringArgumentIsGround
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.ExistenceError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.QuinaryRelation
 import it.unibo.tuprolog.solve.primitive.Solve
 import org.chocosolver.solver.variables.RealVar
-import java.lang.IllegalStateException
 
 object BBInfFive: QuinaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") {
 
@@ -29,24 +29,28 @@ object BBInfFive: QuinaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") {
         fifth: Term
     ): Solve.Response {
         ensuringArgumentIsList(0)
-        require(first.castToList().toList().all { it is Var }){
-            "$first is not a list of variables"
+        val varsList = first.castToList().toList()
+        for(variable in varsList){
+            if(variable !is Var)
+                throw TypeError.forArgument(context, signature, TypeError.Expected.VARIABLE, variable)
         }
-        val vector = first.variables.distinct().toList()
+        val vector = varsList.map { it.castToVar() }
         ensuringArgumentIsVariable(2)
         val inf = third.castToVar()
         ensuringArgumentIsVariable(3)
         val vertex = fourth.castToVar()
-        ensuringArgumentIsGround(4)
         // range of eps described in SWI Prolog
-        require(fifth.let { it is Real && it.value.toDouble() >= 0 && it.value.toDouble() <= 0.5 }){
-            "$fifth is not a valid eps value"
-        }
+        if(!fifth.let { it is Real && it.value.toDouble() >= 0 && it.value.toDouble() <= 0.5 })
+            throw DomainError.forArgument(context, signature, DomainError.Expected.ATOM_PROPERTY, fifth)
         val eps = fifth.castToReal().value.toDouble()
         // eps is not supported by Choco solver
-        if(eps != 0.0){
-            throw IllegalStateException()
-        }
+        if(eps != 0.0)
+            throw ExistenceError.of(
+                context,
+                ExistenceError.ObjectType.RESOURCE,
+                Real.of(eps),
+                "Eps different from 0 are not supported"
+            )
         val vars = vector.toSet()
         val allVars = vars union second.variables.distinct().toSet()
         val varsMap = chocoModel.variablesMap(allVars, context.substitution).toMutableMap()

@@ -10,6 +10,7 @@ import clpqr.search.ProblemType
 import clpqr.utils.bound
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.primitive.TernaryRelation
 import org.chocosolver.solver.variables.RealVar
@@ -18,10 +19,12 @@ object BBInfThree: TernaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") 
 
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term, second: Term, third: Term): Solve.Response {
         ensuringArgumentIsList(0)
-        require(first.castToList().toList().all { it is Var }){
-            "$first is not a list of variables"
+        val varsList = first.castToList().toList()
+        for(variable in varsList){
+            if(variable !is Var)
+                throw TypeError.forArgument(context, signature, TypeError.Expected.VARIABLE, variable)
         }
-        val vector = first.variables.distinct().toList()
+        val vector = varsList.map { it.castToVar() }
         ensuringArgumentIsVariable(2)
         val inf = third.castToVar()
         val vars = vector.toMutableList()
