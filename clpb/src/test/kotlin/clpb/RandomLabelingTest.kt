@@ -94,7 +94,7 @@ class RandomLabelingTest: BaseTest() {
 
         termParser.scope.with {
             solution.assertSolutionAssigns(
-                varOf("X") to intOf(1)
+                varOf("X") to intOf(0)
             )
         }
     }
