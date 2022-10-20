@@ -1,6 +1,5 @@
 package clpb.utils
 
-import clpb.utils.UnaryOp
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.List as LogicList
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor

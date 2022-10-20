@@ -1,9 +1,6 @@
 package clpb
 
-import clpCore.chocoModel
-import clpCore.flip
-import clpCore.solutions
-import clpCore.variablesMap
+import clpCore.*
 import clpb.utils.bound
 import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Term
@@ -54,14 +51,17 @@ object WeightedMaximum: TernaryRelation.NonBacktrackable<ExecutionContext>("weig
         val pairs = varsMap.keys.map { it as BoolVar } zip intVars
         pairs.forEach { (a,b) ->  a.eq(b).decompose().post() }
         val coeffs = weights.map { it.castToInteger().value.toInt() }.toIntArray()
-        val scalarValue = model.intVar(maximum.completeName, -bound, bound)
+        val maximumOuterVar = maximum.getOuterVariable(context.substitution)
+        val scalarValue = model.intVar(maximumOuterVar.completeName, -bound, bound)
         // update the map
-        varsMap[scalarValue] = maximum
+        varsMap[scalarValue] = maximumOuterVar
         // post scalar constraints
         model.scalar(intVars, coeffs, "=", scalarValue).post()
         // generate solution
-        model.setObjective(Model.MAXIMIZE, varsMap.flip()[maximum])
+        model.setObjective(Model.MAXIMIZE, varsMap.flip()[maximumOuterVar])
         val solver = model.solver
-        return replyWith(solver.solutions(varsMap).last())
+        return replySuccess(solver.solutions(varsMap).last().castToUnifier()) {
+            setChocoModel(chocoModel)
+        }
     }
 }
