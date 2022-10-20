@@ -2,7 +2,8 @@ package clpqr
 
 import clpCore.chocoModel
 import clpqr.utils.ConstraintChecker
-import it.unibo.tuprolog.core.Struct
+import it.unibo.tuprolog.core.Atom
+import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.exception.error.TypeError
@@ -11,7 +12,7 @@ import it.unibo.tuprolog.solve.primitive.UnaryPredicate
 
 object Entailed: UnaryPredicate.NonBacktrackable<ExecutionContext>("entailed") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
-        if (first !is Struct) {
+        if (first.let { it is Atom || it is Integer }) {
             throw TypeError.forArgument(context, signature, TypeError.Expected.COMPOUND, first, 0)
         }
         val chocoModel = chocoModel

@@ -1,6 +1,7 @@
 package clpqr
 
 
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
 
 
@@ -246,5 +247,59 @@ class SatisfyTest: BaseTest() {
                 varOf("X") to realOf("0.12499")
             )
         }
+    }
+
+    @Test
+    fun testInvalidArgument(){
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- { X >= Y, X + Y = 10.0 }.
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X, Y),satisfy(a)"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.LIST)
+    }
+
+    @Test
+    fun testInvalidListElement(){
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- { X >= Y, X + Y = 10.0 }.
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X, Y),satisfy([a,X])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.VARIABLE)
+    }
+
+    @Test
+    fun testInvalidConstraint(){
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- { a }.
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X, Y),satisfy([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.COMPOUND)
     }
 }

@@ -14,7 +14,7 @@ import it.unibo.tuprolog.solve.primitive.UnaryPredicate
 
 object Constraint: UnaryPredicate.NonBacktrackable<ExecutionContext>("{}") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
-        if (first !is Struct) {
+        if (first.let { it is Atom || it is Integer }) {
             throw TypeError.forArgument(context, signature, TypeError.Expected.COMPOUND, first, 0)
         }
         val chocoModel = chocoModel

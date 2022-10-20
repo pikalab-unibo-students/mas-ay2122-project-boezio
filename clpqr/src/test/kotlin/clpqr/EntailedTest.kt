@@ -1,5 +1,6 @@
 package clpqr
 
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
 import kotlin.test.Ignore
 import kotlin.test.assertTrue
@@ -133,6 +134,19 @@ class EntailedTest: BaseTest() {
         val solution = solver.solveOnce(goal)
 
         assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testInvalidArgument(){
+
+        val goal = termParser.parseStruct(
+            "{ X > 10.0 }, entailed(a), satisfy([X,Y])"
+        )
+
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.COMPOUND)
+
     }
 
 
