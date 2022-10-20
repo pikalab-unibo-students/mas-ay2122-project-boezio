@@ -1,7 +1,6 @@
 package clpb
 
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 import kotlin.test.assertTrue
 
 class SatTest: BaseTest() {
@@ -344,7 +343,7 @@ class SatTest: BaseTest() {
         assertTrue(solution.isYes)
     }
 
-    @Test @Ignore
+    @Test
     fun testSatNoVariablesLessEquals(){
 
         val goal = termParser.parseStruct(
@@ -358,7 +357,35 @@ class SatTest: BaseTest() {
         assertTrue(solution.isNo)
     }
 
-    @Test @Ignore
+    @Test
+    fun testSatNoVariablesGreaterEquals(){
+
+        val goal = termParser.parseStruct(
+            "sat(1 >= 0)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
+    fun testSatNoVariablesGreaterThan(){
+
+        val goal = termParser.parseStruct(
+            "sat(1 > 0)"
+        )
+
+        val solver = getSolver()
+
+        val solution = solver.solveOnce(goal)
+
+        assertTrue(solution.isYes)
+    }
+
+    @Test
     fun testSatNoVariablesLessThan(){
 
         val goal = termParser.parseStruct(

@@ -26,10 +26,10 @@ class BoolExprEvaluator : DefaultTermVisitor<Boolean>() {
                 "#" -> return binaryExpression(term, Boolean::xor)
                 "=:=" -> return binaryExpression(term, Boolean::equals)
                 "=\\=" -> return term[0].accept(this) != term[1].accept(this)
-                "=<" -> return (term[0].accept(this).compareTo(false)) <= (term[1].accept(this).compareTo(false))
-                ">=" -> return (term[0].accept(this).compareTo(false)) >= (term[1].accept(this).compareTo(false))
-                "<" -> return (term[0].accept(this).compareTo(false)) < (term[1].accept(this).compareTo(false))
-                ">" -> return (term[0].accept(this).compareTo(false)) > (term[1].accept(this).compareTo(false))
+                "=<" -> return !term[0].accept(this) or term[1].accept(this)
+                ">=" -> return binaryExpression(term, Boolean::xor)
+                "<" -> return !term[0].accept(this) and term[1].accept(this)
+                ">" -> return term[0].accept(this) and !term[1].accept(this)
             }
             1 -> when (term.functor) {
                 "+" -> return unaryExpression(term, UnaryOp.OR)
