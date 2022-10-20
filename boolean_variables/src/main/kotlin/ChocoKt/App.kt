@@ -7,10 +7,11 @@ fun main(){
 
     val x = model.boolVar("X")
     val y = model.boolVar("Y")
-    val trueVal = model.boolVar(true)
+    val z = model.boolVar("Z")
 
     model.addClauses(LogOp.implies(x,y))
-    model.addClauses(LogOp.or(trueVal,x,y))
+    z.eq(1).decompose().post()
+    model.addClauses(LogOp.or(z,x,y))
 
     val solver = model.solver
 

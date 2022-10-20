@@ -20,11 +20,13 @@ class ExpressionParser<T : Variable>(
         asExpression(variables[term] ?: error("No such a variable: $term"))
 
     override fun visitInteger(term: Integer): ILogical {
-        return when(term.value.toInt()){
-            1 -> chocoModel.boolVar(true)
-            0 -> chocoModel.boolVar(false)
+        val boolVar = chocoModel.boolVar()
+        when(term.value.toInt()){
+            1 -> boolVar.eq(1).decompose().post()
+            0 -> boolVar.eq(0).decompose().post()
             else -> throw IllegalStateException()
         }
+        return boolVar
     }
 
     override fun visitStruct(term: Struct): ILogical {

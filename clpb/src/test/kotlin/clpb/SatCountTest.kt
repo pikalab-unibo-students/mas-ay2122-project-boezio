@@ -1,7 +1,6 @@
 package clpb
 
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
 class SatCountTest: BaseTest() {
 
@@ -77,7 +76,7 @@ class SatCountTest: BaseTest() {
         }
     }
 
-    @Test @Ignore
+    @Test
     fun testSatCountWithSat(){
 
         val goal = termParser.parseStruct(
