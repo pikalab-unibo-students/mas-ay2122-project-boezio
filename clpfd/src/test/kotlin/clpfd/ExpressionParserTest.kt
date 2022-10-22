@@ -1,11 +1,17 @@
 package clpfd
 
 import it.unibo.tuprolog.core.Integer
+import it.unibo.tuprolog.core.Real
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Var
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.ExistenceError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.chocosolver.solver.Model
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 internal class ExpressionParserTest {
 
@@ -21,7 +27,9 @@ internal class ExpressionParserTest {
     private val tuPrologVars = varNames.map { Var.of(it) }
 
     private val mapVars = (tuPrologVars zip chocoVars).toMap()
-    private val expressionParser = ExpressionParser(model, mapVars)
+    private val expressionParser = ExpressionParser(
+        model, mapVars, Dummy.context.substitution, Dummy.context, Dummy.signature
+    )
 
     @Test
     fun testVisitVar() {
@@ -176,6 +184,46 @@ internal class ExpressionParserTest {
 
         val arithmeticExpr = struct.accept(expressionParser)
         assertEquals(arithmeticExpr.noChild, 2)
+
+    }
+
+    @Test
+    fun testVisitReal() {
+
+        val realNum = Real.of("3.0")
+        assertThrows<TypeError> { realNum.accept(expressionParser) }
+
+    }
+
+    @Test
+    fun testNotExistingVariable() {
+
+        val newVar = Var.of("NewVar")
+        assertThrows<DomainError> { newVar.accept(expressionParser) }
+
+    }
+
+    @Test
+    fun testDivNotSupported() {
+
+        val struct = Struct.of("//", Integer.of(1), Integer.of(2))
+        assertThrows<ExistenceError> { struct.accept(expressionParser) }
+
+    }
+
+    @Test
+    fun testRemNotSupported() {
+
+        val struct = Struct.of("rem", Integer.of(1), Integer.of(2))
+        assertThrows<ExistenceError> { struct.accept(expressionParser) }
+
+    }
+
+    @Test
+    fun testNotExistingOperator() {
+
+        val struct = Struct.of("invalid_op", Integer.of(1), Integer.of(2))
+        assertThrows<TypeError> { struct.accept(expressionParser) }
 
     }
 

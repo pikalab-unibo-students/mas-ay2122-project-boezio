@@ -53,7 +53,7 @@ object ScalarProduct : QuaternaryRelation.NonBacktrackable<ExecutionContext>("sc
             }
             vs.add(getAsIntVar(elem, varsMap, context.substitution))
         }
-        val expParser = ExpressionParser(chocoModel, varsMap, context.substitution)
+        val expParser = ExpressionParser(chocoModel, varsMap, context.substitution, context, signature)
         val expression = fourth.accept(expParser).intVar()
         chocoModel.scalar(vs.toTypedArray(), coeffs, chocoOperator, expression).post()
         return replySuccess {

@@ -8,6 +8,9 @@ import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
+import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.Signature
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.chocosolver.solver.Model
 import org.chocosolver.solver.constraints.nary.cnf.ILogical
 import org.chocosolver.solver.constraints.nary.cnf.LogOp
@@ -18,10 +21,12 @@ import org.chocosolver.solver.variables.Variable
 class ReificationParser<T : Variable>(
     private val chocoModel: Model,
     private val varsMap: Map<Var, T>,
-    private val substitution: Substitution.Unifier
+    private val substitution: Substitution.Unifier,
+    private val context: ExecutionContext,
+    private val signature: Signature
 ) : DefaultTermVisitor<ILogical>() {
     override fun defaultValue(term: Term): ILogical =
-        error("Unsupported sub-expression: $term")
+        throw TypeError.forArgument(context, signature, TypeError.Expected.TYPE_REFERENCE, term)
 
     override fun visitStruct(term: Struct): ILogical {
         when (term.arity) {
@@ -55,7 +60,7 @@ class ReificationParser<T : Variable>(
     ): ReExpression {
         val logicalVars = (first.variables + second.variables).toSet()
         val varMap = chocoModel.variablesMap(logicalVars, substitution).flip()
-        val parser = ExpressionParser(chocoModel, varMap, substitution)
+        val parser = ExpressionParser(chocoModel, varMap, substitution, context, signature)
         val firstExpression = first.accept(parser)
         val secondExpression = second.accept(parser)
         return operation(firstExpression, secondExpression)

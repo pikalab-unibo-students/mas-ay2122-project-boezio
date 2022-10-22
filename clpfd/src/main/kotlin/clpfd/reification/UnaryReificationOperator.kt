@@ -17,7 +17,7 @@ abstract class UnaryReificationOperator(operator: String): UnaryPredicate.NonBac
         val chocoModel = chocoModel
         val logicVars = first.variables.distinct().toList()
         val varsMap = chocoModel.variablesMap(logicVars, context.substitution).flip()
-        val parser = ReificationParser(chocoModel, varsMap, context.substitution)
+        val parser = ReificationParser(chocoModel, varsMap, context.substitution, context, signature)
         val struct = Struct.of(functor, first)
         chocoModel.addClauses(struct.accept(parser) as LogOp)
         return replySuccess()

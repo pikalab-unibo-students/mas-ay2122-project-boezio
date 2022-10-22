@@ -32,7 +32,7 @@ object Sum : TernaryRelation.NonBacktrackable<ExecutionContext>("sum") {
                 throw TypeError.forArgument(context, signature, TypeError.Expected.INTEGER, elem)
             varsFirstTerm.add(getAsIntVar(elem, varsMap, context.substitution))
         }
-        val expParser = ExpressionParser(chocoModel, varsMap, context.substitution)
+        val expParser = ExpressionParser(chocoModel, varsMap, context.substitution, context, signature)
         val expression = third.accept(expParser).intVar()
         chocoModel.sum(varsFirstTerm.toTypedArray(), chocoOperator, expression).post()
         return replySuccess {

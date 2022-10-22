@@ -17,7 +17,7 @@ abstract class BinaryReificationOperator(operator: String): BinaryRelation.NonBa
         val chocoModel = chocoModel
         val logicVars = (first.variables.toSet() union second.variables.toSet())
         val varsMap = chocoModel.variablesMap(logicVars, context.substitution).flip()
-        val parser = ReificationParser(chocoModel, varsMap, context.substitution)
+        val parser = ReificationParser(chocoModel, varsMap, context.substitution, context, signature)
         val struct = Struct.of(functor, first, second)
         chocoModel.addClauses(struct.accept(parser) as LogOp)
         return replySuccess()

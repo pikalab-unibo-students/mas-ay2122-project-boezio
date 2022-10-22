@@ -60,7 +60,7 @@ object Labeling : BinaryRelation<ExecutionContext>("labeling") {
         }
 
         if (config.problemType != ProblemType.SATISFY) {
-            val parser = ExpressionParser(model, variables.flip(), substitution)
+            val parser = ExpressionParser(model, variables.flip(), substitution, context, signature)
             val objectiveExpression = config.objective!!.accept(parser)
             model.setObjective(config.problemType.toChoco()!!, objectiveExpression.intVar())
         }

@@ -3,7 +3,6 @@ package clpfd.relational
 import clpfd.ExpressionParser
 import clpCore.chocoModel
 import clpCore.flip
-import clpCore.getOuterVariables
 import clpCore.variablesMap
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -30,7 +29,7 @@ abstract class BinaryClpOperator(operator: String) : BinaryRelation.NonBacktrack
         val firstExpression: ArExpression
         val secondExpression: ArExpression
         // variables of Choco model are used as keys for a substitution in the current context
-        val parser = ExpressionParser(chocoModel, varMap, context.substitution)
+        val parser = ExpressionParser(chocoModel, varMap, context.substitution, context, signature)
         firstExpression = first.accept(parser)
         secondExpression = second.accept(parser)
         operation(firstExpression, secondExpression).decompose().post()

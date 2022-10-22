@@ -1,5 +1,6 @@
 package clpfd
 
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
 
 class ReificationOpTest: BaseTest() {
@@ -200,5 +201,17 @@ class ReificationOpTest: BaseTest() {
                 varOf("X") to intOf(2)
             )
         }
+    }
+
+    @Test
+    fun testNotSupportedReificationOp() {
+
+        val goal = termParser.parseStruct(
+            "in(X, '..'(1,10)),  #/\\('not_supported'(X,1),#=<(X,3)) , label([X])"
+        )
+
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.TYPE_REFERENCE)
     }
 }
