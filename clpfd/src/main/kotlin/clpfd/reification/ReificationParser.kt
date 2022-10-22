@@ -6,7 +6,6 @@ import clpfd.ExpressionParser
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Substitution
 import it.unibo.tuprolog.core.Term
-import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
 import it.unibo.tuprolog.solve.ExecutionContext
 import it.unibo.tuprolog.solve.Signature
@@ -16,11 +15,9 @@ import org.chocosolver.solver.constraints.nary.cnf.ILogical
 import org.chocosolver.solver.constraints.nary.cnf.LogOp
 import org.chocosolver.solver.expression.discrete.arithmetic.ArExpression
 import org.chocosolver.solver.expression.discrete.relational.ReExpression
-import org.chocosolver.solver.variables.Variable
 
-class ReificationParser<T : Variable>(
+class ReificationParser(
     private val chocoModel: Model,
-    private val varsMap: Map<Var, T>,
     private val substitution: Substitution.Unifier,
     private val context: ExecutionContext,
     private val signature: Signature

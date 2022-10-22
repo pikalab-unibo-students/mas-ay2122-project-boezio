@@ -37,7 +37,7 @@ object Constraint: UnaryPredicate.NonBacktrackable<ExecutionContext>("{}") {
             constraints.add(first)
         }
         // Imposing constraints
-        first.accept(ConstraintImposer(chocoModel, context))
+        first.accept(ConstraintImposer(chocoModel, context, signature))
         // checking equality constraints
         val eqDetector = EquationDetector(context.substitution, equations)
         val updatedEquations = first.accept(eqDetector)
