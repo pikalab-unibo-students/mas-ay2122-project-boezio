@@ -8,6 +8,7 @@ import clpqr.Precision
 import clpqr.search.ProblemType
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.Signature
 import it.unibo.tuprolog.solve.primitive.Solve
 import it.unibo.tuprolog.solve.sideffects.SideEffectsBuilder
 import clpqr.search.Configuration as Configuration
@@ -22,7 +23,7 @@ internal fun Solve.Request<ExecutionContext>.createChocoSolver(
 ): Solver {
 
     if(config.problemType != ProblemType.SATISFY){
-        val parser = ExpressionParser(chocoModel, variables.flip(), context.substitution)
+        val parser = ExpressionParser(chocoModel, variables.flip(), context.substitution, context, signature)
         val objectiveExpression = config.objective!!.accept(parser)
         val precision = (context.flags[Precision] as Real).decimalValue.toDouble()
         chocoModel.setObjective(config.problemType.toChoco()!!, objectiveExpression.realVar(precision))
@@ -42,9 +43,11 @@ internal fun Solver.getVectorValue(varsMap: Map<Variable, Var>, vector: List<Var
 internal fun Solver.calculateExpression(
     varsMap: Map<Variable, Var>,
     expression: Term,
-    substitution: Substitution.Unifier
+    substitution: Substitution.Unifier,
+    context: ExecutionContext,
+    signature: Signature
 ): Sequence<Double> = sequence {
-    val parser = ExpressionEvaluator(varsMap.flip(), substitution)
+    val parser = ExpressionEvaluator(varsMap.flip(), substitution, context, signature)
     while (solve()) {
         yield(expression.accept(parser))
     }
@@ -76,7 +79,7 @@ internal fun Solve.Request<ExecutionContext>.convertExpression(
         expression.getOuterVariable(substitution)
     else{
         val precision = ((context.flags[Precision] ?: Precision.defaultValue) as Real).decimalValue.toDouble()
-        val parser = ExpressionParser(chocoModel, varsMap.flip(), context.substitution)
+        val parser = ExpressionParser(chocoModel, varsMap.flip(), context.substitution, context, signature)
         // convert expression from 2p-kt to Choco data structure
         val chocoExpr = expression.accept(parser)
         // introduce new variable which denotes the expression

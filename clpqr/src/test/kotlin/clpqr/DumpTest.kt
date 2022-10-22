@@ -157,4 +157,5 @@ class DumpTest: BaseTest() {
         val solution = solver.solveOnce(goal)
         assertException<DomainError>(solution, DomainError.Expected.ATOM_PROPERTY)
     }
+
 }

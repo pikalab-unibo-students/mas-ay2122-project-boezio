@@ -1,6 +1,7 @@
 package clpqr
 
 
+import it.unibo.tuprolog.solve.exception.error.DomainError
 import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
 
@@ -302,4 +303,59 @@ class SatisfyTest: BaseTest() {
         val solution = solver.solveOnce(goal)
         assertException<TypeError>(solution, TypeError.Expected.COMPOUND)
     }
+
+    @Test
+    fun testInvalidConstraintFunctor(){
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- { 'invalid'(X,Y) }.
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X, Y),satisfy([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.PREDICATE_PROPERTY)
+    }
+
+    @Test
+    fun testInvalidConstraintIsReal(){
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- { 3.0 }.
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X, Y),satisfy([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.TYPE_REFERENCE)
+    }
+
+    @Test
+    fun testInvalidConstraintFunctorArity(){
+
+        val theory = theoryParser.parseTheory(
+            """
+            problem(X, Y) :- { '>'(X,Y,Z) }.
+            """.trimIndent()
+        )
+
+        val goal = termParser.parseStruct(
+            "problem(X, Y),satisfy([X,Y])"
+        )
+
+        val solver = getSolver(theory)
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.PREDICATE_PROPERTY)
+    }
+
 }

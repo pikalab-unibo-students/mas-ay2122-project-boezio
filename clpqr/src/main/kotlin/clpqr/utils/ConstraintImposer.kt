@@ -52,7 +52,7 @@ internal class ConstraintImposer(
     ){
         val logicalVars = (firstTerm.variables + secondTerm.variables).toSet()
         val varMap = model.variablesMap(logicalVars, context.substitution).flip()
-        val parser = ExpressionParser(model, varMap, context.substitution)
+        val parser = ExpressionParser(model, varMap, context.substitution, context, signature)
         val firstExpression = firstTerm.accept(parser)
         val secondExpression = secondTerm.accept(parser)
         operation(firstExpression, secondExpression).equation().post()

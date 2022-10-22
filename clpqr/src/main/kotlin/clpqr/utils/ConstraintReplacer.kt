@@ -2,10 +2,18 @@ package clpqr.utils
 
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
+import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.Signature
+import it.unibo.tuprolog.solve.exception.error.TypeError
 
-class ConstraintReplacer(private val varsMap: Map<Var, Term>): DefaultTermVisitor<Term>() {
+class ConstraintReplacer(
+    private val varsMap: Map<Var, Term>,
+    private val context: ExecutionContext,
+    private val signature: Signature
+): DefaultTermVisitor<Term>() {
 
-    override fun defaultValue(term: Term) = throw IllegalStateException("Cannot handle $term as constraint")
+    override fun defaultValue(term: Term) =
+        throw TypeError.forArgument(context, signature, TypeError.Expected.TYPE_REFERENCE, term)
 
     override fun visitVar(term: Var): Term{
 

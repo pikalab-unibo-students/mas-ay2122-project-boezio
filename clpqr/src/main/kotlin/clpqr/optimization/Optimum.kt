@@ -31,7 +31,9 @@ abstract class Optimum(operator: String): BinaryRelation.NonBacktrackable<Execut
         }
         val config = Configuration(problemType = problemType, objective = expression)
         val solver = createChocoSolver(chocoModel, config, varsMap)
-        val optimumValue = Real.of(solver.calculateExpression(varsMap, first, context.substitution).last())
+        val optimumValue = Real.of(solver.calculateExpression(
+            varsMap, first, context.substitution, context, signature
+        ).last())
         return replyWith(Substitution.of(optimum to optimumValue))
     }
 }

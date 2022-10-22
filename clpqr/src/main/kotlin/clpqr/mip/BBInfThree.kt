@@ -38,7 +38,9 @@ object BBInfThree: TernaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") 
         val config = Configuration(problemType = ProblemType.MINIMIZE, objective = second)
         val solver = createChocoSolver(chocoModel, config, varsMap)
         // Substitution for optima
-        val infValue = Real.of(solver.calculateExpression(varsMap, second, context.substitution).last())
+        val infValue = Real.of(solver.calculateExpression(
+            varsMap, second, context.substitution, context, signature
+        ).last())
         val substitution = mapOf(inf to infValue)
         return replyWith(Substitution.of(substitution))
     }

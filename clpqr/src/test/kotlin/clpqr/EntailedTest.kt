@@ -1,5 +1,6 @@
 package clpqr
 
+import it.unibo.tuprolog.solve.exception.error.DomainError
 import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
 import kotlin.test.Ignore
@@ -146,6 +147,60 @@ class EntailedTest: BaseTest() {
         val solver = getSolver()
         val solution = solver.solveOnce(goal)
         assertException<TypeError>(solution, TypeError.Expected.COMPOUND)
+
+    }
+
+    @Test
+    fun testConstraintIsRealNumber(){
+
+        val goal = termParser.parseStruct(
+            "{ X > 10.0 }, entailed(3.0), satisfy([X,Y])"
+        )
+
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<TypeError>(solution, TypeError.Expected.TYPE_REFERENCE)
+
+    }
+
+    @Test
+    fun testInvalidConstraintArity(){
+
+        val goal = termParser.parseStruct(
+            "{ X > 10.0 }, entailed('>'(X,Y,Z)), satisfy([X,Y])"
+        )
+
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.PREDICATE_PROPERTY)
+
+    }
+
+    @Test
+    fun testInvalidConstraintOperator(){
+
+        val goal = termParser.parseStruct(
+            "{ X > 10.0 }, entailed('invalid'(X,Y)), satisfy([X,Y])"
+        )
+
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.PREDICATE_PROPERTY)
+
+    }
+
+    @Test @Ignore
+    fun testUndefinedEvaluation(){
+
+        val goal = termParser.parseStruct(
+            "{ X > 10.0, Y > 5.0 }, entailed(X > Y), satisfy([X,Y])"
+        )
+
+        // entail returns true, strange result
+
+        val solver = getSolver()
+        val solution = solver.solveOnce(goal)
+        assertException<DomainError>(solution, DomainError.Expected.ATOM_PROPERTY)
 
     }
 

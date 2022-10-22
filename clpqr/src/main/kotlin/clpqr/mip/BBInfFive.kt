@@ -73,7 +73,9 @@ object BBInfFive: QuinaryRelation.NonBacktrackable<ExecutionContext>("bb_inf") {
         val vertexList = List.of(vertexValue)
         // Substitution for optimum
         solver.hardReset()
-        val infValue = Real.of(solver.calculateExpression(varsMap, second, context.substitution).last())
+        val infValue = Real.of(solver.calculateExpression(
+            varsMap, second, context.substitution, context, signature
+        ).last())
         // Substitution for all variables
         // val allVarsSubstitution = solver.solutions(varsMap).last()
         // Overall substitution

@@ -36,7 +36,7 @@ object Dump: TernaryRelation.NonBacktrackable<ExecutionContext>("dump") {
         val codedAnswer = third.castToVar()
         // conversion of constraints
         val varsMap = target.zip(newVars).toMap()
-        val replacer = ConstraintReplacer(varsMap)
+        val replacer = ConstraintReplacer(varsMap, context, signature)
         val newConstraints = constraints.map { it.accept(replacer) }
         val codedAnswerValue = LogicList.of(newConstraints)
         return replyWith(Substitution.of(codedAnswer to codedAnswerValue))
