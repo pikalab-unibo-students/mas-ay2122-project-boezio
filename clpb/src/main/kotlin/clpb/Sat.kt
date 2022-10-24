@@ -44,8 +44,8 @@ object Sat: UnaryPredicate.NonBacktrackable<ExecutionContext>("sat") {
                 val varsMap = chocoModel.variablesMap(vars, context.substitution)
                 val tautMap = tautModel.variablesMap(vars, context.substitution)
                 // Imposing constraints
-                val expression = first.accept(ExpressionParser(chocoModel, varsMap.flip())) as LogOp
-                val tautExpression = first.accept(ExpressionParser(tautModel, tautMap.flip())) as LogOp
+                val expression = first.accept(ExpressionParser(chocoModel, varsMap.flip(), context, signature)) as LogOp
+                val tautExpression = first.accept(ExpressionParser(tautModel, tautMap.flip(), context, signature)) as LogOp
                 chocoModel.addClauses(expression)
                 tautModel.addClauses(tautExpression)
             }

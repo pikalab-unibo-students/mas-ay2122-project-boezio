@@ -1,8 +1,12 @@
 package clpb.utils
 
 import it.unibo.tuprolog.core.*
+import it.unibo.tuprolog.core.List
 import it.unibo.tuprolog.core.List as LogicList
 import it.unibo.tuprolog.core.visitors.DefaultTermVisitor
+import it.unibo.tuprolog.solve.ExecutionContext
+import it.unibo.tuprolog.solve.exception.error.DomainError
+import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.chocosolver.solver.Model
 import org.chocosolver.solver.constraints.nary.cnf.ILogical
 import org.chocosolver.solver.constraints.nary.cnf.LogOp
@@ -11,20 +15,23 @@ import org.chocosolver.solver.variables.Variable
 
 class ExpressionParser<T : Variable>(
     private val chocoModel: Model,
-    private val variables: Map<Var, T>
+    private val variables: Map<Var, T>,
+    private val context: ExecutionContext,
+    private val signature: it.unibo.tuprolog.solve.Signature
 ) : DefaultTermVisitor<ILogical>() {
     override fun defaultValue(term: Term): ILogical =
-        error("Unsupported sub-expression: $term")
+        throw TypeError.forArgument(context, signature, TypeError.Expected.TYPE_REFERENCE, term)
 
     override fun visitVar(term: Var): ILogical =
-        asExpression(variables[term] ?: error("No such a variable: $term"))
+        asExpression(variables[term] ?:
+        throw DomainError.forArgument(context, signature, DomainError.Expected.ATOM_PROPERTY, term))
 
     override fun visitInteger(term: Integer): ILogical {
         val boolVar = chocoModel.boolVar()
         when(term.value.toInt()){
             1 -> boolVar.eq(1).decompose().post()
             0 -> boolVar.eq(0).decompose().post()
-            else -> throw IllegalStateException()
+            else -> throw DomainError.forArgument(context, signature, DomainError.Expected.ATOM_PROPERTY, term)
         }
         return boolVar
     }
@@ -64,9 +71,8 @@ class ExpressionParser<T : Variable>(
     }
 
     private fun unaryExpression(struct: Struct, op: UnaryOp): ILogical {
-        require(struct[0] is LogicList){
-            "${struct[0]} is not a logic list"
-        }
+        if(struct[0] !is List)
+            throw TypeError.forArgument(context, signature, TypeError.Expected.LIST, struct)
         val expressions = struct[0].castToList().toList()
         val first = expressions.map { it.accept(this) }.toTypedArray()
         return when(op){

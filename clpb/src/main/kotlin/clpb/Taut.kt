@@ -42,7 +42,7 @@ object Taut: BinaryRelation.NonBacktrackable<ExecutionContext>("taut") {
             return if(first is Struct){
                 val varsMap = chocoModel.variablesMap(vars, context.substitution)
                 // Imposing constraints
-                val expression = first.accept(ExpressionParser(chocoModel, varsMap.flip())) as LogOp
+                val expression = first.accept(ExpressionParser(chocoModel, varsMap.flip(), context, signature)) as LogOp
                 chocoModel.addClauses(expression)
                 val numPossibleAssignments = 2.0.pow(vars.size).toInt()
                 val solver = chocoModel.solver
