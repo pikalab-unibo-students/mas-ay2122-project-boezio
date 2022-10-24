@@ -26,7 +26,7 @@ object Taut: BinaryRelation.NonBacktrackable<ExecutionContext>("taut") {
         val vars = first.variables.distinct().toList()
         // In some cases the expression could contain only a variable or anyone
         if(vars.isEmpty()){ // e.g sat(1 + 0)
-            val evaluator = BoolExprEvaluator()
+            val evaluator = BoolExprEvaluator(context, signature)
             val result = first.accept(evaluator)
             return if (result){
                 replyWith(Substitution.of(truthValue to Integer.of(1)))

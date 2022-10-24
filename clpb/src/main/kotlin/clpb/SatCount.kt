@@ -20,7 +20,7 @@ object SatCount: BinaryRelation.NonBacktrackable<ExecutionContext>("sat_count") 
         val vars = first.variables.distinct().toList()
         // expression contains only truth values
         if(vars.isEmpty()){
-            val evaluator = BoolExprEvaluator()
+            val evaluator = BoolExprEvaluator(context, signature)
             val result = first.accept(evaluator)
             // if the expression is true the count is 1 otherwise 0
             return if (result){
