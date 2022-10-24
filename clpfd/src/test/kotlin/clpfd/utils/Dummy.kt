@@ -1,4 +1,4 @@
-package clpfd
+package clpfd.utils
 
 import it.unibo.tuprolog.core.Struct
 import it.unibo.tuprolog.core.Substitution

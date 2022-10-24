@@ -1,5 +1,6 @@
-package clpfd
+package clpfd.utils
 
+import clpfd.ExpressionParser
 import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Real
 import it.unibo.tuprolog.core.Struct
