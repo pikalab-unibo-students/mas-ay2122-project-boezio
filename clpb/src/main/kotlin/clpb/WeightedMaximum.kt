@@ -61,7 +61,10 @@ object WeightedMaximum: TernaryRelation.NonBacktrackable<ExecutionContext>("weig
         model.setObjective(Model.MAXIMIZE, varsMap.flip()[maximumOuterVar])
         val solver = model.solver
         return replySuccess(solver.solutions(varsMap).last().castToUnifier()) {
-            setChocoModel(chocoModel)
+            // this is a trick to allow to use the property isInstantiated in labeling
+            solver.hardReset()
+            solver.solve()
+            setChocoModel(model)
         }
     }
 }

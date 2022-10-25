@@ -3,7 +3,6 @@ package clpb
 import it.unibo.tuprolog.solve.exception.error.DomainError
 import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
 class WeightedMaximumTest: BaseTest() {
 
@@ -49,7 +48,7 @@ class WeightedMaximumTest: BaseTest() {
         }
     }
 
-    @Test @Ignore
+    @Test
     fun testWeightedMaximumWithLabeling(){
 
         val goal = termParser.parseStruct(

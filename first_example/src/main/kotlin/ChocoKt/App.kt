@@ -1,8 +1,6 @@
 package ChocoKt
 
 import org.chocosolver.solver.Model
-import org.chocosolver.solver.variables.IntVar
-import org.chocosolver.solver.Solver
 
 fun main() {
 
@@ -11,13 +9,11 @@ fun main() {
     val ub = 10
 
     val x = model.intVar("X",lb, ub)
-    val y = model.intVar("X",0, 10)
 
-    // searching for a feasible solution
-    val solver: Solver = model.solver
+    println(x.isInstantiated)
 
-    if(solver.solve()) {
-        print("${y.value}")
-    }
+    val solver = model.solver
+    if (solver.solve())
+        print(x.isInstantiated)
 
 }

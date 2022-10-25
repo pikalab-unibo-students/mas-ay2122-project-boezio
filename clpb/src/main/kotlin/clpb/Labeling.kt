@@ -12,6 +12,11 @@ object Labeling: UnaryPredicate.NonBacktrackable<ExecutionContext>("labeling") {
     override fun Solve.Request<ExecutionContext>.computeOne(first: Term): Solve.Response {
         ensuringArgumentIsList(0)
         val listElements = first.castToList().toList()
+
+        // if all variables are instantiated nothing must be done
+        if (chocoModel.vars.map { it.isInstantiated }.all { true })
+            return replySuccess()
+
         for(elem in listElements){
             if(elem !is Var)
                 throw TypeError.forArgument(context, signature, TypeError.Expected.VARIABLE, elem)
