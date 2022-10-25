@@ -4,7 +4,6 @@ import clpfd.BaseTest
 import clpfd.assertSolutionAssigns
 import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
 class LexChainTest: BaseTest() {
 
@@ -92,14 +91,14 @@ class LexChainTest: BaseTest() {
         }
     }
 
-    @Test @Ignore
+    @Test
     fun testInvalidArgument() {
 
         val theory = theoryParser.parseTheory(
             """
             problem(X,Y,Z,W) :- 
                 ins([X,Y,Z,W], '..'(1, 10)), 
-                lex_chain(a).
+                lex(a).
             """.trimIndent()
         )
 

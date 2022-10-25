@@ -6,7 +6,6 @@ import it.unibo.tuprolog.solve.exception.error.DomainError
 import it.unibo.tuprolog.solve.exception.error.ExistenceError
 import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
 class TuplesInTest: BaseTest() {
 
@@ -91,7 +90,7 @@ class TuplesInTest: BaseTest() {
         }
     }
 
-    @Test @Ignore
+    @Test
     fun testTuplesInvalidFirstArgument() {
 
         val theory = theoryParser.parseTheory(
@@ -99,7 +98,7 @@ class TuplesInTest: BaseTest() {
             problem(X, Y) :- 
                 in(X, 4), 
                 in(Y, '..'(1, 10)), 
-                tuples_in(a, [[1,2],[1,5],[4,0],[4,3]]).
+                tuples(a, [[1,2],[1,5],[4,0],[4,3]]).
             """.trimIndent()
         )
 
