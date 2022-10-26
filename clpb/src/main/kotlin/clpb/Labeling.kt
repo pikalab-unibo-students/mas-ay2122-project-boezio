@@ -1,6 +1,7 @@
 package clpb
 
 import clpCore.*
+import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.core.Term
 import it.unibo.tuprolog.core.Var
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -13,8 +14,10 @@ object Labeling: UnaryPredicate.NonBacktrackable<ExecutionContext>("labeling") {
         ensuringArgumentIsList(0)
         val listElements = first.castToList().toList()
 
-        // if all variables are instantiated nothing must be done
-        if (chocoModel.vars.map { it.isInstantiated }.all { true })
+        // if all variables are instantiated, nothing must be done
+        val allVarsInstantiated = chocoModel.vars.map { it.isInstantiated }.all { it }
+        val allArgsIntegers = listElements.map { it is Integer }.all { it }
+        if (allVarsInstantiated && allArgsIntegers)
             return replySuccess()
 
         for(elem in listElements){
