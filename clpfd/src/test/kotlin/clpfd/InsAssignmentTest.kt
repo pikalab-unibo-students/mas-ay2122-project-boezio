@@ -5,7 +5,6 @@ import it.unibo.tuprolog.solve.exception.error.DomainError
 import it.unibo.tuprolog.solve.exception.error.TypeError
 import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
 internal class InsAssignmentTest: BaseTest() {
 
@@ -100,14 +99,14 @@ internal class InsAssignmentTest: BaseTest() {
         assertException<TypeError>(solution, TypeError.Expected.COMPOUND)
     }
 
-    @Test @Ignore
+    @Test
     fun testVarAlreadyDefinedStruct() {
 
         val theory = theoryParser.parseTheory(
             """
             problem(X) :- 
-                in(X, '..'(1,5)),
                 in(X, '..'(2,5)),
+                in(X, '..'(1,5)),
                 '#<'(X,3).
             """.trimIndent()
         )
@@ -125,12 +124,12 @@ internal class InsAssignmentTest: BaseTest() {
 
         termParser.scope.with {
             solution.assertSolutionAssigns(
-                varOf("X") to intOf(2)
+                varOf("X") to intOf(1)
             )
         }
     }
 
-    @Test @Ignore
+    @Test
     fun testVarAlreadyDefinedInteger() {
 
         val theory = theoryParser.parseTheory(

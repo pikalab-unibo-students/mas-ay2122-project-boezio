@@ -3,6 +3,7 @@ package clpfd.domain
 import clpCore.chocoModel
 import clpCore.getOuterVariables
 import clpCore.setChocoModel
+import clpfd.updateChocoVariables
 import it.unibo.tuprolog.core.*
 import it.unibo.tuprolog.core.Integer
 import it.unibo.tuprolog.solve.ExecutionContext
@@ -30,15 +31,11 @@ object Ins : BinaryRelation.NonBacktrackable<ExecutionContext>("ins") {
                 if (lb > ub) {
                     throw DomainError.forArgument(context,signature,DomainError.Expected.ATOM_PROPERTY, Atom.of(lb.toString()))
                 }
-                for (name in varNames) {
-                    chocoModel.intVar(name, lb, ub)
-                }
+                updateChocoVariables(chocoModel, varNames, lb, ub)
             }
             is LogicInt -> {
                 val domainInt = second.castToInteger().intValue.toInt()
-                for (name in varNames) {
-                    chocoModel.intVar(name, domainInt)
-                }
+                updateChocoVariables(chocoModel, varNames, domainInt, domainInt)
             }
             else -> throw TypeError.forArgument(context, signature, TypeError.Expected.COMPOUND, second)
         }
