@@ -23,6 +23,7 @@ object ClpFdLibrary: Library by Library.of(
         LessThan,
         LessEquals,
         AllDistinct,
+        AllDistinctExcept0,
         ScalarProduct,
         TuplesIn,
         Element,
