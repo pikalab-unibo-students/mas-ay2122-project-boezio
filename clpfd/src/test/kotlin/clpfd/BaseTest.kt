@@ -5,7 +5,11 @@ import it.unibo.tuprolog.core.TermConvertible
 import it.unibo.tuprolog.core.parsing.TermParser
 import it.unibo.tuprolog.solve.Solution
 import it.unibo.tuprolog.solve.Solver
+import it.unibo.tuprolog.solve.classic.ClassicSolverFactory
 import it.unibo.tuprolog.solve.exception.LogicError
+import it.unibo.tuprolog.solve.flags.FlagStore
+import it.unibo.tuprolog.solve.flags.TrackVariables
+import it.unibo.tuprolog.solve.flags.invoke
 import it.unibo.tuprolog.solve.library.toRuntime
 import it.unibo.tuprolog.theory.Theory
 import it.unibo.tuprolog.theory.parsing.ClausesParser
@@ -20,14 +24,17 @@ abstract class BaseTest {
 
     // returns a solver for clpfd problems
     protected fun getSolver(theory: Theory = Theory.empty()): Solver =
-        Solver.prolog.solverWithDefaultBuiltins(
+        ClassicSolverFactory.solverOf(
             staticKb = theory,
-            otherLibraries =  ClpFdLibrary.toRuntime()
+            libraries =  ClpFdLibrary.toRuntime(),
+            flags = FlagStore.EMPTY + TrackVariables { ON }
         )
 
     protected fun getFdQRSolver(theory: Theory = Theory.empty()): Solver =
-        Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries =  ClpFdLibrary.toRuntime() + ClpQRLibrary.toRuntime()
+        ClassicSolverFactory.solverOf(
+            staticKb = theory,
+            libraries =  ClpFdLibrary.toRuntime() + ClpQRLibrary.toRuntime(),
+            flags = FlagStore.EMPTY + TrackVariables { ON }
         )
 
     protected inline fun <reified T : LogicError> assertException(sol: Solution, expected: TermConvertible) {

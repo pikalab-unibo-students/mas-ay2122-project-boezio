@@ -6,11 +6,10 @@ import it.unibo.tuprolog.solve.exception.error.DomainError
 import it.unibo.tuprolog.solve.exception.error.ExistenceError
 import it.unibo.tuprolog.solve.exception.error.TypeError
 import org.junit.jupiter.api.Test
-import kotlin.test.Ignore
 
 class GlobalCardinalityTwoTest: BaseTest() {
 
-    @Test @Ignore
+    @Test
     fun testGlobalCardinalityWithIn() {
 
         val theory = theoryParser.parseTheory(

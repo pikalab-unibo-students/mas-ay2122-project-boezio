@@ -5,8 +5,11 @@ import it.unibo.tuprolog.core.TermConvertible
 import it.unibo.tuprolog.core.parsing.TermParser
 import it.unibo.tuprolog.solve.Solution
 import it.unibo.tuprolog.solve.Solver
+import it.unibo.tuprolog.solve.classic.ClassicSolverFactory
 import it.unibo.tuprolog.solve.exception.LogicError
 import it.unibo.tuprolog.solve.flags.FlagStore
+import it.unibo.tuprolog.solve.flags.TrackVariables
+import it.unibo.tuprolog.solve.flags.invoke
 import it.unibo.tuprolog.solve.library.toRuntime
 import it.unibo.tuprolog.theory.Theory
 import it.unibo.tuprolog.theory.parsing.ClausesParser
@@ -20,9 +23,9 @@ abstract class BaseTest {
     protected val precision = 0.1
 
     protected fun getSolver(theory: Theory = Theory.empty()): Solver =
-        Solver.prolog.solverWithDefaultBuiltins(
-            otherLibraries = ClpQRLibrary.toRuntime(),
-            flags = FlagStore.DEFAULT + (Precision to Real.of(precision)),
+        ClassicSolverFactory.solverOf(
+            libraries = ClpQRLibrary.toRuntime(),
+            flags = FlagStore.DEFAULT + (Precision to Real.of(precision)) + TrackVariables { ON },
             staticKb = theory
         )
 
