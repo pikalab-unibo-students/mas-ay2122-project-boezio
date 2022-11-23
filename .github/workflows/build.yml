@@ -1,59 +1,27 @@
 name: build
 on: push
 jobs:
-  first_example:
+  clpfd:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - run: gradle :first_example:run
-  second_example:
+      - run: gradle :clpfd:run
+  clpqr:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - run: gradle :second_example:run
-  third_example:
+      - run: gradle :clpqr:run
+  clpb:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - run: gradle :third_example:run
-  fourth_example:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - run: gradle :fourth_example:run
-  fifth_example:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - run: gradle :fifth_example:run
-  sixth_example:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - run: gradle :sixth_example:run
-  precision:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - run: gradle :precision:run
+      - run: gradle :clpb:run
