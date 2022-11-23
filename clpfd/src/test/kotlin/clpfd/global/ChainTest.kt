@@ -4,6 +4,8 @@ import clpfd.BaseTest
 import clpfd.ClpFdLibrary
 import clpfd.assertSolutionAssigns
 import it.unibo.tuprolog.solve.Solver
+import it.unibo.tuprolog.solve.classic.ClassicSolverFactory
+import it.unibo.tuprolog.solve.flags.FlagStore
 import it.unibo.tuprolog.solve.library.toRuntime
 import org.junit.jupiter.api.Test
 
@@ -24,7 +26,11 @@ class ChainTest: BaseTest() {
             "problem(X,Y,Z), label([X,Y,Z])"
         )
 
-        val solver = getSolver(theory)
+        val solver = ClassicSolverFactory.solverOf(
+            staticKb = theory,
+            libraries =  ClpFdLibrary.toRuntime(),
+            flags = FlagStore.EMPTY
+        )
 
         val solution = solver.solveOnce(goal)
 
