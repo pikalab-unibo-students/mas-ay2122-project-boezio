@@ -8,6 +8,7 @@
  */
 
 rootProject.name = "ChocoKt"
+include(":app")
 include("clpfd")
 include("clpqr")
 include("clp-core")

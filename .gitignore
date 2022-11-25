@@ -18,3 +18,7 @@ build
 
 # Ignore ide folder
 .idea/
+
+# Ignore output of the platform
+app/APDescription.txt
+app/MTPs-mas.project.boezio.ay2122#main.txt
