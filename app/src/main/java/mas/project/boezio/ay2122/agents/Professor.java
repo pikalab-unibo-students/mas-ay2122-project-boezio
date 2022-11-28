@@ -42,6 +42,8 @@ public abstract class Professor extends Agent {
     // autoincrement idNumber for conversations
     private static int idNumber = 1;
 
+    protected abstract Set<Lesson> generatePreferences();
+
     protected void setup(){
 
         Utils.registerOntology(cm, codec, ontology);
