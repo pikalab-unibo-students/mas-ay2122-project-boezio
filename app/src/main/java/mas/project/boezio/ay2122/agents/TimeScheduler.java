@@ -38,7 +38,7 @@ import java.util.*;
 public class TimeScheduler extends Agent {
 
     // service offered by the time scheduler
-    public static final String SERVICE = "negotiation mediator";
+    public static final String SERVICE = "negotiatioMediator";
 
     // timetable of each Professor agent
     private Map<AID, Timetable> timetables;
@@ -69,7 +69,6 @@ public class TimeScheduler extends Agent {
     }
 
     // Behaviour to create school timetables of each professor using Constraint Logic Programing
-
     private class TimetableBehaviour extends OneShotBehaviour{
 
         private final int numHours;
@@ -106,6 +105,12 @@ public class TimeScheduler extends Agent {
 
             Solution solution = solver.solveOnce(goal);
 
+            // initialize timetables
+            timetables = new HashMap<>();
+            int numProfessors = hoursPerProfessor.size();
+            for(int i=1; i <= numProfessors; i++){
+                timetables.put(new AID("professor"+i, true), new Timetable(numHours, numDays));
+            }
             // update timetables for each professor
             it.unibo.tuprolog.core.Substitution substitution = solution.getSubstitution();
             for(Var variable: substitution.keySet()){
@@ -146,8 +151,8 @@ public class TimeScheduler extends Agent {
 
                 // add data to the content of the future message
                 List<Teaching> teachings = new ArrayList<>();
-                for(int i = 0; i < numHours; i++){
-                    for(int j = 0; j < numDays; j++){
+                for(int i = 1; i <= numHours; i++){
+                    for(int j = 1; j <= numDays; j++){
                         SchoolClass schoolClass = timetable.getEntry(i,j);
                         if(schoolClass != null){
                             Teaching teaching = new Teaching(new Lesson(i,j), schoolClass);
