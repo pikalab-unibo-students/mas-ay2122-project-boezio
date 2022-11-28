@@ -23,10 +23,10 @@ public class Timetable {
     }
 
     public void setEntry(int hour, int day, SchoolClass schoolClass){
-        classes[hour][day] = schoolClass;
+        classes[hour-1][day-1] = schoolClass;
     }
 
     public SchoolClass getEntry(int hour, int day){
-        return classes[hour][day];
+        return classes[hour-1][day-1];
     }
 }
