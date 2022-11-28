@@ -247,7 +247,7 @@ public class TimeScheduler extends Agent {
                 case 0:
                     // obtain list of professors who teach in that class
                     professors = Utils.getServiceProviders(myAgent, schoolClass.toString());
-                    // filter professors who have free hour at lesson
+                    // filter professors who have free hour at proposed lesson
                     professors.removeIf(professor -> timetables.get(professor).getEntry(hour, day) != null);
                     // filter professors whose free day is not the day of the proposed lesson
                     professors.removeIf(professor -> freeDays.get(professor) != day);
@@ -256,8 +256,8 @@ public class TimeScheduler extends Agent {
                         Timetable timeProf = timetables.get(professor);
                         int numHours = timeProf.getNumHours();
                         int numDays = timeProf.getNumDays();
-                        for(int i=0; i < numHours; i++){
-                            for(int j=0; j < numDays; j++){
+                        for(int i=1; i <= numHours; i++){
+                            for(int j=1; j <= numDays; j++){
                                 // professor has the same school class, in this lesson sender is free and
                                 // the day is not sender's free day
                                 if(j != senderFreeDay && timeProf.getEntry(i,j).equals(schoolClass) &&

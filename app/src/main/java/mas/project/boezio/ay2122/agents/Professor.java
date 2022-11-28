@@ -41,7 +41,7 @@ public abstract class Professor extends Agent {
     private int numTrials = 3;
     // autoincrement idNumber for conversations
     private static int idNumber = 1;
-
+    // method to initialize preferences for each professor
     protected abstract Set<Lesson> generatePreferences();
 
     protected void setup(){
@@ -128,8 +128,8 @@ public abstract class Professor extends Agent {
         @Override
         public void action() {
 
-            switch(step){
-                case 0:
+            switch (step) {
+                case 0 -> {
                     // obtain the AID of the timeScheduler
                     timeScheduler = Utils.getServiceProviders(myAgent, TimeScheduler.SERVICE).get(0);
                     // send a message with a proposal
@@ -149,19 +149,19 @@ public abstract class Professor extends Agent {
                     // lock the preference for CandidateBehaviour
                     lockedPreferences.add(pref);
                     step = 1;
-                    break;
-                case 1:
+                }
+                case 1 -> {
                     // if another professor proposes a change, the agent must check whether the change
                     // does not damage its own preferences
                     ACLMessage msg = myAgent.receive(mt);
-                    if(msg != null){
-                        if(msg.getPerformative() == ACLMessage.PROPOSE){
+                    if (msg != null) {
+                        if (msg.getPerformative() == ACLMessage.PROPOSE) {
                             // extract the proposed lesson by the other professor
                             try {
                                 Lesson proposedLesson = (Lesson) cm.extractContent(msg);
                                 ACLMessage reply;
                                 // the change does not damage own preferences
-                                if(!preferences.contains(proposedLesson)){
+                                if (!preferences.contains(proposedLesson)) {
                                     // change own timetable
                                     SchoolClass schoolClass = timetable.getEntry(pref.getHour(), pref.getDay());
                                     timetable.setEntry(pref.getHour(), pref.getDay(), null);
@@ -177,7 +177,7 @@ public abstract class Professor extends Agent {
                                     // send accept message
                                     reply = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                                     step = 2;
-                                }else{
+                                } else {
                                     reply = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
                                 }
                                 reply.addReceiver(timeScheduler);
@@ -186,13 +186,14 @@ public abstract class Professor extends Agent {
                                 e.printStackTrace();
                             }
 
-                        }else if(msg.getPerformative() == ACLMessage.REFUSE){
+                        } else if (msg.getPerformative() == ACLMessage.REFUSE) {
                             // lesson is again available
                             lockedPreferences.remove(pref);
                             step = 2;
                         }
-                    }else
+                    } else
                         block();
+                }
             }
         }
 
@@ -214,12 +215,12 @@ public abstract class Professor extends Agent {
         @Override
         public void action() {
 
-            switch(step){
-                case 0:
-                    // receive a message where there is a change proposal
+            switch (step) {
+                case 0 -> {
+                    // receive a message which contains a change proposal
                     mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
                     msg = myAgent.receive(mt);
-                    if(msg != null){
+                    if (msg != null) {
                         conversationID = msg.getConversationId();
                         // extract lessons
                         try {
@@ -230,27 +231,27 @@ public abstract class Professor extends Agent {
                             // the lesson to change must not be involved in another negotiation
                             msg = msg.createReply();
                             msg.setConversationId(conversationID);
-                            if(!lockedPreferences.contains(currentLesson)
-                                    && !preferences.contains(proposedLesson)){
+                            if (!lockedPreferences.contains(currentLesson)
+                                    && !preferences.contains(proposedLesson)) {
                                 msg.setPerformative(ACLMessage.AGREE);
-                            }else{
+                                step = 1;
+                            } else {
                                 msg.setPerformative(ACLMessage.REFUSE);
                             }
                         } catch (Codec.CodecException | OntologyException e) {
                             e.printStackTrace();
                         }
                         myAgent.send(msg);
-                        step = 1;
-                    }else
+                    } else
                         block();
-                    break;
-                case 1:
+                }
+                case 1 -> {
                     // confirm or not about the change
                     mt = MessageTemplate.MatchConversationId(conversationID);
                     msg = receive(mt);
-                    if(msg != null){
+                    if (msg != null) {
                         int performative = msg.getPerformative();
-                        if(performative == ACLMessage.CONFIRM){
+                        if (performative == ACLMessage.CONFIRM) {
                             // the change succeeded
                             // update own timetable
                             SchoolClass schoolClass = timetable.getEntry(
@@ -259,9 +260,10 @@ public abstract class Professor extends Agent {
                             timetable.setEntry(currentLesson.getHour(), currentLesson.getDay(), null);
                             timetable.setEntry(proposedLesson.getHour(), proposedLesson.getDay(), schoolClass);
                         }
-                    }else
+                    } else
                         block();
                     step = 0;
+                }
             }
         }
     }
