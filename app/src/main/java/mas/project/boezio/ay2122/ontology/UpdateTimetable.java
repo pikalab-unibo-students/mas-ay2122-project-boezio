@@ -1,11 +1,10 @@
 package mas.project.boezio.ay2122.ontology;
 
-import jade.content.AgentAction;
+import jade.content.Predicate;
 
-public class UpdateTimetable implements AgentAction {
+public class UpdateTimetable implements Predicate {
 
     private TimetableConcept timetable;
-
 
     public TimetableConcept getTimetable() {
         return timetable;

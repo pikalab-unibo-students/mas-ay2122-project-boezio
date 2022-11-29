@@ -8,6 +8,11 @@ public class Lesson implements Concept {
     private int hour;
     private int day;
 
+    public Lesson(){
+        this.hour = 0;
+        this.day = 0;
+    }
+
     public Lesson(int hour, int day) {
         this.hour = hour;
         this.day = day;

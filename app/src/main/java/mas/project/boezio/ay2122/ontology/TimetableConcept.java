@@ -8,10 +8,6 @@ public class TimetableConcept implements Concept {
 
     private List teachings;
 
-    public TimetableConcept(List teachings) {
-        this.teachings = teachings;
-    }
-
     public List getTeachings() {
         return teachings;
     }

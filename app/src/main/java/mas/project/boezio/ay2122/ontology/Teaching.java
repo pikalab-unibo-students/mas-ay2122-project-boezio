@@ -7,6 +7,11 @@ public class Teaching implements Concept {
     private Lesson lesson;
     private SchoolClass schoolClass;
 
+    public Teaching(){
+        this.lesson = new Lesson();
+        this.schoolClass = new SchoolClass();
+    }
+
     public Teaching(Lesson lesson, SchoolClass schoolClass) {
         this.lesson = lesson;
         this.schoolClass = schoolClass;

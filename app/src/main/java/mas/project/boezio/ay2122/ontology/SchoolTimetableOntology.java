@@ -1,5 +1,6 @@
 package mas.project.boezio.ay2122.ontology;
 
+import jade.content.Predicate;
 import jade.content.onto.BasicOntology;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
@@ -29,7 +30,7 @@ public class SchoolTimetableOntology extends Ontology {
     public static final String TEACHINGS = "teachings";
 
     public static final String UPDATE_TIMETABLE = "UpdateTimetable";
-    public static final String TIMETABLE = "Timetable";
+    public static final String TIMETABLE = "timetable";
 
     private static SchoolTimetableOntology instance = new SchoolTimetableOntology();
 
@@ -47,7 +48,7 @@ public class SchoolTimetableOntology extends Ontology {
             add(new PredicateSchema(SUBSTITUTION), Substitution.class);
             add(new ConceptSchema(TEACHING), Teaching.class);
             add(new ConceptSchema(TIMETABLE_CONCEPT), TimetableConcept.class);
-            add(new AgentActionSchema(UPDATE_TIMETABLE), UpdateTimetable.class);
+            add(new PredicateSchema(UPDATE_TIMETABLE), UpdateTimetable.class);
 
             // Structure of the scheme for the Lesson concept
             ConceptSchema lesson = (ConceptSchema) getSchema(LESSON);
@@ -73,9 +74,9 @@ public class SchoolTimetableOntology extends Ontology {
             ConceptSchema timetable = (ConceptSchema) getSchema(TIMETABLE_CONCEPT);
             timetable.add(TEACHINGS, (ConceptSchema) getSchema(TEACHING), 0, ObjectSchema.UNLIMITED);
 
-            // Structure of the schema for UpdateTimetable action
-            AgentActionSchema update = (AgentActionSchema) getSchema(UPDATE_TIMETABLE);
-            update.add(TIMETABLE, (ConceptSchema) getSchema(TIMETABLE_CONCEPT));
+            // Structure of the schema for UpdateTimetable predicate
+            PredicateSchema update = (PredicateSchema) getSchema(UPDATE_TIMETABLE);
+            update.add(TIMETABLE, getSchema(TIMETABLE_CONCEPT));
 
 
         }catch (OntologyException oe){

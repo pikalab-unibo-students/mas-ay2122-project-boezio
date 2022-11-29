@@ -7,7 +7,12 @@ public class SchoolClass implements Concept {
     private int year;
     private String letter;
 
-    public SchoolClass(int year, String letter){
+    public SchoolClass(){
+        this.year = 0;
+        this.letter = "";
+    }
+
+    public SchoolClass(int year, String letter) {
         this.year = year;
         this.letter = letter;
     }
@@ -31,11 +36,5 @@ public class SchoolClass implements Concept {
     @Override
     public String toString() {
         return year + "" + letter;
-    }
-
-    public static SchoolClass parseSchoolClass(String schoolClass){
-        int year = Integer.parseInt(String.valueOf(schoolClass.charAt(0)));
-        String letter = String.valueOf(schoolClass.charAt(1));
-        return new SchoolClass(year, letter);
     }
 }
