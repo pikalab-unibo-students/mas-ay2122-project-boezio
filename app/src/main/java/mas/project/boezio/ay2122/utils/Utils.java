@@ -98,7 +98,7 @@ public class Utils {
             }
         }
         for(int i = 0; i < NUM_PROFESSORS; i++){
-            hoursMap.put(new AID("professor" + i, true), professorsMap.get(i));
+            hoursMap.put(new AID("professor" + i, AID.ISLOCALNAME), professorsMap.get(i));
         }
 
         return hoursMap;
