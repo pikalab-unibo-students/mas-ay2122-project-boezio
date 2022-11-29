@@ -114,6 +114,7 @@ public class Utils {
         dfd.setName(agent.getAID());
         ServiceDescription sd = new ServiceDescription();
         sd.setType(typeService);
+        sd.setName(agent.getLocalName()+"-"+typeService);
         dfd.addServices(sd);
         try {
             DFService.register(agent, dfd);
@@ -140,4 +141,10 @@ public class Utils {
         }
         return providers;
     }
+
+    public static void printMessage(Agent agent, String message){
+        String agentAID = agent.getAID().getName();
+        System.out.println("["+agentAID+"]: " + message);
+    }
+
 }
