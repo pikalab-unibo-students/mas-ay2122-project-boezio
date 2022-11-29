@@ -9,7 +9,7 @@
 
 rootProject.name = "ChocoKt"
 include(":app")
-include("clpfd")
-include("clpqr")
-include("clp-core")
-include("clpb")
+include(":clpfd")
+include(":clpqr")
+include(":clp-core")
+include(":clpb")
