@@ -60,9 +60,10 @@ public abstract class Professor extends Agent {
 
     }
 
-    private class TimetableBehaviour extends OneShotBehaviour{
+    private class TimetableBehaviour extends Behaviour{
 
         private final MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
+        private boolean received = false;
 
         @Override
         public void action() {
@@ -70,6 +71,7 @@ public abstract class Professor extends Agent {
             ACLMessage msg = receive(mt);
             if(msg != null){
                 Utils.printMessage(myAgent, "I've received my timetable");
+                received = true;
                 // extract timetable and save it
                 try {
                     UpdateTimetable action = (UpdateTimetable) cm.extractContent(msg);
@@ -101,6 +103,11 @@ public abstract class Professor extends Agent {
                 Utils.printMessage(myAgent, "I'm waiting for my timetable");
                 block();
             }
+        }
+
+        @Override
+        public boolean done() {
+            return received;
         }
     }
 
