@@ -7,7 +7,10 @@ import java.util.Set;
 
 public class ProfessorOne extends Professor{
 
-    protected Set<Lesson> preferences = generatePreferences();
+    @Override
+    protected String setName() {
+        return "Rossi";
+    }
 
     @Override
     protected Set<Lesson> generatePreferences(){

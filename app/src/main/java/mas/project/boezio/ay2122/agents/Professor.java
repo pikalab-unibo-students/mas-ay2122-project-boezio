@@ -25,10 +25,12 @@ import java.util.Set;
 
 public abstract class Professor extends Agent {
 
+    // name of the professor
+    protected String name = setName();
     private final Timetable timetable = new Timetable(Utils.NUM_HOURS, Utils.NUM_DAYS);
     // classes where the agent teaches
     private final Set<SchoolClass> classes = new HashSet<>();
-    protected Set<Lesson> preferences;
+    protected Set<Lesson> preferences = generatePreferences();
     private final Set<Lesson> notSatisfiedPref = new HashSet<>();
     private final Set<Lesson> lockedPreferences = new HashSet<>();
     // ontology information
@@ -41,10 +43,14 @@ public abstract class Professor extends Agent {
     private int numTrials = 3;
     // autoincrement idNumber for conversations
     private static int idNumber = 1;
+    // set name of a specific professor
+    abstract protected String setName();
     // method to initialize preferences for each professor
-    protected abstract Set<Lesson> generatePreferences();
+    abstract protected Set<Lesson> generatePreferences();
 
     protected void setup(){
+
+        Utils.printMessage(this, "Hi everyone, I'm Professor "+name);
 
         Utils.registerOntology(cm, codec, ontology);
 
@@ -63,6 +69,7 @@ public abstract class Professor extends Agent {
             // detect message about own timetable
             ACLMessage msg = receive(mt);
             if(msg != null){
+                Utils.printMessage(myAgent, "I've received my timetable");
                 // extract timetable and save it
                 try {
                     TimetableConcept timeConcept = (TimetableConcept) cm.extractContent(msg);
@@ -87,8 +94,10 @@ public abstract class Professor extends Agent {
                 } catch (Codec.CodecException | OntologyException e) {
                     e.printStackTrace();
                 }
-            }else
+            }else {
+                Utils.printMessage(myAgent, "I'm waiting for my timetable");
                 block();
+            }
         }
     }
 
