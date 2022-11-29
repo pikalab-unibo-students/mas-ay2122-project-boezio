@@ -143,7 +143,7 @@ public class Utils {
     }
 
     public static void printMessage(Agent agent, String message){
-        String agentAID = agent.getAID().getName();
+        String agentAID = agent.getAID().getLocalName();
         System.out.println("["+agentAID+"]: " + message);
     }
 
