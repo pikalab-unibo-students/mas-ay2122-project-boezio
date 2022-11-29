@@ -2,17 +2,21 @@ package mas.project.boezio.ay2122.ontology;
 
 import jade.content.Concept;
 
-import java.util.List;
+import jade.util.leap.List;
 
 public class TimetableConcept implements Concept {
 
-    private List<Teaching> teachings;
+    private List teachings;
 
-    public List<Teaching> getTeachings() {
+    public TimetableConcept(List teachings) {
+        this.teachings = teachings;
+    }
+
+    public List getTeachings() {
         return teachings;
     }
 
-    public void setTeachings(List<Teaching> teachings) {
+    public void setTeachings(List teachings) {
         this.teachings = teachings;
     }
 }
