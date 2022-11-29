@@ -3,10 +3,7 @@ package mas.project.boezio.ay2122.ontology;
 import jade.content.onto.BasicOntology;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
-import jade.content.schema.ConceptSchema;
-import jade.content.schema.ObjectSchema;
-import jade.content.schema.PredicateSchema;
-import jade.content.schema.PrimitiveSchema;
+import jade.content.schema.*;
 
 public class SchoolTimetableOntology extends Ontology {
 
@@ -28,8 +25,11 @@ public class SchoolTimetableOntology extends Ontology {
     public static final String TEACH_LESSON = "lesson";
     public static final String TEACH_CLASS = "schoolClass";
 
-    public static final String TIMETABLE = "TimetableConcept";
+    public static final String TIMETABLE_CONCEPT = "TimetableConcept";
     public static final String TEACHINGS = "teachings";
+
+    public static final String UPDATE_TIMETABLE = "UpdateTimetable";
+    public static final String TIMETABLE = "Timetable";
 
     private static SchoolTimetableOntology instance = new SchoolTimetableOntology();
 
@@ -46,7 +46,8 @@ public class SchoolTimetableOntology extends Ontology {
             add(new ConceptSchema(SCHOOL_CLASS), SchoolClass.class);
             add(new PredicateSchema(SUBSTITUTION), Substitution.class);
             add(new ConceptSchema(TEACHING), Teaching.class);
-            add(new ConceptSchema(TIMETABLE), TimetableConcept.class);
+            add(new ConceptSchema(TIMETABLE_CONCEPT), TimetableConcept.class);
+            add(new AgentActionSchema(UPDATE_TIMETABLE), UpdateTimetable.class);
 
             // Structure of the scheme for the Lesson concept
             ConceptSchema lesson = (ConceptSchema) getSchema(LESSON);
@@ -68,9 +69,13 @@ public class SchoolTimetableOntology extends Ontology {
             teaching.add(TEACH_LESSON, (ConceptSchema) getSchema(LESSON));
             teaching.add(TEACH_CLASS, (ConceptSchema) getSchema(SCHOOL_CLASS));
 
-            // Structure of the schema for Teachings concept
-            ConceptSchema timetable = (ConceptSchema) getSchema(TIMETABLE);
+            // Structure of the schema for Timetable concept
+            ConceptSchema timetable = (ConceptSchema) getSchema(TIMETABLE_CONCEPT);
             timetable.add(TEACHINGS, (ConceptSchema) getSchema(TEACHING), 0, ObjectSchema.UNLIMITED);
+
+            // Structure of the schema for UpdateTimetable action
+            AgentActionSchema update = (AgentActionSchema) getSchema(UPDATE_TIMETABLE);
+            update.add(TIMETABLE, (ConceptSchema) getSchema(TIMETABLE_CONCEPT));
 
 
         }catch (OntologyException oe){
