@@ -339,7 +339,7 @@ public class TimeScheduler extends Agent {
                             for(int j=1; j <= numDays; j++){
                                 // professor has the same school class, in this lesson sender is free and
                                 // the day is not sender's free day
-                                if(j != senderFreeDay && timeProf.getEntry(i,j).equals(schoolClass) &&
+                                if(j != senderFreeDay && timeProf.getEntry(i,j) == schoolClass &&
                                         timeSender.getEntry(i,j) == null){
                                     lessons.add(new Tuple<>(professor, new Lesson(i,j)));
                                 }
@@ -356,6 +356,10 @@ public class TimeScheduler extends Agent {
                         proposedChange = element.getSecondElement();
                         // preparation of the message
                         ACLMessage proposalMsg = new ACLMessage(ACLMessage.REQUEST);
+                        // set content language and ontology
+                        proposalMsg.setLanguage(codec.getName());
+                        proposalMsg.setOntology(ontology.getName());
+                        // add receiver
                         proposalMsg.addReceiver(substitute);
                         // ontology management
                         ContentElementList cel = new ContentElementList();
@@ -388,6 +392,9 @@ public class TimeScheduler extends Agent {
                     if(msg != null){
                         if(msg.getPerformative() == ACLMessage.AGREE) {
                             ACLMessage reply = new ACLMessage(ACLMessage.PROPOSE);
+                            // set content language and ontology
+                            reply.setLanguage(codec.getName());
+                            reply.setOntology(ontology.getName());
                             // feedback of sender is needed because proposedChange could be one of its preferences
                             ContentElementList cel = new ContentElementList();
                             Change change = new Change();
@@ -400,8 +407,6 @@ public class TimeScheduler extends Agent {
                             }
                             reply.addReceiver(sender);
                             reply.setConversationId(conversationID);
-                            reply.setLanguage(codec.getName());
-                            reply.setOntology(ontology.getName());
                             myAgent.send(reply);
                             step = 3;
                         }else if(msg.getPerformative() == ACLMessage.REFUSE){
