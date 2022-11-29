@@ -72,9 +72,12 @@ public abstract class Professor extends Agent {
                 Utils.printMessage(myAgent, "I've received my timetable");
                 // extract timetable and save it
                 try {
-                    TimetableConcept timeConcept = (TimetableConcept) cm.extractContent(msg);
-                    List<Teaching> teachings = timeConcept.getTeachings();
-                    for(Teaching teaching: teachings){
+                    UpdateTimetable action = (UpdateTimetable) cm.extractContent(msg);
+                    TimetableConcept timeConcept = action.getTimetable();
+                    jade.util.leap.List teachings = timeConcept.getTeachings();
+                    int numTeachings = teachings.size();
+                    for(int i=0; i < numTeachings; i++){
+                        Teaching teaching = (Teaching) teachings.get(i);
                         Lesson lesson = teaching.getLesson();
                         SchoolClass schoolClass = teaching.getSchoolClass();
                         // update list of own classes

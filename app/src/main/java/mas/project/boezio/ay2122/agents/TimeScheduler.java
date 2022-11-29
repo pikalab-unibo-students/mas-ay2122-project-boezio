@@ -13,7 +13,7 @@ import it.unibo.tuprolog.theory.parsing.ClausesParser;
 
 import it.unibo.tuprolog.solve.flags.FlagStore;
 import it.unibo.tuprolog.solve.flags.TrackVariables;
-import it.unibo.tuprolog.solve.flags.invoke;
+//import it.unibo.tuprolog.solve.flags.invoke;
 
 import jade.content.ContentElement;
 import jade.content.ContentElementList;
@@ -38,7 +38,7 @@ import java.util.*;
 public class TimeScheduler extends Agent {
 
     // service offered by the time scheduler
-    public static final String SERVICE = "negotiatioMediator";
+    public static final String SERVICE = "negotiationMediator";
 
     // timetable of each Professor agent
     private Map<AID, Timetable> timetables;
@@ -57,18 +57,58 @@ public class TimeScheduler extends Agent {
 
     protected void setup(){
 
+        Utils.printMessage(this, "Hi everyone, I'm the time-scheduler");
+
         Utils.registerOntology(cm, codec, ontology);
 
         // register itself as time scheduler
         Utils.registerService(this, SERVICE);
 
+        // dummy behaviour for testing
+        addBehaviour(new Dummy());
+
         // agent's behaviour
-        addBehaviour(new TimetableBehaviour(Utils.NUM_HOURS, Utils.NUM_DAYS, hoursPerProfessor));
+        //addBehaviour(new TimetableBehaviour(Utils.NUM_HOURS, Utils.NUM_DAYS, hoursPerProfessor));
         addBehaviour(new WaitProposalBehaviour());
 
     }
 
+    private class Dummy extends OneShotBehaviour{
+
+        @Override
+        public void action() {
+            Lesson lesson = new Lesson(1,1);
+            SchoolClass schoolClass = new SchoolClass(1,"A");
+            Teaching teaching = new Teaching(lesson, schoolClass);
+            jade.util.leap.List teachings = new jade.util.leap.ArrayList();
+            teachings.add(teaching);
+            TimetableConcept timeConcept = new TimetableConcept(teachings);
+            UpdateTimetable action = new UpdateTimetable();
+            action.setTimetable(timeConcept);
+            ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
+            AID profID = new AID();
+            profID.setLocalName("professorRossi");
+            msg.addReceiver(profID);
+            msg.setLanguage(codec.getName());
+            msg.setOntology(ontology.getName());
+            ContentElementList cel = new ContentElementList();
+            cel.add(action);
+            Utils.printMessage(myAgent, "Before try block");
+            try {
+                cm.fillContent(msg, cel);
+            } catch (OntologyException e) {
+                System.out.println(e.toString());
+                e.printStackTrace();
+            } catch (Codec.CodecException e){
+                e.printStackTrace();
+            }
+            Utils.printMessage(myAgent, "All works before sending the message");
+            myAgent.send(msg);
+        }
+    }
+
     // Behaviour to create school timetables of each professor using Constraint Logic Programing
+    /*
     private class TimetableBehaviour extends OneShotBehaviour{
 
         private final int numHours;
@@ -150,7 +190,7 @@ public class TimeScheduler extends Agent {
                 Timetable timetable = timetables.get(professor);
 
                 // add data to the content of the future message
-                List<Teaching> teachings = new ArrayList<>();
+                jade.util.leap.List teachings = new jade.util.leap.ArrayList();
                 for(int i = 1; i <= numHours; i++){
                     for(int j = 1; j <= numDays; j++){
                         SchoolClass schoolClass = timetable.getEntry(i,j);
@@ -160,22 +200,26 @@ public class TimeScheduler extends Agent {
                         }
                     }
                 }
-                TimetableConcept timeConcept = new TimetableConcept();
-                timeConcept.setTeachings(teachings);
+                TimetableConcept timeConcept = new TimetableConcept(teachings);
+                UpdateTimetable action = new UpdateTimetable();
+                action.setTimetable(timeConcept);
                 // send message
                 ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
                 msg.addReceiver(professor);
+                msg.setLanguage(codec.getName());
+                msg.setOntology(ontology.getName());
                 ContentElementList cel = new ContentElementList();
-                cel.add((ContentElement) timeConcept);
+                cel.add(action);
                 try {
                     cm.fillContent(msg, cel);
                 } catch (Codec.CodecException | OntologyException e) {
                     e.printStackTrace();
                 }
                 myAgent.send(msg);
+
             }
         }
-    }
+    }*/
 
     private class WaitProposalBehaviour extends CyclicBehaviour{
 
