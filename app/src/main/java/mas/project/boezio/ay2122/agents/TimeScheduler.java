@@ -43,7 +43,7 @@ public class TimeScheduler extends Agent {
     // timetable of each Professor agent
     private Map<AID, Timetable> timetables;
     // free day of each Professor agent
-    private Map<AID, Integer> freeDays;
+    private Map<AID, Integer> freeDays = new HashMap<>();
 
     // weekly hours for each professor in each class
     private final Map<AID,Map<SchoolClass,Integer>> hoursPerProfessor = Utils.initializeHours();
@@ -82,9 +82,10 @@ public class TimeScheduler extends Agent {
             Teaching teaching = new Teaching(lesson, schoolClass);
             jade.util.leap.List teachings = new jade.util.leap.ArrayList();
             teachings.add(teaching);
-            TimetableConcept timeConcept = new TimetableConcept(teachings);
-            UpdateTimetable action = new UpdateTimetable();
-            action.setTimetable(timeConcept);
+            TimetableConcept timeConcept = new TimetableConcept();
+            timeConcept.setTeachings(teachings);
+            UpdateTimetable update = new UpdateTimetable();
+            update.setTimetable(timeConcept);
             ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
             AID profID = new AID();
             profID.setLocalName("professorRossi");
@@ -92,17 +93,47 @@ public class TimeScheduler extends Agent {
             msg.setLanguage(codec.getName());
             msg.setOntology(ontology.getName());
             ContentElementList cel = new ContentElementList();
-            cel.add(action);
-            Utils.printMessage(myAgent, "Before try block");
+            cel.add(update);
             try {
                 cm.fillContent(msg, cel);
-            } catch (OntologyException e) {
-                System.out.println(e.toString());
-                e.printStackTrace();
-            } catch (Codec.CodecException e){
+            } catch (OntologyException | Codec.CodecException e) {
                 e.printStackTrace();
             }
-            Utils.printMessage(myAgent, "All works before sending the message");
+            // update freeDay of the professor
+            freeDays.put(profID, 3);
+            // update timetables
+            timetables = new HashMap<>();
+            Timetable dummyTime = new Timetable(Utils.NUM_HOURS, Utils.NUM_DAYS);
+            dummyTime.setEntry(1,1,schoolClass);
+            timetables.put(profID, dummyTime);
+            myAgent.send(msg);
+            // second agent
+            lesson = new Lesson(3,1);
+            teaching = new Teaching(lesson, schoolClass);
+            teachings = new jade.util.leap.ArrayList();
+            teachings.add(teaching);
+            timeConcept = new TimetableConcept();
+            timeConcept.setTeachings(teachings);
+            update = new UpdateTimetable();
+            update.setTimetable(timeConcept);
+            msg = new ACLMessage(ACLMessage.INFORM);
+            profID = new AID("professorBianchi", AID.ISLOCALNAME);
+            msg.addReceiver(profID);
+            msg.setLanguage(codec.getName());
+            msg.setOntology(ontology.getName());
+            cel = new ContentElementList();
+            cel.add(update);
+            try {
+                cm.fillContent(msg, cel);
+            } catch (OntologyException | Codec.CodecException e) {
+                e.printStackTrace();
+            }
+            // free day of the second professor
+            freeDays.put(profID, 4);
+            // update timetables
+            dummyTime = new Timetable(Utils.NUM_HOURS, Utils.NUM_DAYS);
+            dummyTime.setEntry(3,1,schoolClass);
+            timetables.put(profID, dummyTime);
             myAgent.send(msg);
         }
     }
@@ -228,10 +259,13 @@ public class TimeScheduler extends Agent {
         @Override
         public void action(){
             ACLMessage msg = myAgent.receive(mt);
-            if(msg != null)
+            if(msg != null) {
+                Utils.printMessage(myAgent, "I've received a cfp message");
                 addBehaviour(new MediationBehaviour(msg));
-            else
+            }else {
+                Utils.printMessage(myAgent,"I'm waiting for a cfp message");
                 block();
+            }
         }
     }
 
@@ -271,7 +305,8 @@ public class TimeScheduler extends Agent {
             this.conversationID = message.getConversationId();
             // get lesson in the content of the message
             try {
-                proposedLesson = (Lesson) cm.extractContent(message);
+                Change change = (Change) cm.extractContent(message);
+                proposedLesson = change.getLessonChange();
             } catch (Codec.CodecException | OntologyException e) {
                 e.printStackTrace();
             }
@@ -294,7 +329,7 @@ public class TimeScheduler extends Agent {
                     // filter professors who have free hour at proposed lesson
                     professors.removeIf(professor -> timetables.get(professor).getEntry(hour, day) != null);
                     // filter professors whose free day is not the day of the proposed lesson
-                    professors.removeIf(professor -> freeDays.get(professor) != day);
+                    professors.removeIf(professor -> freeDays.get(professor) == day);
                     // create list of lessons where sender has free hour
                     for(AID professor: professors){
                         Timetable timeProf = timetables.get(professor);
@@ -355,7 +390,9 @@ public class TimeScheduler extends Agent {
                             ACLMessage reply = new ACLMessage(ACLMessage.PROPOSE);
                             // feedback of sender is needed because proposedChange could be one of its preferences
                             ContentElementList cel = new ContentElementList();
-                            cel.add((ContentElement) proposedChange);
+                            Change change = new Change();
+                            change.setLessonChange(proposedChange);
+                            cel.add(change);
                             try {
                                 cm.fillContent(reply, cel);
                             } catch (Codec.CodecException | OntologyException e) {
@@ -363,6 +400,8 @@ public class TimeScheduler extends Agent {
                             }
                             reply.addReceiver(sender);
                             reply.setConversationId(conversationID);
+                            reply.setLanguage(codec.getName());
+                            reply.setOntology(ontology.getName());
                             myAgent.send(reply);
                             step = 3;
                         }else if(msg.getPerformative() == ACLMessage.REFUSE){

@@ -74,8 +74,8 @@ public abstract class Professor extends Agent {
                 received = true;
                 // extract timetable and save it
                 try {
-                    UpdateTimetable action = (UpdateTimetable) cm.extractContent(msg);
-                    TimetableConcept timeConcept = action.getTimetable();
+                    UpdateTimetable update = (UpdateTimetable) cm.extractContent(msg);
+                    TimetableConcept timeConcept = update.getTimetable();
                     jade.util.leap.List teachings = timeConcept.getTeachings();
                     int numTeachings = teachings.size();
                     for(int i=0; i < numTeachings; i++){
@@ -95,7 +95,7 @@ public abstract class Professor extends Agent {
                         if(timetable.getEntry(pref.getHour(), pref.getDay()) != null)
                             notSatisfiedPref.add(pref);
                     }
-                    addBehaviour(new PreferenceBehaviour(myAgent, 1500));
+                    addBehaviour(new PreferenceBehaviour(myAgent));
                 } catch (Codec.CodecException | OntologyException e) {
                     e.printStackTrace();
                 }
@@ -113,13 +113,14 @@ public abstract class Professor extends Agent {
 
     private class PreferenceBehaviour extends TickerBehaviour{
 
-        public PreferenceBehaviour(Agent a, long period) {
-            super(a, period);
+        private PreferenceBehaviour(Agent a) {
+            super(a, 15000);
         }
 
         @Override
         protected void onTick() {
             if(numTrials > 0){
+                Utils.printMessage(myAgent, "Attempt to satisfy my preferences");
                 for(Lesson pref: notSatisfiedPref){
                     addBehaviour(new NegotiationBehaviour(pref));
                 }
@@ -156,9 +157,14 @@ public abstract class Professor extends Agent {
                     proposalMsg.addReceiver(timeScheduler);
                     // set conversation ID
                     proposalMsg.setConversationId(conversationID);
+                    // set language and ontology
+                    proposalMsg.setLanguage(codec.getName());
+                    proposalMsg.setOntology(ontology.getName());
                     // set content
                     ContentElementList cel = new ContentElementList();
-                    cel.add((ContentElement) pref);
+                    Change change = new Change();
+                    change.setLessonChange(pref);
+                    cel.add(change);
                     try {
                         cm.fillContent(proposalMsg, cel);
                     } catch (Codec.CodecException | OntologyException e) {
@@ -177,7 +183,8 @@ public abstract class Professor extends Agent {
                         if (msg.getPerformative() == ACLMessage.PROPOSE) {
                             // extract the proposed lesson by the other professor
                             try {
-                                Lesson proposedLesson = (Lesson) cm.extractContent(msg);
+                                Change proposal = (Change) cm.extractContent(msg);
+                                Lesson proposedLesson = proposal.getLessonChange();
                                 ACLMessage reply;
                                 // the change does not damage own preferences
                                 if (!preferences.contains(proposedLesson)) {
@@ -206,6 +213,7 @@ public abstract class Professor extends Agent {
                             }
 
                         } else if (msg.getPerformative() == ACLMessage.REFUSE) {
+                            Utils.printMessage(myAgent, "My preference "+pref+" was not satisfied");
                             // lesson is again available
                             lockedPreferences.remove(pref);
                             step = 2;

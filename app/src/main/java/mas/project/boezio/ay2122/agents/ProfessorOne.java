@@ -15,7 +15,7 @@ public class ProfessorOne extends Professor{
     @Override
     protected Set<Lesson> generatePreferences(){
         Set<Lesson> preferences = new HashSet<>();
-        preferences.add(new Lesson(1,2));
+        preferences.add(new Lesson(1,1));
         return preferences;
     }
 }
