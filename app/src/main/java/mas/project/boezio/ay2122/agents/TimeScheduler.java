@@ -7,15 +7,11 @@ import it.unibo.tuprolog.core.Var;
 import it.unibo.tuprolog.core.parsing.TermParser;
 import it.unibo.tuprolog.solve.Solution;
 import it.unibo.tuprolog.solve.Solver;
-import it.unibo.tuprolog.solve.classic.ClassicSolverFactory;
+import it.unibo.tuprolog.solve.flags.TrackVariables;
+import it.unibo.tuprolog.solve.library.Runtime;
 import it.unibo.tuprolog.theory.Theory;
 import it.unibo.tuprolog.theory.parsing.ClausesParser;
 
-import it.unibo.tuprolog.solve.flags.FlagStore;
-import it.unibo.tuprolog.solve.flags.TrackVariables;
-//import it.unibo.tuprolog.solve.flags.invoke;
-
-import jade.content.ContentElement;
 import jade.content.ContentElementList;
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
@@ -43,7 +39,7 @@ public class TimeScheduler extends Agent {
     // timetable of each Professor agent
     private Map<AID, Timetable> timetables;
     // free day of each Professor agent
-    private Map<AID, Integer> freeDays = new HashMap<>();
+    private final Map<AID, Integer> freeDays = new HashMap<>();
 
     // weekly hours for each professor in each class
     private final Map<AID,Map<SchoolClass,Integer>> hoursPerProfessor = Utils.initializeHours();
@@ -65,10 +61,10 @@ public class TimeScheduler extends Agent {
         Utils.registerService(this, SERVICE);
 
         // dummy behaviour for testing
-        addBehaviour(new Dummy());
+        //addBehaviour(new Dummy());
 
-        // agent's behaviour
-        //addBehaviour(new TimetableBehaviour(Utils.NUM_HOURS, Utils.NUM_DAYS, hoursPerProfessor));
+        // agent's behaviours
+        addBehaviour(new TimetableBehaviour(Utils.NUM_HOURS, Utils.NUM_DAYS, hoursPerProfessor));
         addBehaviour(new WaitProposalBehaviour());
 
     }
@@ -139,12 +135,12 @@ public class TimeScheduler extends Agent {
     }
 
     // Behaviour to create school timetables of each professor using Constraint Logic Programing
-    /*
+
     private class TimetableBehaviour extends OneShotBehaviour{
 
         private final int numHours;
         private final int numDays;
-        private Map<AID,Map<SchoolClass,Integer>> hoursPerProfessor;
+        private final Map<AID,Map<SchoolClass,Integer>> hoursPerProfessor;
         private final ClausesParser theoryParser = ClausesParser.withDefaultOperators();
         private final TermParser termParser = TermParser.withDefaultOperators();
 
@@ -160,27 +156,29 @@ public class TimeScheduler extends Agent {
 
         @Override
         public void action() {
+            long begin = System.currentTimeMillis();
+            System.out.println(begin);
             // simplified version, model should be created dynamically
             // CP model of a specific instance
-            Theory theory = theoryParser.parseTheory(Utils.CP_THEORY);
-
+            Theory theory = Utils.getTheory();
+            System.out.println("Theory has been read");
             // goal
-            Struct goal = termParser.parseStruct(Utils.CP_GOAL);
-
+            Struct goal = Utils.getGoal();
+            System.out.println("Goal has been read");
             // solver
-            Solver solver = ClassicSolverFactory.solverOf(
-                    ClpFdLibrary.toRuntime(),
-                    FlagStore.EMPTY + TrackVariables { ON },
-                    theory
-            );
-
+            Solver solver = Solver.prolog().newBuilder()
+                    .runtime(Runtime.of(ClpFdLibrary.INSTANCE))
+                    .flag(TrackVariables.INSTANCE, TrackVariables.ON)
+                    .staticKb(theory)
+                    .build();
             Solution solution = solver.solveOnce(goal);
-
+            System.out.println(System.currentTimeMillis() - begin);
+            System.out.println( "I've generated timetables");
             // initialize timetables
             timetables = new HashMap<>();
             int numProfessors = hoursPerProfessor.size();
             for(int i=1; i <= numProfessors; i++){
-                timetables.put(new AID("professor"+i, true), new Timetable(numHours, numDays));
+                timetables.put(new AID("professor"+i, AID.ISLOCALNAME), new Timetable(numHours, numDays));
             }
             // update timetables for each professor
             it.unibo.tuprolog.core.Substitution substitution = solution.getSubstitution();
@@ -197,6 +195,7 @@ public class TimeScheduler extends Agent {
                 Timetable profTimetable = timetables.get(profAID);
                 profTimetable.setEntry(hour, day, schoolClass);
             }
+            Utils.printMessage(myAgent, "I've update all timetables");
             // update free day for each professor
             for(AID prof: timetables.keySet()){
                 Timetable timeProf = timetables.get(prof);
@@ -231,7 +230,8 @@ public class TimeScheduler extends Agent {
                         }
                     }
                 }
-                TimetableConcept timeConcept = new TimetableConcept(teachings);
+                TimetableConcept timeConcept = new TimetableConcept();
+                timeConcept.setTeachings(teachings);
                 UpdateTimetable action = new UpdateTimetable();
                 action.setTimetable(timeConcept);
                 // send message
@@ -250,7 +250,7 @@ public class TimeScheduler extends Agent {
 
             }
         }
-    }*/
+    }
 
     private class WaitProposalBehaviour extends CyclicBehaviour{
 
