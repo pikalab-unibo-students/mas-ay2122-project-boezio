@@ -1,8 +1,6 @@
 package mas.project.boezio.ay2122.utils;
 
 import it.unibo.tuprolog.core.*;
-import it.unibo.tuprolog.core.List;
-import it.unibo.tuprolog.core.Tuple;
 import it.unibo.tuprolog.core.parsing.TermParser;
 import it.unibo.tuprolog.theory.Theory;
 import jade.content.ContentManager;
@@ -47,9 +45,9 @@ public class Utils {
                         termParser.parseStruct("problem(P111, P112, P113, P114, P115, P121, P122, P123, P124, P125, P131, P132, P133, P134, P135, P141, P142, P143, P144, P145, P151, P152, P153, P154, P155, P211, P212, P213, P214, P215, P221, P222, P223, P224, P225, P231, P232, P233, P234, P235, P241, P242, P243, P244, P245, P251, P252, P253, P254, P255, P311, P312, P313, P314, P315, P321, P322, P323, P324, P325, P331, P332, P333, P334, P335, P341, P342, P343, P344, P345, P351, P352, P353, P354, P355, P411, P412, P413, P414, P415, P421, P422, P423, P424, P425, P431, P432, P433, P434, P435, P441, P442, P443, P444, P445, P451, P452, P453, P454, P455)"),
                         termParser.parseStruct("ins([P111, P112, P113, P114, P115, P121, P122, P123, P124, P125, P131, P132, P133, P134, P135, P141, P142, P143, P144, P145, P151, P152, P153, P154, P155, P211, P212, P213, P214, P215, P221, P222, P223, P224, P225, P231, P232, P233, P234, P235, P241, P242, P243, P244, P245, P251, P252, P253, P254, P255, P311, P312, P313, P314, P315, P321, P322, P323, P324, P325, P331, P332, P333, P334, P335, P341, P342, P343, P344, P345, P351, P352, P353, P354, P355, P411, P412, P413, P414, P415, P421, P422, P423, P424, P425, P431, P432, P433, P434, P435, P441, P442, P443, P444, P445, P451, P452, P453, P454, P455],'..'(0,2))"),
                         termParser.parseStruct("global_cardinality([P111, P112, P113, P114, P115, P121, P122, P123, P124, P125, P131, P132, P134, P135, P141, P142, P143, P144, P145, P151, P152, P153, P154, P155], ['-'(1,7),'-'(2,7),'-'(0,11)])"),
-                        termParser.parseStruct("global_cardinality([P211, P212, P213, P214, P215, P221, P222, P223, P224, P225, P231, P232, P234, P235, P241, P242, P243, P244, P245, P251, P252, P253, P254, P255], ['-'(1,6),'-'(2,8),'-'(0,11)])"),
+                        termParser.parseStruct("global_cardinality([P211, P212, P213, P214, P215, P221, P222, P223, P224, P225, P231, P232, P234, P235, P241, P242, P243, P244, P245, P251, P252, P253, P254, P255], ['-'(1,6),'-'(2,7),'-'(0,12)])"),
                         termParser.parseStruct("global_cardinality([P311, P312, P313, P314, P315, P321, P322, P323, P324, P325, P331, P332, P334, P335, P341, P342, P343, P344, P345, P351, P352, P353, P354, P355], ['-'(1,5),'-'(2,7),'-'(0,13)])"),
-                        termParser.parseStruct("global_cardinality([P411, P412, P413, P414, P415, P421, P422, P423, P424, P425, P431, P432, P434, P435, P441, P442, P443, P444, P445, P451, P452, P453, P454, P455], ['-'(1,7),'-'(2,3),'-'(0,15)])"),
+                        termParser.parseStruct("global_cardinality([P411, P412, P413, P414, P415, P421, P422, P423, P424, P425, P431, P432, P434, P435, P441, P442, P443, P444, P445, P451, P452, P453, P454, P455], ['-'(1,7),'-'(2,4),'-'(0,14)])"),
                         termParser.parseStruct("all_distinct_except_0([P111,P211,P311,P411])"),
                         termParser.parseStruct("all_distinct_except_0([P112,P212,P312,P412])"),
                         termParser.parseStruct("all_distinct_except_0([P113,P213,P313,P413])"),
