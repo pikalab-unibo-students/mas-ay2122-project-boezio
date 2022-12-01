@@ -4,13 +4,11 @@ import clpfd.ClpFdLibrary;
 
 import it.unibo.tuprolog.core.Struct;
 import it.unibo.tuprolog.core.Var;
-import it.unibo.tuprolog.core.parsing.TermParser;
 import it.unibo.tuprolog.solve.Solution;
 import it.unibo.tuprolog.solve.Solver;
 import it.unibo.tuprolog.solve.flags.TrackVariables;
 import it.unibo.tuprolog.solve.library.Runtime;
 import it.unibo.tuprolog.theory.Theory;
-import it.unibo.tuprolog.theory.parsing.ClausesParser;
 
 import jade.content.ContentElementList;
 import jade.content.ContentManager;
@@ -73,6 +71,99 @@ public class TimeScheduler extends Agent {
 
         @Override
         public void action() {
+
+
+            // initialize different lessons
+            Lesson[][] lessons = new Lesson[Utils.NUM_HOURS][Utils.NUM_DAYS];
+            for(int i=0; i < Utils.NUM_HOURS; i++){
+                for(int j=0; j < Utils.NUM_DAYS; j++){
+                    lessons[i][j] = new Lesson(i+1,j+1);
+                }
+            }
+
+            // school classes
+            SchoolClass firstA = Utils.classesMap.get(1);
+            SchoolClass secondA = Utils.classesMap.get(2);
+
+            // timetable of professor1
+            jade.util.leap.List teachingsFirst = new jade.util.leap.ArrayList();
+            teachingsFirst.add(new Teaching(lessons[0][0], firstA));
+            teachingsFirst.add(new Teaching(lessons[1][0], firstA));
+            teachingsFirst.add(new Teaching(lessons[2][0], secondA));
+            teachingsFirst.add(new Teaching(lessons[3][0], secondA));
+            teachingsFirst.add(new Teaching(lessons[0][2], secondA));
+            teachingsFirst.add(new Teaching(lessons[1][2], secondA));
+            teachingsFirst.add(new Teaching(lessons[2][2], firstA));
+            teachingsFirst.add(new Teaching(lessons[3][2], firstA));
+            teachingsFirst.add(new Teaching(lessons[0][3], secondA));
+            teachingsFirst.add(new Teaching(lessons[4][3], firstA));
+            teachingsFirst.add(new Teaching(lessons[0][4], secondA));
+            teachingsFirst.add(new Teaching(lessons[3][4], firstA));
+            teachingsFirst.add(new Teaching(lessons[4][4], firstA));
+            TimetableConcept timeConceptFirst = new TimetableConcept();
+            timeConceptFirst.setTeachings(teachingsFirst);
+            UpdateTimetable updateFirst = new UpdateTimetable();
+            updateFirst.setTimetable(timeConceptFirst);
+
+            // timetable of professor2
+            jade.util.leap.List teachingsSecond = new jade.util.leap.ArrayList();
+            teachingsSecond.add(new Teaching(lessons[0][1], firstA));
+            teachingsSecond.add(new Teaching(lessons[1][1], firstA));
+            teachingsSecond.add(new Teaching(lessons[3][1], secondA));
+            teachingsSecond.add(new Teaching(lessons[4][1], secondA));
+            teachingsSecond.add(new Teaching(lessons[4][2], firstA));
+            teachingsSecond.add(new Teaching(lessons[3][3], secondA));
+            teachingsSecond.add(new Teaching(lessons[4][3], secondA));
+            teachingsSecond.add(new Teaching(lessons[0][4], firstA));
+            teachingsSecond.add(new Teaching(lessons[1][4], firstA));
+            teachingsSecond.add(new Teaching(lessons[2][4], secondA));
+            teachingsSecond.add(new Teaching(lessons[3][4], secondA));
+            teachingsSecond.add(new Teaching(lessons[4][4], secondA));
+            TimetableConcept timeConceptSecond = new TimetableConcept();
+            timeConceptSecond.setTeachings(teachingsSecond);
+            UpdateTimetable updateSecond = new UpdateTimetable();
+            updateSecond.setTimetable(timeConceptSecond);
+
+            // timetable of professor3
+            jade.util.leap.List teachingsThird = new jade.util.leap.ArrayList();
+            teachingsThird.add(new Teaching(lessons[0][0], secondA));
+            teachingsThird.add(new Teaching(lessons[1][0], secondA));
+            teachingsThird.add(new Teaching(lessons[2][0], firstA));
+            teachingsThird.add(new Teaching(lessons[0][2], firstA));
+            teachingsThird.add(new Teaching(lessons[1][2], firstA));
+            teachingsThird.add(new Teaching(lessons[2][2], secondA));
+            teachingsThird.add(new Teaching(lessons[3][2], secondA));
+            teachingsThird.add(new Teaching(lessons[1][3], secondA));
+            teachingsThird.add(new Teaching(lessons[2][3], secondA));
+            teachingsThird.add(new Teaching(lessons[3][3], firstA));
+            teachingsThird.add(new Teaching(lessons[1][4], secondA));
+            teachingsThird.add(new Teaching(lessons[2][4], firstA));
+            TimetableConcept timeConceptThird = new TimetableConcept();
+            timeConceptThird.setTeachings(teachingsThird);
+            UpdateTimetable updateThird = new UpdateTimetable();
+            updateThird.setTimetable(timeConceptThird);
+
+            // timetable of professor4
+            jade.util.leap.List teachingsFourth = new jade.util.leap.ArrayList();
+            teachingsFourth.add(new Teaching(lessons[3][0], firstA));
+            teachingsFourth.add(new Teaching(lessons[4][0], firstA));
+            teachingsFourth.add(new Teaching(lessons[0][1], secondA));
+            teachingsFourth.add(new Teaching(lessons[1][1], secondA));
+            teachingsFourth.add(new Teaching(lessons[2][1], secondA));
+            teachingsFourth.add(new Teaching(lessons[3][1], firstA));
+            teachingsFourth.add(new Teaching(lessons[4][1], firstA));
+            teachingsFourth.add(new Teaching(lessons[4][2], secondA));
+            teachingsFourth.add(new Teaching(lessons[0][3], firstA));
+            teachingsFourth.add(new Teaching(lessons[1][3], firstA));
+            teachingsFourth.add(new Teaching(lessons[2][3], firstA));
+            TimetableConcept timeConceptFourth = new TimetableConcept();
+            timeConceptFourth.setTeachings(teachingsFourth);
+            UpdateTimetable updateFourth = new UpdateTimetable();
+            updateFourth.setTimetable(timeConceptFourth);
+
+            // update timetables
+
+
             Lesson lesson = new Lesson(1,1);
             SchoolClass schoolClass = new SchoolClass(1,"A");
             Teaching teaching = new Teaching(lesson, schoolClass);
@@ -141,8 +232,6 @@ public class TimeScheduler extends Agent {
         private final int numHours;
         private final int numDays;
         private final Map<AID,Map<SchoolClass,Integer>> hoursPerProfessor;
-        private final ClausesParser theoryParser = ClausesParser.withDefaultOperators();
-        private final TermParser termParser = TermParser.withDefaultOperators();
 
         private TimetableBehaviour(
                 int numHours,
