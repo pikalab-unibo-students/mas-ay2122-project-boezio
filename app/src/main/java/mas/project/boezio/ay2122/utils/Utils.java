@@ -1,9 +1,8 @@
 package mas.project.boezio.ay2122.utils;
 
-import it.unibo.tuprolog.core.Rule;
-import it.unibo.tuprolog.core.Struct;
-import it.unibo.tuprolog.core.Var;
+import it.unibo.tuprolog.core.*;
 import it.unibo.tuprolog.core.List;
+import it.unibo.tuprolog.core.Tuple;
 import it.unibo.tuprolog.core.parsing.TermParser;
 import it.unibo.tuprolog.theory.Theory;
 import jade.content.ContentManager;
@@ -17,6 +16,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import mas.project.boezio.ay2122.ontology.SchoolClass;
 
+import java.lang.Integer;
 import java.util.*;
 
 public class Utils {
@@ -26,9 +26,8 @@ public class Utils {
     public static final int NUM_PROFESSORS = 4;
     public static final int NUM_CLASSES = 2;
 
-    // variables of the CP problem instance
-    private static final Var[] allVars = new Var[NUM_PROFESSORS*NUM_HOURS*NUM_DAYS];
 
+    // number of classes for the specific instance of the problem
     public static final Map<Integer, SchoolClass> classesMap = new HashMap<>()
     {
         {
@@ -38,45 +37,19 @@ public class Utils {
         }
     };
 
-    public static Theory getTheory(){
+    private static final TermParser termParser = TermParser.withDefaultOperators();
 
-        Var[][][] vars = new Var[NUM_PROFESSORS][NUM_HOURS][NUM_DAYS];
-        int l = 0;
-        for(int i=0; i < NUM_PROFESSORS; i++ ){
-            for(int j=0; j < NUM_HOURS; j++){
-                for(int k=0; k < NUM_DAYS; k++){
-                    vars[i][j][k] = Var.of("P"+(i+1)+(j+1)+(k+1));
-                    allVars[l++] = vars[i][j][k];
-                }
-            }
-        }
-        // term parser for part of the theory
-        TermParser termParser = TermParser.withDefaultOperators();
+
+    public static Theory getTheory(){
 
         return Theory.of(
                 Rule.of(
-                        // head
-                        Struct.of(
-                                "problem",
-                                allVars
-                        ),
-                        // body
-                        // Domain of the variables (number of classes + 0 for no class)
-                        Struct.of(
-                                "ins",
-                                List.of(allVars),
-                                Struct.of(
-                                        "..",
-                                        it.unibo.tuprolog.core.Integer.of(0),
-                                        it.unibo.tuprolog.core.Integer.of(NUM_CLASSES)
-                                )
-                        ),
-                        // Each professor must teach in each class for a specif number of hours
+                        termParser.parseStruct("problem(P111, P112, P113, P114, P115, P121, P122, P123, P124, P125, P131, P132, P133, P134, P135, P141, P142, P143, P144, P145, P151, P152, P153, P154, P155, P211, P212, P213, P214, P215, P221, P222, P223, P224, P225, P231, P232, P233, P234, P235, P241, P242, P243, P244, P245, P251, P252, P253, P254, P255, P311, P312, P313, P314, P315, P321, P322, P323, P324, P325, P331, P332, P333, P334, P335, P341, P342, P343, P344, P345, P351, P352, P353, P354, P355, P411, P412, P413, P414, P415, P421, P422, P423, P424, P425, P431, P432, P433, P434, P435, P441, P442, P443, P444, P445, P451, P452, P453, P454, P455)"),
+                        termParser.parseStruct("ins([P111, P112, P113, P114, P115, P121, P122, P123, P124, P125, P131, P132, P133, P134, P135, P141, P142, P143, P144, P145, P151, P152, P153, P154, P155, P211, P212, P213, P214, P215, P221, P222, P223, P224, P225, P231, P232, P233, P234, P235, P241, P242, P243, P244, P245, P251, P252, P253, P254, P255, P311, P312, P313, P314, P315, P321, P322, P323, P324, P325, P331, P332, P333, P334, P335, P341, P342, P343, P344, P345, P351, P352, P353, P354, P355, P411, P412, P413, P414, P415, P421, P422, P423, P424, P425, P431, P432, P433, P434, P435, P441, P442, P443, P444, P445, P451, P452, P453, P454, P455],'..'(0,2))"),
                         termParser.parseStruct("global_cardinality([P111, P112, P113, P114, P115, P121, P122, P123, P124, P125, P131, P132, P134, P135, P141, P142, P143, P144, P145, P151, P152, P153, P154, P155], ['-'(1,7),'-'(2,7),'-'(0,11)])"),
                         termParser.parseStruct("global_cardinality([P211, P212, P213, P214, P215, P221, P222, P223, P224, P225, P231, P232, P234, P235, P241, P242, P243, P244, P245, P251, P252, P253, P254, P255], ['-'(1,6),'-'(2,8),'-'(0,11)])"),
                         termParser.parseStruct("global_cardinality([P311, P312, P313, P314, P315, P321, P322, P323, P324, P325, P331, P332, P334, P335, P341, P342, P343, P344, P345, P351, P352, P353, P354, P355], ['-'(1,5),'-'(2,7),'-'(0,13)])"),
                         termParser.parseStruct("global_cardinality([P411, P412, P413, P414, P415, P421, P422, P423, P424, P425, P431, P432, P434, P435, P441, P442, P443, P444, P445, P451, P452, P453, P454, P455], ['-'(1,7),'-'(2,3),'-'(0,15)])"),
-                        // No more than one professor for each class
                         termParser.parseStruct("all_distinct_except_0([P111,P211,P311,P411])"),
                         termParser.parseStruct("all_distinct_except_0([P112,P212,P312,P412])"),
                         termParser.parseStruct("all_distinct_except_0([P113,P213,P313,P413])"),
@@ -102,21 +75,21 @@ public class Utils {
                         termParser.parseStruct("all_distinct_except_0([P153,P253,P353,P453])"),
                         termParser.parseStruct("all_distinct_except_0([P154,P254,P354,P454])"),
                         termParser.parseStruct("all_distinct_except_0([P155,P255,P355,P455])"),
-                        // Each professor must have a free day
-                        termParser.parseStruct("#\\/(#\\/(#\\/(#\\/(tuples_in([[P111, P121, P131, P141, P151]],[[0,0,0,0,0]]),tuples_in([[P112, P122, P132, P142, P152]],[[0,0,0,0,0]])),tuples_in([[P113, P123, P143, P153]],[[0,0,0,0,0]])),tuples_in([[P114, P124, P134, P144, P154]],[[0,0,0,0,0]])),tuples_in([[P115, P125, P135, P145, P155]],[[0,0,0,0,0]]))"),
-                        termParser.parseStruct("#\\/(#\\/(#\\/(#\\/(tuples_in([[P211, P221, P231, P241, P251]],[[0,0,0,0,0]]),tuples_in([[P212, P222, P232, P242, P252]],[[0,0,0,0,0]])),tuples_in([[P213, P223, P243, P253]],[[0,0,0,0,0]])),tuples_in([[P214, P224, P234, P244, P254]],[[0,0,0,0,0]])),tuples_in([[P215, P225, P235, P245, P255]],[[0,0,0,0,0]]))"),
-                        termParser.parseStruct("#\\/(#\\/(#\\/(#\\/(tuples_in([[P311, P321, P331, P341, P351]],[[0,0,0,0,0]]),tuples_in([[P312, P322, P332, P342, P352]],[[0,0,0,0,0]])),tuples_in([[P313, P323, P343, P353]],[[0,0,0,0,0]])),tuples_in([[P314, P324, P334, P344, P354]],[[0,0,0,0,0]])),tuples_in([[P315, P325, P335, P345, P355]],[[0,0,0,0,0]]))"),
-                        termParser.parseStruct("#\\/(#\\/(#\\/(#\\/(tuples_in([[P411, P421, P431, P441, P451]],[[0,0,0,0,0]]),tuples_in([[P412, P422, P432, P442, P452]],[[0,0,0,0,0]])),tuples_in([[P413, P423, P443, P453]],[[0,0,0,0,0]])),tuples_in([[P414, P424, P434, P444, P454]],[[0,0,0,0,0]])),tuples_in([[P415, P425, P435, P445, P455]],[[0,0,0,0,0]]))")
+                        termParser.parseStruct("#\\/(#\\/(#\\/(#\\/(tuples_in([[P111, P121, P131, P141, P151]],[[0,0,0,0,0]]),tuples_in([[P112, P122, P132, P142, P152]],[[0,0,0,0,0]])),tuples_in([[P113, P123, P133, P143, P153]],[[0,0,0,0,0]])),tuples_in([[P114, P124, P134, P144, P154]],[[0,0,0,0,0]])),tuples_in([[P115, P125, P135, P145, P155]],[[0,0,0,0,0]]))"),
+                        termParser.parseStruct("#\\/(#\\/(#\\/(#\\/(tuples_in([[P211, P221, P231, P241, P251]],[[0,0,0,0,0]]),tuples_in([[P212, P222, P232, P242, P252]],[[0,0,0,0,0]])),tuples_in([[P213, P223, P233, P243, P253]],[[0,0,0,0,0]])),tuples_in([[P214, P224, P234, P244, P254]],[[0,0,0,0,0]])),tuples_in([[P215, P225, P235, P245, P255]],[[0,0,0,0,0]]))"),
+                        termParser.parseStruct("#\\/(#\\/(#\\/(#\\/(tuples_in([[P311, P321, P331, P341, P351]],[[0,0,0,0,0]]),tuples_in([[P312, P322, P332, P342, P352]],[[0,0,0,0,0]])),tuples_in([[P313, P323, P333, P343, P353]],[[0,0,0,0,0]])),tuples_in([[P314, P324, P334, P344, P354]],[[0,0,0,0,0]])),tuples_in([[P315, P325, P335, P345, P355]],[[0,0,0,0,0]]))"),
+                        termParser.parseStruct("#\\/(#\\/(#\\/(#\\/(tuples_in([[P411, P421, P431, P441, P451]],[[0,0,0,0,0]]),tuples_in([[P412, P422, P432, P442, P452]],[[0,0,0,0,0]])),tuples_in([[P413, P423, P433, P443, P453]],[[0,0,0,0,0]])),tuples_in([[P414, P424, P434, P444, P454]],[[0,0,0,0,0]])),tuples_in([[P415, P425, P435, P445, P455]],[[0,0,0,0,0]]))")
                 )
         );
     }
 
     public static Struct getGoal(){
-        return Struct.of(
-                "problem",
-                allVars
-        );
+        return termParser.parseStruct("""
+            problem(P111, P112, P113, P114, P115, P121, P122, P123, P124, P125, P131, P132, P133, P134, P135, P141, P142, P143, P144, P145, P151, P152, P153, P154, P155, P211, P212, P213, P214, P215, P221, P222, P223, P224, P225, P231, P232, P233, P234, P235, P241, P242, P243, P244, P245, P251, P252, P253, P254, P255, P311, P312, P313, P314, P315, P321, P322, P323, P324, P325, P331, P332, P333, P334, P335, P341, P342, P343, P344, P345, P351, P352, P353, P354, P355, P411, P412, P413, P414, P415, P421, P422, P423, P424, P425, P431, P432, P433, P434, P435, P441, P442, P443, P444, P445, P451, P452, P453, P454, P455),
+            label([P111, P112, P113, P114, P115, P121, P122, P123, P124, P125, P131, P132, P133, P134, P135, P141, P142, P143, P144, P145, P151, P152, P153, P154, P155, P211, P212, P213, P214, P215, P221, P222, P223, P224, P225, P231, P232, P233, P234, P235, P241, P242, P243, P244, P245, P251, P252, P253, P254, P255, P311, P312, P313, P314, P315, P321, P322, P323, P324, P325, P331, P332, P333, P334, P335, P341, P342, P343, P344, P345, P351, P352, P353, P354, P355, P411, P412, P413, P414, P415, P421, P422, P423, P424, P425, P431, P432, P433, P434, P435, P441, P442, P443, P444, P445, P451, P452, P453, P454, P455])
+        """);
     }
+
 
     public static Map<AID, Map<SchoolClass,Integer>> initializeHours(){
         // this information is provided by the school

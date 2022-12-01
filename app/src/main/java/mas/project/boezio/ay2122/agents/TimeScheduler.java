@@ -156,8 +156,6 @@ public class TimeScheduler extends Agent {
 
         @Override
         public void action() {
-            long begin = System.currentTimeMillis();
-            System.out.println(begin);
             // simplified version, model should be created dynamically
             // CP model of a specific instance
             Theory theory = Utils.getTheory();
@@ -172,8 +170,10 @@ public class TimeScheduler extends Agent {
                     .staticKb(theory)
                     .build();
             Solution solution = solver.solveOnce(goal);
-            System.out.println(System.currentTimeMillis() - begin);
-            System.out.println( "I've generated timetables");
+
+            System.out.print("Solution is yes: ");
+            System.out.println(solution.isYes());
+
             // initialize timetables
             timetables = new HashMap<>();
             int numProfessors = hoursPerProfessor.size();
