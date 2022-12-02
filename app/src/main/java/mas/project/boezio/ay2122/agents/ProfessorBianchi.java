@@ -13,6 +13,8 @@ public class ProfessorBianchi extends Professor{
 
     @Override
     protected Set<Lesson> generatePreferences() {
-        return new HashSet<>();
+        Set<Lesson> preferences = new HashSet<>();
+        preferences.add(new Lesson(2,5));
+        return preferences;
     }
 }

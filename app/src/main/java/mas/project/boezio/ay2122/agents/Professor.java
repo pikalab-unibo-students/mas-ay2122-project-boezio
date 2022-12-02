@@ -10,7 +10,6 @@ import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.CyclicBehaviour;
-import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
@@ -55,7 +54,7 @@ public abstract class Professor extends Agent {
 
         // agent's behaviour
         addBehaviour(new TimetableBehaviour());
-        addBehaviour(new CandidateBehaviour());
+        addBehaviour(new WaitProposalBehaviour());
 
     }
 
@@ -222,7 +221,7 @@ public abstract class Professor extends Agent {
                                     step = 2;
                                 } else {
                                     reply = new ACLMessage(ACLMessage.REJECT_PROPOSAL);
-                                    outcome = "refused";
+                                    outcome = "rejected";
                                 }
                                 reply.addReceiver(timeScheduler);
                                 reply.setConversationId(conversationID);
@@ -253,61 +252,75 @@ public abstract class Professor extends Agent {
         }
     }
 
-    private class CandidateBehaviour extends CyclicBehaviour{
+    private class WaitProposalBehaviour extends CyclicBehaviour{
+
+        private final MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
+
+        @Override
+        public void action() {
+            ACLMessage msg = myAgent.receive(mt);
+            if(msg != null) {
+                Utils.printMessage(myAgent, "I've received a change proposal");
+                addBehaviour(new CandidateBehaviour(msg));
+            }else {
+                Utils.printMessage(myAgent,"I'm waiting for a change proposal");
+                block();
+            }
+        }
+    }
+
+    private class CandidateBehaviour extends Behaviour{
 
         private int step = 0;
         private ACLMessage msg;
         private MessageTemplate mt;
-        private String conversationID;
+        private final String conversationID;
         private Lesson proposedLesson;
         private Lesson currentLesson;
+
+        public CandidateBehaviour(ACLMessage msg){
+            this.msg = msg;
+            conversationID = msg.getConversationId();
+            mt = MessageTemplate.MatchConversationId(conversationID);
+        }
 
         @Override
         public void action() {
 
             switch (step) {
                 case 0 -> {
-                    // receive a message which contains a change proposal
-                    mt = MessageTemplate.MatchPerformative(ACLMessage.REQUEST);
-                    msg = myAgent.receive(mt);
-                    if (msg != null) {
-                        conversationID = msg.getConversationId();
-                        ACLMessage reply = msg.createReply();
-                        reply.setConversationId(conversationID);
-                        // extract lessons
-                        try {
-                            Substitution substitution = (Substitution) cm.extractContent(msg);
-                            proposedLesson = substitution.getProposedLesson();
-                            currentLesson = substitution.getCurrentLesson();
-                            Utils.printMessage(
-                                    myAgent,
-                                    "Someone wants to change "+proposedLesson+" with my "+currentLesson
-                            );
-                            // to accept the proposal the proposed change must not be in the preferences and
-                            // the lesson to change must not be involved in another negotiation
-                            // Outcome message
-                            String outcome;
-                            if (!lockedPreferences.contains(currentLesson)
-                                    && !preferences.contains(proposedLesson)) {
-                                reply.setPerformative(ACLMessage.AGREE);
-                                step = 1;
-                                outcome = "accepted";
-                            } else {
-                                reply.setPerformative(ACLMessage.REFUSE);
-                                outcome = "refused";
-                            }
-                            Utils.printMessage(
-                                    myAgent,
-                                    "I've "+outcome+" to change "+currentLesson+" for "+proposedLesson
-                            );
-                        } catch (Codec.CodecException | OntologyException e) {
-                            e.printStackTrace();
+                    ACLMessage reply = msg.createReply();
+                    reply.setConversationId(conversationID);
+                    // extract lessons
+                    try {
+                        Substitution substitution = (Substitution) cm.extractContent(msg);
+                        proposedLesson = substitution.getProposedLesson();
+                        currentLesson = substitution.getCurrentLesson();
+                        Utils.printMessage(
+                                myAgent,
+                                "Someone wants to change "+proposedLesson+" with my "+currentLesson
+                        );
+                        // to accept the proposal the proposed change must not be in the preferences and
+                        // the lesson to change must not be involved in another negotiation
+                        // Outcome message
+                        String outcome;
+                        if (!lockedPreferences.contains(currentLesson)
+                                && !preferences.contains(proposedLesson)) {
+                            reply.setPerformative(ACLMessage.AGREE);
+                            step = 1;
+                            outcome = "agreed";
+                        } else {
+                            reply.setPerformative(ACLMessage.REFUSE);
+                            outcome = "refused";
                         }
-                        myAgent.send(reply);
-                    } else {
-                        Utils.printMessage(myAgent, "I'm waiting for a change proposal");
-                        block();
+                        Utils.printMessage(
+                                myAgent,
+                                "I've "+outcome+" to change "+currentLesson+" for "+proposedLesson
+                        );
+                    } catch (Codec.CodecException | OntologyException e) {
+                        e.printStackTrace();
                     }
+                    myAgent.send(reply);
                 }
                 case 1 -> {
                     // confirm or not about the change
@@ -333,13 +346,18 @@ public abstract class Professor extends Agent {
                                 myAgent,
                                 "Someone's "+outcome+" the change of my "+currentLesson+" for "+proposedLesson
                         );
-                        step = 0;
+                        step = 2;
                     } else {
                         Utils.printMessage(myAgent, "I'm waiting for a confirm or disconfirm message");
                         block();
                     }
                 }
             }
+        }
+
+        @Override
+        public boolean done() {
+            return step == 2;
         }
     }
 
