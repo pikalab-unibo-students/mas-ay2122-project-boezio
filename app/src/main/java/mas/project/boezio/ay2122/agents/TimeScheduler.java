@@ -59,10 +59,10 @@ public class TimeScheduler extends Agent {
         Utils.registerService(this, SERVICE);
 
         // dummy behaviour for testing
-        //addBehaviour(new Dummy());
+        addBehaviour(new Dummy());
 
         // agent's behaviours
-        addBehaviour(new TimetableBehaviour(Utils.NUM_HOURS, Utils.NUM_DAYS, hoursPerProfessor));
+        //addBehaviour(new TimetableBehaviour(Utils.NUM_HOURS, Utils.NUM_DAYS, hoursPerProfessor));
         addBehaviour(new WaitProposalBehaviour());
 
     }
@@ -91,6 +91,7 @@ public class TimeScheduler extends Agent {
             teachingsFirst.add(new Teaching(lessons[1][0], firstA));
             teachingsFirst.add(new Teaching(lessons[2][0], secondA));
             teachingsFirst.add(new Teaching(lessons[3][0], secondA));
+            teachingsFirst.add(new Teaching(lessons[4][0], secondA));
             teachingsFirst.add(new Teaching(lessons[0][2], secondA));
             teachingsFirst.add(new Teaching(lessons[1][2], secondA));
             teachingsFirst.add(new Teaching(lessons[2][2], firstA));
@@ -108,6 +109,7 @@ public class TimeScheduler extends Agent {
             // timetable of professor2
             jade.util.leap.List teachingsSecond = new jade.util.leap.ArrayList();
             teachingsSecond.add(new Teaching(lessons[0][1], firstA));
+            teachingsSecond.add(new Teaching(lessons[1][1], firstA));
             teachingsSecond.add(new Teaching(lessons[1][1], firstA));
             teachingsSecond.add(new Teaching(lessons[3][1], secondA));
             teachingsSecond.add(new Teaching(lessons[4][1], secondA));
@@ -161,67 +163,74 @@ public class TimeScheduler extends Agent {
             UpdateTimetable updateFourth = new UpdateTimetable();
             updateFourth.setTimetable(timeConceptFourth);
 
-            // update timetables
+            // update timetables and free days
 
-
-            Lesson lesson = new Lesson(1,1);
-            SchoolClass schoolClass = new SchoolClass(1,"A");
-            Teaching teaching = new Teaching(lesson, schoolClass);
-            jade.util.leap.List teachings = new jade.util.leap.ArrayList();
-            teachings.add(teaching);
-            TimetableConcept timeConcept = new TimetableConcept();
-            timeConcept.setTeachings(teachings);
-            UpdateTimetable update = new UpdateTimetable();
-            update.setTimetable(timeConcept);
-            ACLMessage msg = new ACLMessage(ACLMessage.INFORM);
-            AID profID = new AID();
-            profID.setLocalName("professorRossi");
-            msg.addReceiver(profID);
-            msg.setLanguage(codec.getName());
-            msg.setOntology(ontology.getName());
-            ContentElementList cel = new ContentElementList();
-            cel.add(update);
-            try {
-                cm.fillContent(msg, cel);
-            } catch (OntologyException | Codec.CodecException e) {
-                e.printStackTrace();
-            }
-            // update freeDay of the professor
-            freeDays.put(profID, 3);
-            // update timetables
+            // initialize timetables
             timetables = new HashMap<>();
-            Timetable dummyTime = new Timetable(Utils.NUM_HOURS, Utils.NUM_DAYS);
-            dummyTime.setEntry(1,1,schoolClass);
-            timetables.put(profID, dummyTime);
-            myAgent.send(msg);
-            // second agent
-            lesson = new Lesson(3,1);
-            teaching = new Teaching(lesson, schoolClass);
-            teachings = new jade.util.leap.ArrayList();
-            teachings.add(teaching);
-            timeConcept = new TimetableConcept();
-            timeConcept.setTeachings(teachings);
-            update = new UpdateTimetable();
-            update.setTimetable(timeConcept);
-            msg = new ACLMessage(ACLMessage.INFORM);
-            profID = new AID("professorBianchi", AID.ISLOCALNAME);
-            msg.addReceiver(profID);
-            msg.setLanguage(codec.getName());
-            msg.setOntology(ontology.getName());
-            cel = new ContentElementList();
-            cel.add(update);
-            try {
-                cm.fillContent(msg, cel);
-            } catch (OntologyException | Codec.CodecException e) {
-                e.printStackTrace();
+            int numProfessors = hoursPerProfessor.size();
+            for(int i=1; i <= numProfessors; i++){
+                timetables.put(
+                        new AID("professor"+i, AID.ISLOCALNAME),
+                        new Timetable(Utils.NUM_HOURS, Utils.NUM_DAYS)
+                );
             }
-            // free day of the second professor
-            freeDays.put(profID, 4);
-            // update timetables
-            dummyTime = new Timetable(Utils.NUM_HOURS, Utils.NUM_DAYS);
-            dummyTime.setEntry(3,1,schoolClass);
-            timetables.put(profID, dummyTime);
-            myAgent.send(msg);
+
+            // initialize professor AID
+            AID[] profAIDs = new AID[Utils.NUM_PROFESSORS];
+            for(int i=0; i < Utils.NUM_PROFESSORS; i++){
+                profAIDs[i] = new AID("professor"+(i+1), AID.ISLOCALNAME);
+            }
+
+            // update timetable for each professor
+            jade.util.leap.List[] allTeachings =
+                    new jade.util.leap.List[] { teachingsFirst, teachingsSecond, teachingsThird, teachingsFourth };
+            int size = allTeachings.length;
+            // teachings of each professor
+            for(int i=0; i < size; i++){
+                jade.util.leap.List teachings = allTeachings[i];
+                int numTeachings = teachings.size();
+                Timetable timetable = timetables.get(profAIDs[i]);
+                // different teachings of a professor
+                for(int j=0; j < numTeachings; j++){
+                    Teaching currentTeach = (Teaching) teachings.get(j);
+                    Lesson currentLesson = currentTeach.getLesson();
+                    timetable.setEntry(
+                            currentLesson.getHour(),
+                            currentLesson.getDay(),
+                            currentTeach.getSchoolClass()
+                    );
+                }
+            }
+
+            // update free days for each professor
+            freeDays.put(profAIDs[0], 2);
+            freeDays.put(profAIDs[1], 1);
+            freeDays.put(profAIDs[2], 2);
+            freeDays.put(profAIDs[3], 5);
+
+            // send timetables to all professors
+            UpdateTimetable[] msgContent =
+                    new UpdateTimetable[] {updateFirst, updateSecond, updateThird, updateFourth };
+
+            ACLMessage[] messages = new ACLMessage[Utils.NUM_PROFESSORS];
+            for(int i=0; i < Utils.NUM_PROFESSORS; i++){
+                messages[i] = new ACLMessage(ACLMessage.INFORM);
+                messages[i].addReceiver(profAIDs[i]);
+                messages[i].setLanguage(codec.getName());
+                messages[i].setOntology(ontology.getName());
+                ContentElementList cel = new ContentElementList();
+                cel.add(msgContent[i]);
+                try {
+                    cm.fillContent(messages[i], cel);
+                } catch (OntologyException | Codec.CodecException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            // send messages
+            for(int i=0; i < Utils.NUM_PROFESSORS; i++){
+                myAgent.send(messages[i]);
+            }
         }
     }
 
