@@ -56,7 +56,7 @@ public class TimeScheduler extends Agent {
         Utils.registerOntology(cm, codec, ontology);
 
         // register itself as time scheduler
-        Utils.registerService(this, SERVICE);
+        Utils.registerService(this, new String[] {SERVICE});
 
         // dummy behaviour for testing
         addBehaviour(new Dummy());
@@ -85,105 +85,105 @@ public class TimeScheduler extends Agent {
             SchoolClass firstA = Utils.classesMap.get(1);
             SchoolClass secondA = Utils.classesMap.get(2);
 
-            // timetable of professor1
-            jade.util.leap.List teachingsFirst = new jade.util.leap.ArrayList();
-            teachingsFirst.add(new Teaching(lessons[0][0], firstA));
-            teachingsFirst.add(new Teaching(lessons[1][0], firstA));
-            teachingsFirst.add(new Teaching(lessons[2][0], secondA));
-            teachingsFirst.add(new Teaching(lessons[3][0], secondA));
-            teachingsFirst.add(new Teaching(lessons[4][0], secondA));
-            teachingsFirst.add(new Teaching(lessons[0][2], secondA));
-            teachingsFirst.add(new Teaching(lessons[1][2], secondA));
-            teachingsFirst.add(new Teaching(lessons[2][2], firstA));
-            teachingsFirst.add(new Teaching(lessons[3][2], firstA));
-            teachingsFirst.add(new Teaching(lessons[0][3], secondA));
-            teachingsFirst.add(new Teaching(lessons[4][3], firstA));
-            teachingsFirst.add(new Teaching(lessons[0][4], secondA));
-            teachingsFirst.add(new Teaching(lessons[3][4], firstA));
-            teachingsFirst.add(new Teaching(lessons[4][4], firstA));
+            // timetable of professorRossi
+            jade.util.leap.List teachingsRossi = new jade.util.leap.ArrayList();
+            teachingsRossi.add(new Teaching(lessons[0][0], firstA));
+            teachingsRossi.add(new Teaching(lessons[1][0], firstA));
+            teachingsRossi.add(new Teaching(lessons[2][0], secondA));
+            teachingsRossi.add(new Teaching(lessons[3][0], secondA));
+            teachingsRossi.add(new Teaching(lessons[4][0], secondA));
+            teachingsRossi.add(new Teaching(lessons[0][2], secondA));
+            teachingsRossi.add(new Teaching(lessons[1][2], secondA));
+            teachingsRossi.add(new Teaching(lessons[2][2], firstA));
+            teachingsRossi.add(new Teaching(lessons[3][2], firstA));
+            teachingsRossi.add(new Teaching(lessons[0][3], secondA));
+            teachingsRossi.add(new Teaching(lessons[4][3], firstA));
+            teachingsRossi.add(new Teaching(lessons[0][4], secondA));
+            teachingsRossi.add(new Teaching(lessons[3][4], firstA));
+            teachingsRossi.add(new Teaching(lessons[4][4], firstA));
             TimetableConcept timeConceptFirst = new TimetableConcept();
-            timeConceptFirst.setTeachings(teachingsFirst);
+            timeConceptFirst.setTeachings(teachingsRossi);
             UpdateTimetable updateFirst = new UpdateTimetable();
             updateFirst.setTimetable(timeConceptFirst);
 
             // timetable of professor2
-            jade.util.leap.List teachingsSecond = new jade.util.leap.ArrayList();
-            teachingsSecond.add(new Teaching(lessons[0][1], firstA));
-            teachingsSecond.add(new Teaching(lessons[1][1], firstA));
-            teachingsSecond.add(new Teaching(lessons[1][1], firstA));
-            teachingsSecond.add(new Teaching(lessons[3][1], secondA));
-            teachingsSecond.add(new Teaching(lessons[4][1], secondA));
-            teachingsSecond.add(new Teaching(lessons[4][2], firstA));
-            teachingsSecond.add(new Teaching(lessons[3][3], secondA));
-            teachingsSecond.add(new Teaching(lessons[4][3], secondA));
-            teachingsSecond.add(new Teaching(lessons[0][4], firstA));
-            teachingsSecond.add(new Teaching(lessons[1][4], firstA));
-            teachingsSecond.add(new Teaching(lessons[2][4], secondA));
-            teachingsSecond.add(new Teaching(lessons[3][4], secondA));
-            teachingsSecond.add(new Teaching(lessons[4][4], secondA));
+            jade.util.leap.List teachingsBianchi = new jade.util.leap.ArrayList();
+            teachingsBianchi.add(new Teaching(lessons[0][1], firstA));
+            teachingsBianchi.add(new Teaching(lessons[1][1], firstA));
+            teachingsBianchi.add(new Teaching(lessons[1][1], firstA));
+            teachingsBianchi.add(new Teaching(lessons[3][1], secondA));
+            teachingsBianchi.add(new Teaching(lessons[4][1], secondA));
+            teachingsBianchi.add(new Teaching(lessons[4][2], firstA));
+            teachingsBianchi.add(new Teaching(lessons[3][3], secondA));
+            teachingsBianchi.add(new Teaching(lessons[4][3], secondA));
+            teachingsBianchi.add(new Teaching(lessons[0][4], firstA));
+            teachingsBianchi.add(new Teaching(lessons[1][4], firstA));
+            teachingsBianchi.add(new Teaching(lessons[2][4], secondA));
+            teachingsBianchi.add(new Teaching(lessons[3][4], secondA));
+            teachingsBianchi.add(new Teaching(lessons[4][4], secondA));
             TimetableConcept timeConceptSecond = new TimetableConcept();
-            timeConceptSecond.setTeachings(teachingsSecond);
+            timeConceptSecond.setTeachings(teachingsBianchi);
             UpdateTimetable updateSecond = new UpdateTimetable();
             updateSecond.setTimetable(timeConceptSecond);
 
             // timetable of professor3
-            jade.util.leap.List teachingsThird = new jade.util.leap.ArrayList();
-            teachingsThird.add(new Teaching(lessons[0][0], secondA));
-            teachingsThird.add(new Teaching(lessons[1][0], secondA));
-            teachingsThird.add(new Teaching(lessons[2][0], firstA));
-            teachingsThird.add(new Teaching(lessons[0][2], firstA));
-            teachingsThird.add(new Teaching(lessons[1][2], firstA));
-            teachingsThird.add(new Teaching(lessons[2][2], secondA));
-            teachingsThird.add(new Teaching(lessons[3][2], secondA));
-            teachingsThird.add(new Teaching(lessons[1][3], secondA));
-            teachingsThird.add(new Teaching(lessons[2][3], secondA));
-            teachingsThird.add(new Teaching(lessons[3][3], firstA));
-            teachingsThird.add(new Teaching(lessons[1][4], secondA));
-            teachingsThird.add(new Teaching(lessons[2][4], firstA));
+            jade.util.leap.List teachingRosa = new jade.util.leap.ArrayList();
+            teachingRosa.add(new Teaching(lessons[0][0], secondA));
+            teachingRosa.add(new Teaching(lessons[1][0], secondA));
+            teachingRosa.add(new Teaching(lessons[2][0], firstA));
+            teachingRosa.add(new Teaching(lessons[0][2], firstA));
+            teachingRosa.add(new Teaching(lessons[1][2], firstA));
+            teachingRosa.add(new Teaching(lessons[2][2], secondA));
+            teachingRosa.add(new Teaching(lessons[3][2], secondA));
+            teachingRosa.add(new Teaching(lessons[1][3], secondA));
+            teachingRosa.add(new Teaching(lessons[2][3], secondA));
+            teachingRosa.add(new Teaching(lessons[3][3], firstA));
+            teachingRosa.add(new Teaching(lessons[1][4], secondA));
+            teachingRosa.add(new Teaching(lessons[2][4], firstA));
             TimetableConcept timeConceptThird = new TimetableConcept();
-            timeConceptThird.setTeachings(teachingsThird);
+            timeConceptThird.setTeachings(teachingRosa);
             UpdateTimetable updateThird = new UpdateTimetable();
             updateThird.setTimetable(timeConceptThird);
 
             // timetable of professor4
-            jade.util.leap.List teachingsFourth = new jade.util.leap.ArrayList();
-            teachingsFourth.add(new Teaching(lessons[3][0], firstA));
-            teachingsFourth.add(new Teaching(lessons[4][0], firstA));
-            teachingsFourth.add(new Teaching(lessons[0][1], secondA));
-            teachingsFourth.add(new Teaching(lessons[1][1], secondA));
-            teachingsFourth.add(new Teaching(lessons[2][1], secondA));
-            teachingsFourth.add(new Teaching(lessons[3][1], firstA));
-            teachingsFourth.add(new Teaching(lessons[4][1], firstA));
-            teachingsFourth.add(new Teaching(lessons[4][2], secondA));
-            teachingsFourth.add(new Teaching(lessons[0][3], firstA));
-            teachingsFourth.add(new Teaching(lessons[1][3], firstA));
-            teachingsFourth.add(new Teaching(lessons[2][3], firstA));
+            jade.util.leap.List teachingVerdi = new jade.util.leap.ArrayList();
+            teachingVerdi.add(new Teaching(lessons[3][0], firstA));
+            teachingVerdi.add(new Teaching(lessons[4][0], firstA));
+            teachingVerdi.add(new Teaching(lessons[0][1], secondA));
+            teachingVerdi.add(new Teaching(lessons[1][1], secondA));
+            teachingVerdi.add(new Teaching(lessons[2][1], secondA));
+            teachingVerdi.add(new Teaching(lessons[3][1], firstA));
+            teachingVerdi.add(new Teaching(lessons[4][1], firstA));
+            teachingVerdi.add(new Teaching(lessons[4][2], secondA));
+            teachingVerdi.add(new Teaching(lessons[0][3], firstA));
+            teachingVerdi.add(new Teaching(lessons[1][3], firstA));
+            teachingVerdi.add(new Teaching(lessons[2][3], firstA));
             TimetableConcept timeConceptFourth = new TimetableConcept();
-            timeConceptFourth.setTeachings(teachingsFourth);
+            timeConceptFourth.setTeachings(teachingVerdi);
             UpdateTimetable updateFourth = new UpdateTimetable();
             updateFourth.setTimetable(timeConceptFourth);
+
+            // initialize professor AID
+            AID[] profAIDs = new AID[Utils.NUM_PROFESSORS];
+            for(int i=0; i < Utils.NUM_PROFESSORS; i++){
+                profAIDs[i] = new AID("professor"+Utils.PROFESSOR_NAMES[i], AID.ISLOCALNAME);
+            }
 
             // update timetables and free days
 
             // initialize timetables
             timetables = new HashMap<>();
             int numProfessors = hoursPerProfessor.size();
-            for(int i=1; i <= numProfessors; i++){
+            for(int i=0; i < numProfessors; i++){
                 timetables.put(
-                        new AID("professor"+i, AID.ISLOCALNAME),
+                        profAIDs[i],
                         new Timetable(Utils.NUM_HOURS, Utils.NUM_DAYS)
                 );
             }
 
-            // initialize professor AID
-            AID[] profAIDs = new AID[Utils.NUM_PROFESSORS];
-            for(int i=0; i < Utils.NUM_PROFESSORS; i++){
-                profAIDs[i] = new AID("professor"+(i+1), AID.ISLOCALNAME);
-            }
-
             // update timetable for each professor
             jade.util.leap.List[] allTeachings =
-                    new jade.util.leap.List[] { teachingsFirst, teachingsSecond, teachingsThird, teachingsFourth };
+                    new jade.util.leap.List[] { teachingsRossi, teachingsBianchi, teachingRosa, teachingVerdi };
             int size = allTeachings.length;
             // teachings of each professor
             for(int i=0; i < size; i++){
@@ -276,7 +276,10 @@ public class TimeScheduler extends Agent {
             timetables = new HashMap<>();
             int numProfessors = hoursPerProfessor.size();
             for(int i=1; i <= numProfessors; i++){
-                timetables.put(new AID("professor"+i, AID.ISLOCALNAME), new Timetable(numHours, numDays));
+                timetables.put(
+                        new AID("professor"+Utils.PROFESSOR_NAMES[i], AID.ISLOCALNAME),
+                        new Timetable(numHours, numDays)
+                );
             }
             // update timetables for each professor
             it.unibo.tuprolog.core.Substitution substitution = solution.getSubstitution();
@@ -284,7 +287,7 @@ public class TimeScheduler extends Agent {
                 // extract from each variable relevant information
                 String varName = variable.getName();
                 int profID = Integer.parseInt(String.valueOf(varName.charAt(1)));
-                AID profAID = new AID("professor"+profID, true);
+                AID profAID = new AID("professor"+Utils.PROFESSOR_NAMES[profID-1], true);
                 int hour = Integer.parseInt(String.valueOf(varName.charAt(2)));
                 int day = Integer.parseInt(String.valueOf(varName.charAt(3)));
                 // this map depends on the specific instance of the problem

@@ -2,10 +2,25 @@ package mas.project.boezio.ay2122.ontology;
 
 import jade.content.Concept;
 
+import java.util.Objects;
+
 public class SchoolClass implements Concept {
 
     private int year;
     private String letter;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SchoolClass that = (SchoolClass) o;
+        return year == that.year && letter.equals(that.letter);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(year, letter);
+    }
 
     public SchoolClass(){
         this.year = 0;

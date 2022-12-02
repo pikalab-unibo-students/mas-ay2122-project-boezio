@@ -24,6 +24,8 @@ public class Utils {
     public static final int NUM_PROFESSORS = 4;
     public static final int NUM_CLASSES = 2;
 
+    public static final String[] PROFESSOR_NAMES = new String[] { "Rossi", "Bianchi", "Rosa", "Verdi"};
+
 
     // number of classes for the specific instance of the problem
     public static final Map<Integer, SchoolClass> classesMap = new HashMap<>()
@@ -110,7 +112,7 @@ public class Utils {
             }
         }
         for(int i = 0; i < NUM_PROFESSORS; i++){
-            hoursMap.put(new AID("professor" + i, AID.ISLOCALNAME), professorsMap.get(i));
+            hoursMap.put(new AID("professor"+PROFESSOR_NAMES[i], AID.ISLOCALNAME), professorsMap.get(i));
         }
 
         return hoursMap;
@@ -121,17 +123,18 @@ public class Utils {
         cm.registerOntology(ontology);
     }
 
-    public static void registerService(Agent agent, String typeService) {
+    public static void registerService(Agent agent, String[] typeService) {
         DFAgentDescription dfd = new DFAgentDescription();
         dfd.setName(agent.getAID());
-        ServiceDescription sd = new ServiceDescription();
-        sd.setType(typeService);
-        sd.setName(agent.getLocalName()+"-"+typeService);
-        dfd.addServices(sd);
+        for (String s : typeService) {
+            ServiceDescription sd = new ServiceDescription();
+            sd.setType(s);
+            sd.setName(agent.getLocalName() + "-" + s);
+            dfd.addServices(sd);
+        }
         try {
             DFService.register(agent, dfd);
-        }
-        catch (FIPAException fe) {
+        } catch (FIPAException fe) {
             fe.printStackTrace();
         }
     }

@@ -1,6 +1,5 @@
 package mas.project.boezio.ay2122.agents;
 
-import jade.content.ContentElement;
 import jade.content.ContentElementList;
 import jade.content.ContentManager;
 import jade.content.lang.Codec;
@@ -20,7 +19,7 @@ import mas.project.boezio.ay2122.utils.Timetable;
 import mas.project.boezio.ay2122.utils.Utils;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Iterator;
 import java.util.Set;
 
 public abstract class Professor extends Agent {
@@ -86,10 +85,17 @@ public abstract class Professor extends Agent {
                         classes.add(schoolClass);
                         timetable.setEntry(lesson.getHour(), lesson.getDay(), schoolClass);
                     }
+
                     // register own classes as a service
-                    for(SchoolClass schoolClass: classes){
-                        Utils.registerService(myAgent, schoolClass.toString());
+                    int numServices = classes.size();
+                    String [] services = new String[numServices];
+                    Iterator<SchoolClass> it = classes.iterator();
+                    int i = 0;
+                    while(it.hasNext()){
+                        services[i] = it.next().toString();
+                        i++;
                     }
+                    Utils.registerService(myAgent, services);
                     // check satisfied preferences and execute PreferenceBehaviour for unsatisfied ones
                     for(Lesson pref: preferences){
                         if(timetable.getEntry(pref.getHour(), pref.getDay()) != null)
