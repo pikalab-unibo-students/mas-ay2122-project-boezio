@@ -4,10 +4,10 @@ import mas.project.boezio.ay2122.ontology.Lesson;
 
 import java.util.Set;
 
-public class ProfessorThree extends Professor{
+public class ProfessorRosa extends Professor{
     @Override
     protected String setName() {
-        return null;
+        return "Rosa";
     }
 
     @Override
