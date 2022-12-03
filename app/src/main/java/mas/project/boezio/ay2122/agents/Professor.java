@@ -50,7 +50,7 @@ public abstract class Professor extends Agent {
 
         Utils.printMessage(this, "Hi everyone, I'm Professor "+name);
 
-        Utils.registerOntology(cm, codec, ontology);
+        Utils.Language.registerOntology(cm, codec, ontology);
 
         // agent's behaviour
         addBehaviour(new TimetableBehaviour());
@@ -94,7 +94,7 @@ public abstract class Professor extends Agent {
                         services[i] = it.next().toString();
                         i++;
                     }
-                    Utils.registerService(myAgent, services);
+                    Utils.Service.registerService(myAgent, services);
                     // check satisfied preferences and execute PreferenceBehaviour for unsatisfied ones
                     for(Lesson pref: preferences){
                         if(timetable.getEntry(pref.getHour(), pref.getDay()) != null)
@@ -159,7 +159,7 @@ public abstract class Professor extends Agent {
             switch (step) {
                 case 0 -> {
                     // obtain the AID of the timeScheduler
-                    timeScheduler = Utils.getServiceProviders(myAgent, TimeScheduler.SERVICE).get(0);
+                    timeScheduler = Utils.Service.getServiceProviders(myAgent, TimeScheduler.SERVICE).get(0);
                     // send a message with a proposal
                     ACLMessage proposalMsg = new ACLMessage(ACLMessage.CFP);
                     proposalMsg.addReceiver(timeScheduler);

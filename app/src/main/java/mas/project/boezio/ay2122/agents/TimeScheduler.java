@@ -53,10 +53,10 @@ public class TimeScheduler extends Agent {
 
         Utils.printMessage(this, "Hi everyone, I'm the time-scheduler");
 
-        Utils.registerOntology(cm, codec, ontology);
+        Utils.Language.registerOntology(cm, codec, ontology);
 
         // register itself as time scheduler
-        Utils.registerService(this, new String[] {SERVICE});
+        Utils.Service.registerService(this, new String[] {SERVICE});
 
         // dummy behaviour for testing
         addBehaviour(new Dummy());
@@ -256,10 +256,10 @@ public class TimeScheduler extends Agent {
         public void action() {
             // simplified version, model should be created dynamically
             // CP model of a specific instance
-            Theory theory = Utils.getTheory();
+            Theory theory = Utils.CP.getTheory();
             System.out.println("Theory has been read");
             // goal
-            Struct goal = Utils.getGoal();
+            Struct goal = Utils.CP.getGoal();
             System.out.println("Goal has been read");
             // solver
             Solver solver = Solver.prolog().newBuilder()
@@ -426,7 +426,7 @@ public class TimeScheduler extends Agent {
             switch (step){
                 case 0:
                     // obtain list of professors who teach in that class
-                    professors = Utils.getServiceProviders(myAgent, schoolClass.toString());
+                    professors = Utils.Service.getServiceProviders(myAgent, schoolClass.toString());
                     // filter professors who have free hour at proposed lesson
                     professors.removeIf(professor -> timetables.get(professor).getEntry(hour, day) != null);
                     // filter professors whose free day is not the day of the proposed lesson
