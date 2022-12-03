@@ -15,6 +15,7 @@ public class ProfessorBianchi extends Professor{
     protected Set<Lesson> generatePreferences() {
         Set<Lesson> preferences = new HashSet<>();
         preferences.add(new Lesson(2,5));
+        preferences.add(new Lesson(5,2));
         return preferences;
     }
 }

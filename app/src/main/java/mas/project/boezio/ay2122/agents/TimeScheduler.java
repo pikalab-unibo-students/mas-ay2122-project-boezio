@@ -88,18 +88,18 @@ public class TimeScheduler extends Agent {
             // timetable of professorRossi
             jade.util.leap.List teachingsRossi = new jade.util.leap.ArrayList();
             teachingsRossi.add(new Teaching(lessons[0][0], firstA));
-            teachingsRossi.add(new Teaching(lessons[1][0], firstA));
-            teachingsRossi.add(new Teaching(lessons[2][0], secondA));
-            teachingsRossi.add(new Teaching(lessons[3][0], secondA));
-            teachingsRossi.add(new Teaching(lessons[4][0], secondA));
             teachingsRossi.add(new Teaching(lessons[0][2], secondA));
-            teachingsRossi.add(new Teaching(lessons[1][2], secondA));
-            teachingsRossi.add(new Teaching(lessons[2][2], firstA));
-            teachingsRossi.add(new Teaching(lessons[3][2], firstA));
             teachingsRossi.add(new Teaching(lessons[0][3], secondA));
-            teachingsRossi.add(new Teaching(lessons[4][3], firstA));
             teachingsRossi.add(new Teaching(lessons[0][4], secondA));
+            teachingsRossi.add(new Teaching(lessons[1][0], firstA));
+            teachingsRossi.add(new Teaching(lessons[1][2], secondA));
+            teachingsRossi.add(new Teaching(lessons[2][0], secondA));
+            teachingsRossi.add(new Teaching(lessons[2][2], firstA));
+            teachingsRossi.add(new Teaching(lessons[3][0], secondA));
+            teachingsRossi.add(new Teaching(lessons[3][2], firstA));
             teachingsRossi.add(new Teaching(lessons[3][4], firstA));
+            teachingsRossi.add(new Teaching(lessons[4][0], secondA));
+            teachingsRossi.add(new Teaching(lessons[4][3], firstA));
             teachingsRossi.add(new Teaching(lessons[4][4], firstA));
             TimetableConcept timeConceptFirst = new TimetableConcept();
             timeConceptFirst.setTeachings(teachingsRossi);
@@ -109,17 +109,17 @@ public class TimeScheduler extends Agent {
             // timetable of professor2
             jade.util.leap.List teachingsBianchi = new jade.util.leap.ArrayList();
             teachingsBianchi.add(new Teaching(lessons[0][1], firstA));
+            teachingsBianchi.add(new Teaching(lessons[0][4], firstA));
             teachingsBianchi.add(new Teaching(lessons[1][1], firstA));
-            teachingsBianchi.add(new Teaching(lessons[1][1], firstA));
+            teachingsBianchi.add(new Teaching(lessons[1][4], firstA));
+            teachingsBianchi.add(new Teaching(lessons[2][1], firstA));
+            teachingsBianchi.add(new Teaching(lessons[2][4], secondA));
             teachingsBianchi.add(new Teaching(lessons[3][1], secondA));
+            teachingsBianchi.add(new Teaching(lessons[3][3], secondA));
+            teachingsBianchi.add(new Teaching(lessons[3][4], secondA));
             teachingsBianchi.add(new Teaching(lessons[4][1], secondA));
             teachingsBianchi.add(new Teaching(lessons[4][2], firstA));
-            teachingsBianchi.add(new Teaching(lessons[3][3], secondA));
             teachingsBianchi.add(new Teaching(lessons[4][3], secondA));
-            teachingsBianchi.add(new Teaching(lessons[0][4], firstA));
-            teachingsBianchi.add(new Teaching(lessons[1][4], firstA));
-            teachingsBianchi.add(new Teaching(lessons[2][4], secondA));
-            teachingsBianchi.add(new Teaching(lessons[3][4], secondA));
             teachingsBianchi.add(new Teaching(lessons[4][4], secondA));
             TimetableConcept timeConceptSecond = new TimetableConcept();
             timeConceptSecond.setTeachings(teachingsBianchi);
@@ -129,17 +129,17 @@ public class TimeScheduler extends Agent {
             // timetable of professor3
             jade.util.leap.List teachingRosa = new jade.util.leap.ArrayList();
             teachingRosa.add(new Teaching(lessons[0][0], secondA));
-            teachingRosa.add(new Teaching(lessons[1][0], secondA));
-            teachingRosa.add(new Teaching(lessons[2][0], firstA));
             teachingRosa.add(new Teaching(lessons[0][2], firstA));
+            teachingRosa.add(new Teaching(lessons[1][0], secondA));
             teachingRosa.add(new Teaching(lessons[1][2], firstA));
-            teachingRosa.add(new Teaching(lessons[2][2], secondA));
-            teachingRosa.add(new Teaching(lessons[3][2], secondA));
             teachingRosa.add(new Teaching(lessons[1][3], secondA));
-            teachingRosa.add(new Teaching(lessons[2][3], secondA));
-            teachingRosa.add(new Teaching(lessons[3][3], firstA));
             teachingRosa.add(new Teaching(lessons[1][4], secondA));
+            teachingRosa.add(new Teaching(lessons[2][0], firstA));
+            teachingRosa.add(new Teaching(lessons[2][2], secondA));
+            teachingRosa.add(new Teaching(lessons[2][3], secondA));
             teachingRosa.add(new Teaching(lessons[2][4], firstA));
+            teachingRosa.add(new Teaching(lessons[3][2], secondA));
+            teachingRosa.add(new Teaching(lessons[3][3], firstA));
             TimetableConcept timeConceptThird = new TimetableConcept();
             timeConceptThird.setTeachings(teachingRosa);
             UpdateTimetable updateThird = new UpdateTimetable();
@@ -147,17 +147,17 @@ public class TimeScheduler extends Agent {
 
             // timetable of professor4
             jade.util.leap.List teachingVerdi = new jade.util.leap.ArrayList();
-            teachingVerdi.add(new Teaching(lessons[3][0], firstA));
-            teachingVerdi.add(new Teaching(lessons[4][0], firstA));
             teachingVerdi.add(new Teaching(lessons[0][1], secondA));
+            teachingVerdi.add(new Teaching(lessons[0][3], firstA));
             teachingVerdi.add(new Teaching(lessons[1][1], secondA));
+            teachingVerdi.add(new Teaching(lessons[1][3], firstA));
             teachingVerdi.add(new Teaching(lessons[2][1], secondA));
+            teachingVerdi.add(new Teaching(lessons[2][3], firstA));
+            teachingVerdi.add(new Teaching(lessons[3][0], firstA));
             teachingVerdi.add(new Teaching(lessons[3][1], firstA));
+            teachingVerdi.add(new Teaching(lessons[4][0], firstA));
             teachingVerdi.add(new Teaching(lessons[4][1], firstA));
             teachingVerdi.add(new Teaching(lessons[4][2], secondA));
-            teachingVerdi.add(new Teaching(lessons[0][3], firstA));
-            teachingVerdi.add(new Teaching(lessons[1][3], firstA));
-            teachingVerdi.add(new Teaching(lessons[2][3], firstA));
             TimetableConcept timeConceptFourth = new TimetableConcept();
             timeConceptFourth.setTeachings(teachingVerdi);
             UpdateTimetable updateFourth = new UpdateTimetable();

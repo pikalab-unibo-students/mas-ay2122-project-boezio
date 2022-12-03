@@ -38,7 +38,7 @@ public abstract class Professor extends Agent {
     private final ContentManager cm = getContentManager();
 
     // num trials to launch a negotiation
-    private int numTrials = 3;
+    private int numTrials = 10;
     // autoincrement idNumber for conversations
     private static int idNumber = 1;
     // set name of a specific professor
@@ -124,7 +124,7 @@ public abstract class Professor extends Agent {
 
         @Override
         protected void onTick() {
-            if(numTrials > 0){
+            if(numTrials > 0 && notSatisfiedPref.size() != 0){
                 Utils.printMessage(
                         myAgent,
                         "I'm trying to satisfy my preferences"
@@ -213,8 +213,6 @@ public abstract class Professor extends Agent {
                                     );
                                     // remove preference from notSatisfiedPref
                                     notSatisfiedPref.remove(pref);
-                                    // remove preference from locked preferences
-                                    lockedPreferences.remove(pref);
                                     // send accept message
                                     reply = new ACLMessage(ACLMessage.ACCEPT_PROPOSAL);
                                     outcome = "accepted";
@@ -233,13 +231,12 @@ public abstract class Professor extends Agent {
                             } catch (Codec.CodecException | OntologyException e) {
                                 e.printStackTrace();
                             }
-
                         } else if (msg.getPerformative() == ACLMessage.REFUSE) {
                             Utils.printMessage(myAgent, "My preference "+pref+" was not satisfied");
-                            // lesson is again available
-                            lockedPreferences.remove(pref);
                             step = 2;
                         }
+                        // lesson is again available
+                        lockedPreferences.remove(pref);
                     } else
                         block();
                 }
@@ -311,6 +308,7 @@ public abstract class Professor extends Agent {
                             outcome = "agreed";
                         } else {
                             reply.setPerformative(ACLMessage.REFUSE);
+                            step = 2;
                             outcome = "refused";
                         }
                         Utils.printMessage(
